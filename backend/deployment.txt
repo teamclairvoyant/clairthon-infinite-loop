@@ -1,0 +1,20 @@
+### Clairthon22 - iPlanner ###
+###### Deployment Steps ######
+
+Heroku -
+
+####### first time init  ######
+1. sudo snap install heroku --classic
+2. heroku login
+3. git init
+4. heroku git:remote -a clairthon
+
+####### any new changes #######
+5. git add .
+6. git commit -am "make it better"
+7. git push heroku master
+
+
+
+
+
