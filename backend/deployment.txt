@@ -10,6 +10,9 @@ Heroku -
 4. heroku git:remote -a clairthon
 
 ####### any new changes #######
+
+cd backend    ------->> IMPORTANT
+
 5. git add .
 6. git commit -am "make it better"
 7. git push heroku master

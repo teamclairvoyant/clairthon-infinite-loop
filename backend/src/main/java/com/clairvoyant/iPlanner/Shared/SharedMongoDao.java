@@ -297,6 +297,32 @@ public class SharedMongoDao {
         }
     }
 
+    /**
+     * Generic method to upsert a document into mongo collection.
+     * Upsert will insert new document if not found (update+insert)
+     *
+     * document should contain _id to upsert
+     *
+     * @param collection
+     * @return
+     */
+    public boolean upsertDocument(Document document, final String collection) {
+        try {
+            Document filter_doc = new Document().append(Literal._id, document.get(Literal._id));
+            Query query = new BasicQuery(filter_doc);
+
+            Update update = new Update();
+            document.forEach(update::set);
+            /**
+             * upsert data in MONGODB
+             */
+            return upsertDocument(query, update, collection);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Literal.FALSE;
+        }
+    }
+
 
     /**
      * Generic method to find a documents in a mongo collection with query.
@@ -360,4 +386,16 @@ public class SharedMongoDao {
     }
 
 
+    /**
+     * Get all documents for a collection
+     * @param collection_name
+     * @return
+     */
+    public List<Document> getAllDocuments(String collection_name) {
+        return mongoTemplate.findAll(Document.class, collection_name);
+    }
+
+    public MongoTemplate getMongoTemplate() {
+        return mongoTemplate;
+    }
 }

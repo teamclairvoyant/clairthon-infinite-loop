@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -71,7 +72,7 @@ public class ListingController {
             /**
              * check valid Action
              */
-            if (Utility.chkValidAction(req_map.get(Literal.action).toString())) {
+            if (!Utility.chkValidAction(req_map.get(Literal.action).toString())) {
                 return_map.put(Literal.STATUS, Literal.ERROR);
                 return_map.put(Literal.MESSAGE, Literal.ACTION_INVALID);
                 return_map.put(Literal.REQUEST_DATA, req_map);
@@ -87,9 +88,11 @@ public class ListingController {
                 return return_map;
             }
 
-            return PlannerService.getInstance().saveListing(req_map);
-
-
+            return PlannerService.getInstance()
+                    .saveListing(
+                            req_map.get(Literal.type).toString(),
+                            req_map.get(Literal.action).toString(),
+                            (List<String>) req_map.get(Literal.items));
         } catch (Exception e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
             return_map.put(Literal.MESSAGE, Literal.SOMETHING_WENT_WRONG);
@@ -103,6 +106,20 @@ public class ListingController {
     @GetMapping()
     // todo
     public Map<String, Object> getListing(@RequestBody Map<String, Object> req_map) {
+        Map<String, Object> return_map = new HashMap<>(Literal.SIX);
+        return return_map;
+
+    }
+
+    /**
+     * Populates demo/dummy/default data for the below listings -
+     * - JOB_TITLE, DEPARTMENT, BUSINESS_UNIT, SKILLS
+     *
+     * @return
+     */
+    @GetMapping("/initialize")
+    // todo
+    public Map<String, Object> populateDummyListing() {
         Map<String, Object> return_map = new HashMap<>(Literal.SIX);
         return return_map;
 
