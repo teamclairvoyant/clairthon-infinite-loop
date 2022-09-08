@@ -59,7 +59,6 @@ public class PlannerService {
                 listing_doc = new Document();
                 listing_doc.append(Literal._id, Utility.UUID());
                 listing_doc.append(Literal.type, type);
-                listing_doc.append(Literal.createdDate, Utility.now());
             }
             /**
              * if action is ADD
@@ -116,5 +115,9 @@ public class PlannerService {
             return_map.put(Literal.EXCEPTION, e.getStackTrace());
             return return_map;
         }
+    }
+
+    public List<Document> getListing() {
+        return SharedMongoDao.getInstance().getAllDocuments(MongoDBConnectionInfo.listing_col);
     }
 }

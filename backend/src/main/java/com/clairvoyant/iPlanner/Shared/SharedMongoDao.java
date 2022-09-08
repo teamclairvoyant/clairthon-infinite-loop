@@ -3,6 +3,7 @@ package com.clairvoyant.iPlanner.Shared;
 import com.clairvoyant.iPlanner.Utility.Literal;
 import com.clairvoyant.iPlanner.Utility.MongoDBConnectionInfo;
 import com.clairvoyant.iPlanner.Utility.MongoDbConnection;
+import com.clairvoyant.iPlanner.Utility.Utility;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
@@ -93,6 +94,11 @@ public class SharedMongoDao {
      */
     public boolean insertDocument(final Document document, final String collection) {
         try {
+            document.append(Literal.createdDate, Utility.now());
+            document.append(Literal.createdDateMs, Utility.currentTimeMillis());
+            document.append(Literal.updatedDate, Utility.now());
+            document.append(Literal.updatedDateMs, Utility.currentTimeMillis());
+
             mongoTemplate.insert(document, collection);
             return Literal.TRUE;
         } catch (DuplicateKeyException de) {
@@ -242,6 +248,8 @@ public class SharedMongoDao {
      */
     public boolean updateDocument(final Query query, final Update update, final String collection) {
         try {
+            update.set(Literal.updatedDate, Utility.now());
+            update.set(Literal.updatedDateMs, Utility.currentTimeMillis());
             /**
              * update data in MONGODB
              */
@@ -263,6 +271,9 @@ public class SharedMongoDao {
      */
     public boolean updateDocument(final Document filter_doc, final Update update, final String collection) {
         try {
+            update.set(Literal.updatedDate, Utility.now());
+            update.set(Literal.updatedDateMs, Utility.currentTimeMillis());
+
             Query query = new BasicQuery(filter_doc);
             /**
              * update data in MONGODB
@@ -286,6 +297,8 @@ public class SharedMongoDao {
      */
     public boolean upsertDocument(final Query query, final Update update, final String collection) {
         try {
+            update.set(Literal.updatedDate, Utility.now());
+            update.set(Literal.updatedDateMs, Utility.currentTimeMillis());
             /**
              * upsert data in MONGODB
              */
@@ -308,6 +321,9 @@ public class SharedMongoDao {
      */
     public boolean upsertDocument(Document document, final String collection) {
         try {
+            document.append(Literal.updatedDate, Utility.now());
+            document.append(Literal.updatedDateMs, Utility.currentTimeMillis());
+
             Document filter_doc = new Document().append(Literal._id, document.get(Literal._id));
             Query query = new BasicQuery(filter_doc);
 

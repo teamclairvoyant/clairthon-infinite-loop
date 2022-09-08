@@ -4,11 +4,12 @@ import java.util.*;
 
 public class Utility {
 
-    public static final Set<String> LISTING_TYPE = new HashSet<>(Arrays.asList("JOB_TITLE", "DEPARTMENT", "BUSINESS_UNIT", "SKILLS"));
-    public static final Set<String> JOB_TITLE = new HashSet<>(Arrays.asList("Software Engineer", "Software Engineer II", "QA Engineer", "HR"));
-    public static final Set<String> DEPARTMENT = new HashSet<>(Arrays.asList("Enterprise Engineering", "Business Development"));
-    public static final Set<String> BUSINESS_UNIT = new HashSet<>(Arrays.asList("Enterprise and Data Services", "Sales"));
-    public static final Set<String> SKILLS = new HashSet<>(Arrays.asList("Java", "Angular", "ReactJS", "Big Data", "Python"));
+    public static final List<String> LISTING_TYPE = new ArrayList<>(Arrays.asList("JOB_TITLE", "DEPARTMENT", "BUSINESS_UNIT", "SKILLS", "LOCATION"));
+    public static final List<String> JOB_TITLE = new ArrayList<>(Arrays.asList("Software Engineer", "Software Engineer II", "QA Engineer", "HR"));
+    public static final List<String> DEPARTMENT = new ArrayList<>(Arrays.asList("Enterprise Engineering", "Business Development"));
+    public static final List<String> BUSINESS_UNIT = new ArrayList<>(Arrays.asList("Enterprise and Data Services", "Sales"));
+    public static final List<String> SKILLS = new ArrayList<>(Arrays.asList("Java", "Angular", "ReactJS", "Big Data", "Python"));
+    public static final List<String> LOCATION = new ArrayList<>(Arrays.asList("Pune", "Hyderabad", "US", "Canada"));
     /**
      * check null object or empty string
      *
@@ -34,7 +35,11 @@ public class Utility {
         return new Date(Utility.currentTimeMillis());
     }
 
-    private static long currentTimeMillis() {
+    /**
+     * Will be useful if we want to shift application time
+     * @return
+     */
+    public static long currentTimeMillis() {
         return System.currentTimeMillis();
     }
 

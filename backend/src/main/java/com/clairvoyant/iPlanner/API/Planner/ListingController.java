@@ -96,7 +96,7 @@ public class ListingController {
         } catch (Exception e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
             return_map.put(Literal.MESSAGE, Literal.SOMETHING_WENT_WRONG);
-            return_map.put(Literal.EXCEPTION, e.getStackTrace());
+            return_map.put(Literal.EXCEPTION, e.getLocalizedMessage());
             return_map.put(Literal.REQUEST_DATA, req_map);
             return return_map;
         }
@@ -104,11 +104,28 @@ public class ListingController {
     }
 
     @GetMapping()
-    // todo
     public Map<String, Object> getListing(@RequestBody Map<String, Object> req_map) {
         Map<String, Object> return_map = new HashMap<>(Literal.SIX);
-        return return_map;
+        try {
+            /**
+             * Check token
+             */
+            if (!TokenService.getInstance().validateToken(request)) {
+                return_map.put(Literal.STATUS, Literal.ERROR);
+                return_map.put(Literal.MESSAGE, Literal.TOKEN_INVALID);
+                return_map.put(Literal.REQUEST_DATA, req_map);
+                return return_map;
+            }
 
+            return_map.put(Literal.STATUS, Literal.SUCCESS);
+            return_map.put(Literal.DATA, PlannerService.getInstance().getListing());
+            return return_map;
+        } catch (Exception e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, Literal.SOMETHING_WENT_WRONG);
+            return_map.put(Literal.EXCEPTION, e.getLocalizedMessage());
+            return return_map;
+        }
     }
 
     /**
@@ -118,10 +135,35 @@ public class ListingController {
      * @return
      */
     @GetMapping("/initialize")
-    // todo
     public Map<String, Object> populateDummyListing() {
         Map<String, Object> return_map = new HashMap<>(Literal.SIX);
-        return return_map;
+        try {
+            /**
+             * Check token
+             */
+            if (!TokenService.getInstance().validateToken(request)) {
+                return_map.put(Literal.STATUS, Literal.ERROR);
+                return_map.put(Literal.MESSAGE, Literal.TOKEN_INVALID);
+                return return_map;
+            }
+            /**
+             * For each listing_type call saveListing
+             */
+            PlannerService.getInstance().saveListing("JOB_TITLE", Literal.ADD, Utility.JOB_TITLE);
+            PlannerService.getInstance().saveListing("DEPARTMENT", Literal.ADD, Utility.DEPARTMENT);
+            PlannerService.getInstance().saveListing("BUSINESS_UNIT", Literal.ADD, Utility.BUSINESS_UNIT);
+            PlannerService.getInstance().saveListing("SKILLS", Literal.ADD, Utility.SKILLS);
+            PlannerService.getInstance().saveListing("LOCATION", Literal.ADD, Utility.LOCATION);
 
+            return_map.put(Literal.STATUS, Literal.SUCCESS);
+            return_map.put(Literal.MESSAGE, Literal.DATA_UPDATED);
+            return_map.put(Literal.DATA, PlannerService.getInstance().getListing());
+            return return_map;
+        } catch (Exception e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, Literal.SOMETHING_WENT_WRONG);
+            return_map.put(Literal.EXCEPTION, e.getLocalizedMessage());
+            return return_map;
+        }
     }
 }

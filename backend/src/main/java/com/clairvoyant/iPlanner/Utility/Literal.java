@@ -46,8 +46,12 @@ public class Literal {
     public static final Map<String, Object> EMPTY_HASHMAP = new HashMap<>();
     public static final String ASC = "ASC";
     public static final String createdDate = "createdDate";
+    public static final String createdDateMs = "createdDateMs";
     public static final String DATA_UPDATED = "Data updated successfully";
     public static final String DATA_NOT_UPDATED = "Data not updated";
     public static final String _id = "_id";
     public static final String EMPTY_LIST = "The listing is already empty";
+    public static final String DATA = "DATA";
+    public static final String updatedDate = "updatedDate";
+    public static final String updatedDateMs = "updatedDateMs";
 }
