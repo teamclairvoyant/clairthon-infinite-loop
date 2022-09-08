@@ -15,11 +15,12 @@ public class FreeBusyService {
 
     /**
      * Singleton class Lazy initialization with Double check locking
+     *
      * @return FreeBusyService
      */
     public static FreeBusyService getInstance() {
-        synchronized (FreeBusyService.class){
-            if(instance==null) {
+        synchronized (FreeBusyService.class) {
+            if (instance == null) {
                 instance = new FreeBusyService();
             }
             return instance;

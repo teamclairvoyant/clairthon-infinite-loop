@@ -13,13 +13,6 @@ import java.util.Map;
 @RequestMapping(APIEndpoints.FREEBUSY)
 public class FreeBusyController {
 
-    @Autowired
-    FreeBusyService freeBusyService;
-
-    public FreeBusyController(FreeBusyService freeBusyService) {
-        this.freeBusyService = FreeBusyService.getInstance();
-    }
-
     @GetMapping("/test")
     public String testFreeBusy() {
         return "SUCCESS - FreeBusyController";
@@ -27,16 +20,17 @@ public class FreeBusyController {
 
     @GetMapping("/initialize")
     public Map<String, Object> initFreeBusyCredentials() {
-        return freeBusyService.initService();
+        return FreeBusyService.getInstance().initService();
     }
 
     @GetMapping("/get")
+    // todo improve this , token validate
     public String getFreeBusy(@RequestParam(value = "email", required = false) String email) {
         try {
             if(email == null) {
                 email = "abhinav.gogoi@clairvoyantsoft.com";
             }
-            return freeBusyService.getFreeBusy(email);
+            return FreeBusyService.getInstance().getFreeBusy(email);
         } catch (Exception e) {
             return  e.getLocalizedMessage();
         }
