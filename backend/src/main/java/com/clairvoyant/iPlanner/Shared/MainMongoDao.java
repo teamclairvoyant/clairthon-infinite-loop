@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class SharedMongoDao {
+public class MainMongoDao {
     /**
      * mongo template for mongo connection
      */
@@ -28,7 +28,7 @@ public class SharedMongoDao {
     /**
      * Call constructor
      */
-    public SharedMongoDao() {
+    public MainMongoDao() {
         /**
          * Get mongo template connection
          */
@@ -38,15 +38,15 @@ public class SharedMongoDao {
     /**
      * Class instance
      */
-    private static SharedMongoDao instance;
+    private static MainMongoDao instance;
 
     /**
      * @return instance of this class
      */
-    public static SharedMongoDao getInstance() {
-        synchronized (SharedMongoDao.class) {
+    public static MainMongoDao getInstance() {
+        synchronized (MainMongoDao.class) {
             if (instance == null) {
-                instance = new SharedMongoDao();
+                instance = new MainMongoDao();
             }
             return instance;
         }

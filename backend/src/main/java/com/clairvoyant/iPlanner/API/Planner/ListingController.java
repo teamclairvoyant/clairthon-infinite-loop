@@ -149,11 +149,11 @@ public class ListingController {
             /**
              * For each listing_type call saveListing
              */
-            PlannerService.getInstance().saveListing("JOB_TITLE", Literal.ADD, Utility.JOB_TITLE);
-            PlannerService.getInstance().saveListing("DEPARTMENT", Literal.ADD, Utility.DEPARTMENT);
-            PlannerService.getInstance().saveListing("BUSINESS_UNIT", Literal.ADD, Utility.BUSINESS_UNIT);
-            PlannerService.getInstance().saveListing("SKILLS", Literal.ADD, Utility.SKILLS);
-            PlannerService.getInstance().saveListing("LOCATION", Literal.ADD, Utility.LOCATION);
+            PlannerService.getInstance().saveListing("JOB_TITLE", Literal.ADD, Utility.JOB_TITLE_LIST);
+            PlannerService.getInstance().saveListing("DEPARTMENT", Literal.ADD, Utility.DEPARTMENT_LIST);
+            PlannerService.getInstance().saveListing("BUSINESS_UNIT", Literal.ADD, Utility.BUSINESS_UNIT_LIST);
+            PlannerService.getInstance().saveListing("SKILLS", Literal.ADD, Utility.SKILLS_LIST);
+            PlannerService.getInstance().saveListing("LOCATION", Literal.ADD, Utility.LOCATION_LIST);
 
             return_map.put(Literal.STATUS, Literal.SUCCESS);
             return_map.put(Literal.MESSAGE, Literal.DATA_UPDATED);

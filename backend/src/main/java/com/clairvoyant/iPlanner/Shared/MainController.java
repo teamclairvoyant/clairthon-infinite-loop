@@ -8,12 +8,12 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Date;
 
 @Controller
-public class SharedController {
+public class MainController {
 
     @GetMapping("/testMongo")
     @ResponseBody
     public String testMongo() {
-        if (SharedMongoDao.getInstance().testMongoConnection()) {
+        if (MainMongoDao.getInstance().testMongoConnection()) {
             return "Mongo is UP " + new Date(System.currentTimeMillis());
         } else {
             return "Mongo DOWN !! " + new Date(System.currentTimeMillis());

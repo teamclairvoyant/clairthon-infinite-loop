@@ -11,4 +11,5 @@ public class MongoDBConnectionInfo {
      */
     public static final String test_col = "test_col";
     public static final String listing_col = "listing_col";
+    public static final String interviewer_col = "interviewer_col";
 }

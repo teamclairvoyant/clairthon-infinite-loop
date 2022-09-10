@@ -1,6 +1,6 @@
 package com.clairvoyant.iPlanner.API.Planner;
 
-import com.clairvoyant.iPlanner.Shared.SharedMongoDao;
+import com.clairvoyant.iPlanner.Shared.MainMongoDao;
 import com.clairvoyant.iPlanner.Utility.Literal;
 import com.clairvoyant.iPlanner.Utility.MongoDBConnectionInfo;
 import com.clairvoyant.iPlanner.Utility.Utility;
@@ -53,7 +53,7 @@ public class PlannerService {
              * Get the existing doc from mongo
              */
             Document filter_doc = new Document().append(Literal.type, type);
-            Document listing_doc = SharedMongoDao.getInstance().getMongoTemplate().findOne(new BasicQuery(filter_doc), Document.class, MongoDBConnectionInfo.listing_col);
+            Document listing_doc = MainMongoDao.getInstance().getMongoTemplate().findOne(new BasicQuery(filter_doc), Document.class, MongoDBConnectionInfo.listing_col);
             if (listing_doc == null || listing_doc.isEmpty()) {
                 // first time
                 listing_doc = new Document();
@@ -100,7 +100,7 @@ public class PlannerService {
                     listing_doc.append(Literal.items, final_list);
                 }
             }
-            if (SharedMongoDao.getInstance().upsertDocument(listing_doc, MongoDBConnectionInfo.listing_col)) {
+            if (MainMongoDao.getInstance().upsertDocument(listing_doc, MongoDBConnectionInfo.listing_col)) {
                 return_map.put(Literal.STATUS, Literal.SUCCESS);
                 return_map.put(Literal.MESSAGE, Literal.DATA_UPDATED);
                 return return_map;
@@ -118,6 +118,46 @@ public class PlannerService {
     }
 
     public List<Document> getListing() {
-        return SharedMongoDao.getInstance().getAllDocuments(MongoDBConnectionInfo.listing_col);
+        return MainMongoDao.getInstance().getAllDocuments(MongoDBConnectionInfo.listing_col);
+    }
+
+    public Map<String, Object> saveInterviewer(Map<String, Object> req_map) {
+        Map<String, Object> return_map = new HashMap<>(Literal.SIX);
+        try {
+            Document interviewer_document = new Document();
+            /**
+             * set the fields
+             */
+            interviewer_document.put(Literal._id, req_map.get(Literal.id));
+            interviewer_document.put(Literal.employee_no, req_map.get(Literal.employee_no));
+            interviewer_document.put(Literal.name, req_map.get(Literal.name));
+            interviewer_document.put(Literal.email, req_map.get(Literal.email));
+            interviewer_document.put(Literal.phone, req_map.get(Literal.phone));
+            interviewer_document.put(Literal.experience, req_map.get(Literal.experience));
+            interviewer_document.put(Literal.isInterviewer, req_map.get(Literal.isInterviewer));
+            interviewer_document.put(Literal.job_title, req_map.get(Literal.job_title));
+            interviewer_document.put(Literal.department, req_map.get(Literal.department));
+            interviewer_document.put(Literal.business_unit, req_map.get(Literal.business_unit));
+            interviewer_document.put(Literal.location, req_map.get(Literal.location));
+            interviewer_document.put(Literal.skills, req_map.get(Literal.skills));
+            /**
+             * while create/update employee set deleted/archived status to false
+             */
+            interviewer_document.put(Literal.archived, Literal.FALSE);
+            if(MainMongoDao.getInstance().upsertDocument(interviewer_document, MongoDBConnectionInfo.interviewer_col)) {
+                return_map.put(Literal.STATUS, Literal.SUCCESS);
+                return_map.put(Literal.MESSAGE, Literal.DATA_UPDATED);
+                return return_map;
+            } else {
+                return_map.put(Literal.STATUS, Literal.SUCCESS);
+                return_map.put(Literal.MESSAGE, Literal.DATA_NOT_UPDATED);
+                return return_map;
+            }
+        } catch (Exception e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, Literal.SOMETHING_WENT_WRONG);
+            return_map.put(Literal.EXCEPTION, e.getStackTrace());
+            return return_map;
+        }
     }
 }
