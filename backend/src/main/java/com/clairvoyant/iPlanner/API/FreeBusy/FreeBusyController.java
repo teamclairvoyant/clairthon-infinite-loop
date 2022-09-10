@@ -1,15 +1,12 @@
 package com.clairvoyant.iPlanner.API.FreeBusy;
 
 import com.clairvoyant.iPlanner.API.APIEndpoints;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping(APIEndpoints.FREEBUSY)
 public class FreeBusyController {
 

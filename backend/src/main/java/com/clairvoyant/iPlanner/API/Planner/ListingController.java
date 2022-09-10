@@ -2,6 +2,7 @@ package com.clairvoyant.iPlanner.API.Planner;
 
 import com.clairvoyant.iPlanner.API.APIEndpoints;
 import com.clairvoyant.iPlanner.Services.TokenService;
+import com.clairvoyant.iPlanner.Shared.TokenValidationException;
 import com.clairvoyant.iPlanner.Utility.Literal;
 import com.clairvoyant.iPlanner.Utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping(APIEndpoints.LISTING)
 public class ListingController {
 
@@ -36,12 +38,8 @@ public class ListingController {
             /**
              * Check token
              */
-            if (!TokenService.getInstance().validateToken(request)) {
-                return_map.put(Literal.STATUS, Literal.ERROR);
-                return_map.put(Literal.MESSAGE, Literal.TOKEN_INVALID);
-                return_map.put(Literal.REQUEST_DATA, req_map);
-                return return_map;
-            }
+            TokenService.getInstance().validateToken(request);
+
             /**
              * check null type
              */
@@ -93,6 +91,11 @@ public class ListingController {
                             req_map.get(Literal.type).toString(),
                             req_map.get(Literal.action).toString(),
                             (List<String>) req_map.get(Literal.items));
+        } catch (TokenValidationException e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, Literal.TOKEN_INVALID);
+            return_map.put(Literal.EXCEPTION, e.getLocalizedMessage());
+            return return_map;
         } catch (Exception e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
             return_map.put(Literal.MESSAGE, Literal.SOMETHING_WENT_WRONG);
@@ -110,15 +113,17 @@ public class ListingController {
             /**
              * Check token
              */
-            if (!TokenService.getInstance().validateToken(request)) {
-                return_map.put(Literal.STATUS, Literal.ERROR);
-                return_map.put(Literal.MESSAGE, Literal.TOKEN_INVALID);
-                return_map.put(Literal.REQUEST_DATA, req_map);
-                return return_map;
-            }
-
+            TokenService.getInstance().validateToken(request);
+            /**
+             * get the data
+             */
             return_map.put(Literal.STATUS, Literal.SUCCESS);
             return_map.put(Literal.DATA, PlannerService.getInstance().getListing());
+            return return_map;
+        } catch (TokenValidationException e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, Literal.TOKEN_INVALID);
+            return_map.put(Literal.EXCEPTION, e.getLocalizedMessage());
             return return_map;
         } catch (Exception e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
@@ -141,11 +146,8 @@ public class ListingController {
             /**
              * Check token
              */
-            if (!TokenService.getInstance().validateToken(request)) {
-                return_map.put(Literal.STATUS, Literal.ERROR);
-                return_map.put(Literal.MESSAGE, Literal.TOKEN_INVALID);
-                return return_map;
-            }
+            TokenService.getInstance().validateToken(request);
+
             /**
              * For each listing_type call saveListing
              */
@@ -158,6 +160,11 @@ public class ListingController {
             return_map.put(Literal.STATUS, Literal.SUCCESS);
             return_map.put(Literal.MESSAGE, Literal.DATA_UPDATED);
             return_map.put(Literal.DATA, PlannerService.getInstance().getListing());
+            return return_map;
+        } catch (TokenValidationException e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, Literal.TOKEN_INVALID);
+            return_map.put(Literal.EXCEPTION, e.getLocalizedMessage());
             return return_map;
         } catch (Exception e) {
             return_map.put(Literal.STATUS, Literal.ERROR);

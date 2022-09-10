@@ -1,5 +1,6 @@
 package com.clairvoyant.iPlanner.Services;
 
+import com.clairvoyant.iPlanner.Shared.TokenValidationException;
 import com.clairvoyant.iPlanner.Utility.Literal;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,21 +29,24 @@ public class TokenService {
     private TokenService() {
     }
 
-    public boolean validateToken(HttpServletRequest request) {
-        try {
-            if (request.getHeader(Literal.TOKEN) == null || request.getHeader(Literal.LOGIN_ID) == null) {
-                // if both token and login_id are not present in header
-                return Literal.FALSE;
-            } else if (request.getHeader(Literal.LOGIN_ID).equals(Literal.admin) && request.getHeader(Literal.TOKEN).equals(Literal.iPlanner)) {
-                // hardcoded token and login_id
-                // todo :: change this later when signup is implemented for admin access, fetch token from mongo
-                return Literal.TRUE;
-            } else {
-                return Literal.FALSE;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Literal.FALSE;
+    public void validateToken(HttpServletRequest request) throws TokenValidationException {
+        if (request.getHeader(Literal.TOKEN) == null) {
+            throw new TokenValidationException("TOKEN missing in request header");
         }
+
+        if (request.getHeader(Literal.LOGIN_ID) == null) {
+            throw new TokenValidationException("LOGIN_ID missing in request header");
+        }
+
+        String TOKEN = request.getHeader(Literal.TOKEN);
+        String LOGIN_ID = request.getHeader(Literal.LOGIN_ID);
+
+        // todo :: change this later after signup is implemented for admin access, fetch user token from mongo
+        if (LOGIN_ID.equals(Literal.admin) && TOKEN.equals(Literal.iPlanner)) {
+            // valid token, don't throw exception
+        } else {
+            throw new TokenValidationException("Invalid TOKEN for given LOGIN_ID :: "+LOGIN_ID);
+        }
+
     }
 }

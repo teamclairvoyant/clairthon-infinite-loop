@@ -27,8 +27,8 @@ public class Literal {
     public static final String EXCEPTION = "EXCEPTION";
     public static final String INCORRECT_CREDENTIALS = "Incorrect login id or password";
     public static final String AUTH_LINK = "AUTH_LINK";
-    public static final boolean FALSE = false;
-    public static final boolean TRUE = true;
+    public static final Boolean FALSE = false;
+    public static final Boolean TRUE = true;
     public static final String ADMIN = "ADMIN";
     public static final String admin = "admin";
     public static final String EMPTY_STRING = "";
@@ -100,4 +100,5 @@ public class Literal {
     public static final String SKILLS = "SKILLS";
     public static final String SKILLS_LIST_EMPTY = "There are no skills present in listing, please add to listing first";
     public static final String archived = "archived";
+    public static final String REQUEST_VALIDATION_FAILED = "Request validation failed";
 }
