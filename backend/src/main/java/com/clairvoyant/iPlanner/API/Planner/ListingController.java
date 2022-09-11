@@ -2,9 +2,9 @@ package com.clairvoyant.iPlanner.API.Planner;
 
 import com.clairvoyant.iPlanner.API.APIEndpoints;
 import com.clairvoyant.iPlanner.Services.TokenService;
-import com.clairvoyant.iPlanner.Shared.TokenValidationException;
+import com.clairvoyant.iPlanner.Exceptions.RequestValidationException;
+import com.clairvoyant.iPlanner.Exceptions.TokenValidationException;
 import com.clairvoyant.iPlanner.Utility.Literal;
-import com.clairvoyant.iPlanner.Utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,53 +39,13 @@ public class ListingController {
              * Check token
              */
             TokenService.getInstance().validateToken(request);
-
             /**
-             * check null type
+             * Validate Request
              */
-            if (Utility.isEmptyString(req_map.get(Literal.type))) {
-                return_map.put(Literal.STATUS, Literal.ERROR);
-                return_map.put(Literal.MESSAGE, Literal.TYPE_NULL);
-                return_map.put(Literal.REQUEST_DATA, req_map);
-                return return_map;
-            }
+            PlannerService.getInstance().validateSaveListing(req_map);
             /**
-             * check invalid type
+             * save the valid data
              */
-            if (!Utility.chkListingType(req_map.get(Literal.type).toString())) {
-                return_map.put(Literal.STATUS, Literal.ERROR);
-                return_map.put(Literal.MESSAGE, Literal.TYPE_INVALID);
-                return_map.put(Literal.REQUEST_DATA, req_map);
-                return return_map;
-            }
-            /**
-             * check null Action
-             */
-            if (Utility.isEmptyString(req_map.get(Literal.action))) {
-                return_map.put(Literal.STATUS, Literal.ERROR);
-                return_map.put(Literal.MESSAGE, Literal.ACTION_NULL);
-                return_map.put(Literal.REQUEST_DATA, req_map);
-                return return_map;
-            }
-            /**
-             * check valid Action
-             */
-            if (!Utility.chkValidAction(req_map.get(Literal.action).toString())) {
-                return_map.put(Literal.STATUS, Literal.ERROR);
-                return_map.put(Literal.MESSAGE, Literal.ACTION_INVALID);
-                return_map.put(Literal.REQUEST_DATA, req_map);
-                return return_map;
-            }
-            /**
-             * Check null items
-             */
-            if (req_map.get(Literal.items) == null) {
-                return_map.put(Literal.STATUS, Literal.ERROR);
-                return_map.put(Literal.MESSAGE, Literal.ITEMS_NULL);
-                return_map.put(Literal.REQUEST_DATA, req_map);
-                return return_map;
-            }
-
             return PlannerService.getInstance()
                     .saveListing(
                             req_map.get(Literal.type).toString(),
@@ -93,14 +53,18 @@ public class ListingController {
                             (List<String>) req_map.get(Literal.items));
         } catch (TokenValidationException e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
-            return_map.put(Literal.MESSAGE, Literal.TOKEN_INVALID);
-            return_map.put(Literal.EXCEPTION, e.getLocalizedMessage());
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.TOKEN_INVALID);
+            return return_map;
+        } catch (RequestValidationException e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.REQUEST_VALIDATION_FAILED);
             return return_map;
         } catch (Exception e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
-            return_map.put(Literal.MESSAGE, Literal.SOMETHING_WENT_WRONG);
-            return_map.put(Literal.EXCEPTION, e.getLocalizedMessage());
-            return_map.put(Literal.REQUEST_DATA, req_map);
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.SOMETHING_WENT_WRONG);
             return return_map;
         }
 
@@ -122,13 +86,13 @@ public class ListingController {
             return return_map;
         } catch (TokenValidationException e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
-            return_map.put(Literal.MESSAGE, Literal.TOKEN_INVALID);
-            return_map.put(Literal.EXCEPTION, e.getLocalizedMessage());
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.TOKEN_INVALID);
             return return_map;
         } catch (Exception e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
-            return_map.put(Literal.MESSAGE, Literal.SOMETHING_WENT_WRONG);
-            return_map.put(Literal.EXCEPTION, e.getLocalizedMessage());
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.SOMETHING_WENT_WRONG);
             return return_map;
         }
     }
@@ -148,28 +112,26 @@ public class ListingController {
              */
             TokenService.getInstance().validateToken(request);
 
-            /**
-             * For each listing_type call saveListing
-             */
-            PlannerService.getInstance().saveListing("JOB_TITLE", Literal.ADD, Utility.JOB_TITLE_LIST);
-            PlannerService.getInstance().saveListing("DEPARTMENT", Literal.ADD, Utility.DEPARTMENT_LIST);
-            PlannerService.getInstance().saveListing("BUSINESS_UNIT", Literal.ADD, Utility.BUSINESS_UNIT_LIST);
-            PlannerService.getInstance().saveListing("SKILLS", Literal.ADD, Utility.SKILLS_LIST);
-            PlannerService.getInstance().saveListing("LOCATION", Literal.ADD, Utility.LOCATION_LIST);
-
-            return_map.put(Literal.STATUS, Literal.SUCCESS);
-            return_map.put(Literal.MESSAGE, Literal.DATA_UPDATED);
-            return_map.put(Literal.DATA, PlannerService.getInstance().getListing());
-            return return_map;
+            if (PlannerService.getInstance().populateDummyListing()) {
+                return_map.put(Literal.STATUS, Literal.SUCCESS);
+                return_map.put(Literal.MESSAGE, Literal.DATA_UPDATED);
+                return_map.put(Literal.DATA, PlannerService.getInstance().getListing());
+                return return_map;
+            } else {
+                return_map.put(Literal.STATUS, Literal.ERROR);
+                return_map.put(Literal.MESSAGE, Literal.DATA_NOT_UPDATED);
+                return_map.put(Literal.DATA, PlannerService.getInstance().getListing());
+                return return_map;
+            }
         } catch (TokenValidationException e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
-            return_map.put(Literal.MESSAGE, Literal.TOKEN_INVALID);
-            return_map.put(Literal.EXCEPTION, e.getLocalizedMessage());
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.TOKEN_INVALID);
             return return_map;
         } catch (Exception e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
-            return_map.put(Literal.MESSAGE, Literal.SOMETHING_WENT_WRONG);
-            return_map.put(Literal.EXCEPTION, e.getLocalizedMessage());
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.SOMETHING_WENT_WRONG);
             return return_map;
         }
     }

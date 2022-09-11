@@ -1,7 +1,7 @@
 package com.clairvoyant.iPlanner.API.Planner;
 
+import com.clairvoyant.iPlanner.Exceptions.RequestValidationException;
 import com.clairvoyant.iPlanner.Shared.MainMongoDao;
-import com.clairvoyant.iPlanner.Shared.RequestValidationException;
 import com.clairvoyant.iPlanner.Utility.Literal;
 import com.clairvoyant.iPlanner.Utility.MongoDBConnectionInfo;
 import com.clairvoyant.iPlanner.Utility.Utility;
@@ -21,15 +21,15 @@ public class PlannerService {
     /**
      * Singleton class Lazy initialization with Double check locking
      *
-     * @return FreeBusyService
+     * @return PlannerService
      */
     public static PlannerService getInstance() {
-        synchronized (PlannerService.class) {
-            if (instance == null) {
+        if (instance == null) {
+            synchronized (PlannerService.class) {
                 instance = new PlannerService();
             }
-            return instance;
         }
+        return instance;
     }
 
     /**
@@ -163,7 +163,7 @@ public class PlannerService {
         }
     }
 
-    public void validateInterviewer(Map<String, Object> req_map) throws RequestValidationException {
+    public void validateSaveInterviewer(Map<String, Object> req_map) throws RequestValidationException {
 
         /**
          * check null id, means newly add the interviewer / create employee, else update
@@ -361,5 +361,71 @@ public class PlannerService {
                 }
             }
         }
+    }
+
+    public void validateSaveListing(Map<String, Object> req_map) throws RequestValidationException {
+        /**
+         * check null type
+         */
+        if (Utility.isEmptyString(req_map.get(Literal.type))) {
+            throw new RequestValidationException(Literal.TYPE_NULL);
+        }
+        /**
+         * check invalid type
+         */
+        if (!Utility.chkListingType(req_map.get(Literal.type).toString())) {
+            throw new RequestValidationException(Literal.TYPE_INVALID);
+        }
+        /**
+         * check null Action
+         */
+        if (Utility.isEmptyString(req_map.get(Literal.action))) {
+            throw new RequestValidationException(Literal.ACTION_NULL);
+        }
+        /**
+         * check valid Action
+         */
+        if (!Utility.chkValidAction(req_map.get(Literal.action).toString())) {
+            throw new RequestValidationException(Literal.ACTION_INVALID);
+        }
+        /**
+         * Check null items
+         */
+        if (req_map.get(Literal.items) == null) {
+            throw new RequestValidationException(Literal.ITEMS_NULL);
+        }
+
+    }
+
+    public boolean populateDummyListing() {
+        /**
+         * For each listing_type call saveListing
+         */
+        PlannerService.getInstance().saveListing(Literal.JOB_TITLE, Literal.ADD, Utility.JOB_TITLE_LIST);
+        PlannerService.getInstance().saveListing(Literal.DEPARTMENT, Literal.ADD, Utility.DEPARTMENT_LIST);
+        PlannerService.getInstance().saveListing(Literal.BUSINESS_UNIT, Literal.ADD, Utility.BUSINESS_UNIT_LIST);
+        PlannerService.getInstance().saveListing(Literal.SKILLS, Literal.ADD, Utility.SKILLS_LIST);
+        PlannerService.getInstance().saveListing(Literal.LOCATION, Literal.ADD, Utility.LOCATION_LIST);
+        return Literal.TRUE;
+    }
+
+    public List<Map<String, Object>>  getInterviewers(String id) {
+
+        Document filter_doc = new Document().append(Literal.archived, Literal.FALSE);
+        Document search_doc = new Document().append(Literal.archived, Literal.ZERO);
+
+        if(!id.equalsIgnoreCase(Literal.ALL)) {
+            /**
+             * append the id to search
+             */
+            filter_doc.append(Literal._id, id);
+        }
+        return MainMongoDao.getInstance().getDocuments(new BasicQuery(filter_doc, search_doc),MongoDBConnectionInfo.interviewer_col);
+    }
+
+    public boolean deleteInterviewer(String id) {
+        Document filter_doc = new Document().append(Literal._id, id);
+        return  MainMongoDao.getInstance()
+                .deleteDocuments(new BasicQuery(filter_doc), MongoDBConnectionInfo.interviewer_col);
     }
 }

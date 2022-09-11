@@ -1,6 +1,6 @@
 package com.clairvoyant.iPlanner.Services;
 
-import com.clairvoyant.iPlanner.Shared.TokenValidationException;
+import com.clairvoyant.iPlanner.Exceptions.TokenValidationException;
 import com.clairvoyant.iPlanner.Utility.Literal;
 
 import javax.servlet.http.HttpServletRequest;

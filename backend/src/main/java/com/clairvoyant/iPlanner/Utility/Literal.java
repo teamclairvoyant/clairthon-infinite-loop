@@ -101,4 +101,7 @@ public class Literal {
     public static final String SKILLS_LIST_EMPTY = "There are no skills present in listing, please add to listing first";
     public static final String archived = "archived";
     public static final String REQUEST_VALIDATION_FAILED = "Request validation failed";
+    public static final String ALL = "ALL";
+    public static final int ZERO = 0;
+    public static final String ID_NULL = "Kindly provide id";
 }

@@ -1,4 +1,4 @@
-package com.clairvoyant.iPlanner.Shared;
+package com.clairvoyant.iPlanner.Exceptions;
 
 public class TokenValidationException extends Exception {
     public TokenValidationException(String errorMessage) {

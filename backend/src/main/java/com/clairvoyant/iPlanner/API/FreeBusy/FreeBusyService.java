@@ -19,12 +19,12 @@ public class FreeBusyService {
      * @return FreeBusyService
      */
     public static FreeBusyService getInstance() {
-        synchronized (FreeBusyService.class) {
-            if (instance == null) {
+        if (instance == null) {
+            synchronized (FreeBusyService.class) {
                 instance = new FreeBusyService();
             }
-            return instance;
         }
+        return instance;
     }
 
     /**
