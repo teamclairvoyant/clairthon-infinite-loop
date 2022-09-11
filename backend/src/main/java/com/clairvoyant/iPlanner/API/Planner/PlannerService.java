@@ -7,6 +7,7 @@ import com.clairvoyant.iPlanner.Utility.MongoDBConnectionInfo;
 import com.clairvoyant.iPlanner.Utility.Utility;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Update;
 
 import java.util.HashMap;
 import java.util.List;
@@ -394,7 +395,6 @@ public class PlannerService {
         if (req_map.get(Literal.items) == null) {
             throw new RequestValidationException(Literal.ITEMS_NULL);
         }
-
     }
 
     public boolean populateDummyListing() {
@@ -409,23 +409,24 @@ public class PlannerService {
         return Literal.TRUE;
     }
 
-    public List<Map<String, Object>>  getInterviewers(String id) {
-
+    public List<Map<String, Object>> getInterviewers(String id) {
         Document filter_doc = new Document().append(Literal.archived, Literal.FALSE);
         Document search_doc = new Document().append(Literal.archived, Literal.ZERO);
-
-        if(!id.equalsIgnoreCase(Literal.ALL)) {
+        if (!id.equalsIgnoreCase(Literal.ALL)) {
             /**
              * append the id to search
              */
             filter_doc.append(Literal._id, id);
         }
-        return MainMongoDao.getInstance().getDocuments(new BasicQuery(filter_doc, search_doc),MongoDBConnectionInfo.interviewer_col);
+        return MainMongoDao.getInstance().getDocuments(new BasicQuery(filter_doc, search_doc), MongoDBConnectionInfo.interviewer_col);
     }
 
     public boolean deleteInterviewer(String id) {
         Document filter_doc = new Document().append(Literal._id, id);
-        return  MainMongoDao.getInstance()
-                .deleteDocuments(new BasicQuery(filter_doc), MongoDBConnectionInfo.interviewer_col);
+        Update update = new Update().set(Literal.archived, Literal.TRUE);
+        /**
+         * Implement soft delete; set archived status flag to 'true' in interviewer doc
+         */
+        return MainMongoDao.getInstance().updateDocument(new BasicQuery(filter_doc), update, MongoDBConnectionInfo.interviewer_col);
     }
 }

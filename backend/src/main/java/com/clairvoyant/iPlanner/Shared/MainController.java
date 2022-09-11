@@ -26,4 +26,11 @@ public class MainController {
         modelAndView.setViewName("coming-soon");
         return modelAndView;
     }
+
+    @GetMapping("/javadoc")
+    public ModelAndView javadoc() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("javadoc/index");
+        return modelAndView;
+    }
 }
