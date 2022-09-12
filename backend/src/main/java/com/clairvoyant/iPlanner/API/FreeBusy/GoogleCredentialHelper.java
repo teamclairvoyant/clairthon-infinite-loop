@@ -106,7 +106,8 @@ public class GoogleCredentialHelper {
         if (HTTP_TRANSPORT == null) {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         }
-        return new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleCredentialHelper.getCredential(HTTP_TRANSPORT)).setApplicationName(APPLICATION_NAME).build();
+        Credential credential = GoogleCredentialHelper.getCredential(HTTP_TRANSPORT);
+        return new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
     }
 
     /**
@@ -125,9 +126,11 @@ public class GoogleCredentialHelper {
         if (storedCredential != null) {
             credential.setAccessToken(storedCredential.getAccessToken());
             credential.setRefreshToken(storedCredential.getRefreshToken());
-            credential.setExpirationTimeMilliseconds(storedCredential.getExpirationTimeMilliseconds());
+            credential.setExpirationTimeMilliseconds(null);
         }
-        credential.refreshToken();
+        if(credential.refreshToken()) {
+            logger.info("Refreshed GoogleCredential accessToken");
+        }
         return credential;
     }
 }

@@ -391,16 +391,14 @@ public class InterviewerController {
      * {@code @apiNote}
      *                REQUEST METHOD - POST <br>
      * {
-     *     "start_time" : "",
-     *     "end_time" : ""
+     *     "start_time": "2022-12-18T12:00:00+05:30",
+     *     "end_time": "2022-12-18T23:59:00+05:30",
      *     "experience": 2,
      *     "job_title": "Software Engineer",
      *     "department": "Enterprise Engineering",
      *     "business_unit": "Enterprise and Data Services",
      *     "location": "Pune",
-     *     "skills": [
-     *         "Java"
-     *     ]
+     *     "skills" : ["React", "Java"]
      * }
      * 				  <br>
      *                <table border=1px>
@@ -444,6 +442,7 @@ public class InterviewerController {
      *                </table>
      *                <br>
      * @see <b>Functionality: </b> This API is used to search interviewer based on filters <br>
+     * @note All fields are filtered on AND operator and individual skills on OR/(IN) operator
      * @return <b>SUCCESS MESSAGE:</b> <br>
      *         <b>ERROR MESSAGE:</b> <br>
      *         {"EXCEPTION":"Invalid Token","MESSAGE":"TOKEN missing in request header","STATUS":"Error"} <br>

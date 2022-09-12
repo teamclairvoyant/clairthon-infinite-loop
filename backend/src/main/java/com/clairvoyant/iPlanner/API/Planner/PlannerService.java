@@ -449,47 +449,51 @@ public class PlannerService {
          */
         if(!Utility.isEmptyString(req_map.get(Literal.experience))) {
             /**
-             * append the experience
+             * append the experience (AND OPERATOR)
              */
             filter_doc.append(Literal.experience, new Document().append(Literal.$gte, req_map.get(Literal.experience)));
         }
         if(!Utility.isEmptyString(req_map.get(Literal.job_title))) {
             /**
-             * append the job_title
+             * append the job_title (AND OPERATOR)
              */
             filter_doc.append(Literal.job_title, req_map.get(Literal.job_title));
         }
         if(!Utility.isEmptyString(req_map.get(Literal.department))) {
             /**
-             * append the department
+             * append the department (AND OPERATOR)
              */
             filter_doc.append(Literal.department, req_map.get(Literal.department));
         }
         if(!Utility.isEmptyString(req_map.get(Literal.business_unit))) {
             /**
-             * append the business_unit
+             * append the business_unit (AND OPERATOR)
              */
             filter_doc.append(Literal.business_unit, req_map.get(Literal.business_unit));
         }
         if(!Utility.isEmptyString(req_map.get(Literal.location))) {
             /**
-             * append the department
+             * append the department (AND OPERATOR)
              */
             filter_doc.append(Literal.location, req_map.get(Literal.location));
         }
-        if(!Utility.isEmptyString(req_map.get(Literal.skills))) {
+        if(req_map.get(Literal.skills) != null) {
             /**
-             * append the skills
+             * append the skills (AND OPERATOR)
              */
-            // TODO :: implement skills :: each skill should be OR criteria not AND
-            throw new RequestValidationException("Filter by SKILLS not implemented");
+            List<String> skills = (List<String>) req_map.get(Literal.skills);
+            /**
+             * Individual kills are matched by (OR/IN OPERATOR)
+             */
+            Document in_doc = new Document().append(Literal.$in, skills);
+            filter_doc.append(Literal.skills, in_doc);
         }
         /**
          * get eligible interviewers
          */
         List<Map<String, Object>> eligible_interviewers = MainMongoDao.getInstance().getDocuments(new BasicQuery(filter_doc, search_doc), MongoDBConnectionInfo.interviewer_col);
         /**
-         * if request has start_time and end_time; go check freeBusy API for filtering the interviewers with free time
+         * if request has start_time and end_time; go check freeBusy API for filtering the interviewers with free time (AND OPERATOR)
          */
         if(!eligible_interviewers.isEmpty() && req_map.get(Literal.start_time) != null && req_map.get(Literal.end_time)!=null) {
             /**
