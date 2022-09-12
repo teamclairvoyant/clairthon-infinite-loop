@@ -2,6 +2,7 @@ package com.clairvoyant.iPlanner.API.FreeBusy;
 
 import com.clairvoyant.iPlanner.Utility.Literal;
 import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.FreeBusyCalendar;
 import com.google.api.services.calendar.model.FreeBusyResponse;
 import org.springframework.stereotype.Service;
@@ -39,14 +40,14 @@ public class FreeBusyService {
         Map<String, Object> return_map = new HashMap<>(Literal.SIX);
         try {
             return_map.put(Literal.STATUS, Literal.SUCCESS);
-            return_map.put(Literal.AUTH_LINK, FreeBusyHelper.getAuthorizationLink());
+            return_map.put(Literal.AUTH_LINK, GoogleCredentialHelper.getAuthorizationLink());
             return return_map;
         } catch (IOException e) {
             // todo :: improve this, kill jetty process on port 8888 before even trying to start jetty
             // in case already authorised and port in use send already existing auth link
             return_map.put(Literal.STATUS, Literal.SUCCESS);
             return_map.put(Literal.MESSAGE, e.getMessage());
-            return_map.put(Literal.AUTH_LINK, FreeBusyHelper.AUTH_LINK);
+            return_map.put(Literal.AUTH_LINK, GoogleCredentialHelper.AUTH_LINK);
             return return_map;
         } catch (GeneralSecurityException e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
@@ -73,5 +74,9 @@ public class FreeBusyService {
             });
         }
         return email_list;
+    }
+
+    public List<Event> getEvents(List<String> emails_list, DateTime start_time, DateTime end_time) throws GeneralSecurityException, IOException {
+        return GoogleCalendarHelper.getEvents("todo", start_time, end_time);
     }
 }
