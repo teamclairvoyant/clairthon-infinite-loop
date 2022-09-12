@@ -31,6 +31,7 @@ import java.util.List;
 
 public class FreeBusyHelper {
 
+    public static String AUTH_LINK = null;
     private static Credential CREDENTIAL;
     private static final String APPLICATION_NAME = "Google Calendar API Java Quickstart";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
@@ -86,7 +87,12 @@ public class FreeBusyHelper {
         // Build flow and trigger user authorization request.
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES).setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH))).setAccessType("offline").build();
 
+        /**
+         * TODO :: stop existing process running on port 8888
+         */
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
+        receiver.stop();
+
         AuthorizationCodeInstalledApp authorizationCodeInstalledApp = new AuthorizationCodeInstalledApp(flow, receiver);
         Credential credential = authorizationCodeInstalledApp.getFlow().loadCredential("user");
         String redirectUri = receiver.getRedirectUri();
@@ -112,8 +118,9 @@ public class FreeBusyHelper {
                 throw new RuntimeException(e);
             }
         }).start();
-
-        return authorizationUrl.build();
+        // set auth link
+        AUTH_LINK = authorizationUrl.build();
+        return AUTH_LINK;
     }
 
     public static Calendar getCalendarClient() throws GeneralSecurityException, IOException {
