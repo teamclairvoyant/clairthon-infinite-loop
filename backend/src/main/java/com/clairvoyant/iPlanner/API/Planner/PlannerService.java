@@ -429,4 +429,68 @@ public class PlannerService {
          */
         return MainMongoDao.getInstance().updateDocument(new BasicQuery(filter_doc), update, MongoDBConnectionInfo.interviewer_col);
     }
+
+    public void validateInterviewerSearchRequest(Map<String, Object> search_map) throws RequestValidationException {
+        // TODO :: delete this after these filters have been implemented
+        if (!Utility.isEmptyString(search_map.get(Literal.start_time)) || !Utility.isEmptyString(search_map.get(Literal.end_time))) {
+            throw new RequestValidationException(Literal.SEARCH_FILTER_NOT_IMPLEMENTED);
+        }
+        // todo :: do other validations for experience - integer, job title - in listing or not, skills etc
+
+    }
+
+    public List<Map<String, Object>> searchInterviewers(Map<String, Object> req_map) {
+        /**
+         * filter doc
+         */
+        Document filter_doc = new Document().append(Literal.archived, Literal.FALSE);
+        /**
+         * create the filters based on request
+         */
+        if(!Utility.isEmptyString(req_map.get(Literal.experience))) {
+            /**
+             * append the experience
+             */
+            filter_doc.append(Literal.experience, new Document().append(Literal.$gte, req_map.get(Literal.experience)));
+        }
+        if(!Utility.isEmptyString(req_map.get(Literal.job_title))) {
+            /**
+             * append the job_title
+             */
+            filter_doc.append(Literal.job_title, req_map.get(Literal.job_title));
+        }
+        if(!Utility.isEmptyString(req_map.get(Literal.department))) {
+            /**
+             * append the department
+             */
+            filter_doc.append(Literal.department, req_map.get(Literal.department));
+        }
+        if(!Utility.isEmptyString(req_map.get(Literal.business_unit))) {
+            /**
+             * append the business_unit
+             */
+            filter_doc.append(Literal.business_unit, req_map.get(Literal.business_unit));
+        }
+        if(!Utility.isEmptyString(req_map.get(Literal.location))) {
+            /**
+             * append the department
+             */
+            filter_doc.append(Literal.location, req_map.get(Literal.location));
+        }
+        if(!Utility.isEmptyString(req_map.get(Literal.skills))) {
+            /**
+             * append the skills
+             */
+            // TODO :: implement skills :: each skill should be OR criteria not AND
+        }
+        /**
+         * search doc - remove the archived status
+         */
+        Document search_doc = new Document().append(Literal.archived, Literal.ZERO);
+
+        // TODO :: before returning :: check freeBusy API for filtering start_time and end_time
+
+        return MainMongoDao.getInstance().getDocuments(new BasicQuery(filter_doc, search_doc), MongoDBConnectionInfo.interviewer_col);
+    }
 }
+

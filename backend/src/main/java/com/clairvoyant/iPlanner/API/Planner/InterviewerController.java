@@ -1,9 +1,9 @@
 package com.clairvoyant.iPlanner.API.Planner;
 
 import com.clairvoyant.iPlanner.API.APIEndpoints;
-import com.clairvoyant.iPlanner.Services.TokenService;
 import com.clairvoyant.iPlanner.Exceptions.RequestValidationException;
 import com.clairvoyant.iPlanner.Exceptions.TokenValidationException;
+import com.clairvoyant.iPlanner.Services.TokenService;
 import com.clairvoyant.iPlanner.Utility.Literal;
 import com.clairvoyant.iPlanner.Utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -378,6 +378,104 @@ public class InterviewerController {
             return_map.put(Literal.STATUS, Literal.ERROR);
             return_map.put(Literal.MESSAGE, e.getMessage());
             return_map.put(Literal.EXCEPTION, Literal.TOKEN_INVALID);
+            return return_map;
+        } catch (Exception e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.SOMETHING_WENT_WRONG);
+            return return_map;
+        }
+    }
+
+    /**
+     * {@code @apiNote}
+     *                REQUEST METHOD - POST <br>
+     * {
+     *     "start_time" : "",
+     *     "end_time" : ""
+     *     "experience": 2,
+     *     "job_title": "Software Engineer",
+     *     "department": "Enterprise Engineering",
+     *     "business_unit": "Enterprise and Data Services",
+     *     "location": "Pune",
+     *     "skills": [
+     *         "Java"
+     *     ]
+     * }
+     * 				  <br>
+     *                <table border=1px>
+     *                <tr>
+     *                <th>Key</th>
+     *                <th>Sample Data</th>
+     *                <th>Data Type</th>
+     *                <th>Constraint</th>
+     *                <th>Description</th>
+     *                </tr>
+     *                <tr>
+     *                <td>experience</td>
+     *                <td>2</td>
+     *                <td>Integer</td>
+     *                <td>Optional</td>
+     *                <td>filter experience (years equal to or greater than) of the interviewer </td>
+     *                </tr>
+     *
+     *                <table border=1px>
+     *                <tr>
+     *                <th>Header Key</th>
+     *                <th>Sample Data</th>
+     *                <th>Data Type</th>
+     *                <th>Constraint</th>
+     *                <th>Description</th>
+     *                </tr>
+     *                <tr>
+     *                <td>TOKEN</td>
+     *                <td>G6G57HfD49HPl</td>
+     *                <td>String</td>
+     *                <td>Mandatory</td>
+     *                <td>user token</td>
+     *                </tr>
+     *                <tr>
+     *                <td>LOGIN_ID</td>
+     *                <td>admin</td>
+     *                <td>String</td>
+     *                <td>Mandatory</td>
+     *                <td>login id / username</td>
+     *                </tr>
+     *                </table>
+     *                <br>
+     * @see <b>Functionality: </b> This API is used to search interviewer based on filters <br>
+     * @return <b>SUCCESS MESSAGE:</b> <br>
+     *         <b>ERROR MESSAGE:</b> <br>
+     *         {"EXCEPTION":"Invalid Token","MESSAGE":"TOKEN missing in request header","STATUS":"Error"} <br>
+     *         {"EXCEPTION":"Invalid Token","MESSAGE":"Invalid TOKEN for given LOGIN_ID :: admin","STATUS":"Error"} <br>
+     */
+    @PostMapping("/search")
+    public Map<String, Object> searchInterviewers(@RequestBody Map<String, Object> req_map) {
+        Map<String, Object> return_map = new HashMap<>(Literal.SIX);
+        try {
+            /**
+             * Check token
+             */
+            TokenService.getInstance().validateToken(request);
+            /**
+             * Validate request params
+             */
+            PlannerService.getInstance().validateInterviewerSearchRequest(req_map);
+            /**
+             * get the results
+             */
+            return_map.put(Literal.STATUS, Literal.SUCCESS);
+            return_map.put(Literal.DATA, PlannerService.getInstance().searchInterviewers(req_map));
+            return return_map;
+        } catch (TokenValidationException e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.TOKEN_INVALID);
+            return return_map;
+        } catch (RequestValidationException e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.REQUEST_VALIDATION_FAILED);
             return return_map;
         } catch (Exception e) {
             return_map.put(Literal.STATUS, Literal.ERROR);

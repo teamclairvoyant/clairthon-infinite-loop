@@ -104,4 +104,8 @@ public class Literal {
     public static final String ALL = "ALL";
     public static final int ZERO = 0;
     public static final String ID_NULL = "Kindly provide id";
+    public static final String start_time = "start_time";
+    public static final String end_time = "end_time";
+    public static final String SEARCH_FILTER_NOT_IMPLEMENTED = "This filter is not yet implemented. Coming soon";
+    public static final String $gte = "$gte";
 }
