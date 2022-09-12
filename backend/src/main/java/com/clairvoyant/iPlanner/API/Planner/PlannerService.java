@@ -1,18 +1,17 @@
 package com.clairvoyant.iPlanner.API.Planner;
 
+import com.clairvoyant.iPlanner.API.FreeBusy.FreeBusyService;
 import com.clairvoyant.iPlanner.Exceptions.RequestValidationException;
 import com.clairvoyant.iPlanner.Shared.MainMongoDao;
 import com.clairvoyant.iPlanner.Utility.Literal;
 import com.clairvoyant.iPlanner.Utility.MongoDBConnectionInfo;
 import com.clairvoyant.iPlanner.Utility.Utility;
+import com.google.api.client.util.DateTime;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Update;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PlannerService {
@@ -431,19 +430,20 @@ public class PlannerService {
     }
 
     public void validateInterviewerSearchRequest(Map<String, Object> search_map) throws RequestValidationException {
-        // TODO :: delete this after these filters have been implemented
-        if (!Utility.isEmptyString(search_map.get(Literal.start_time)) || !Utility.isEmptyString(search_map.get(Literal.end_time))) {
-            throw new RequestValidationException(Literal.SEARCH_FILTER_NOT_IMPLEMENTED);
-        }
-        // todo :: do other validations for experience - integer, job title - in listing or not, skills etc
-
+        // TODO validateInterviewerSearchRequest like date parse
     }
 
-    public List<Map<String, Object>> searchInterviewers(Map<String, Object> req_map) {
+    public List<Map<String, Object>> searchInterviewers(Map<String, Object> req_map) throws RequestValidationException {
         /**
          * filter doc
          */
-        Document filter_doc = new Document().append(Literal.archived, Literal.FALSE);
+        Document filter_doc = new Document()
+                .append(Literal.archived, Literal.FALSE)
+                .append(Literal.isInterviewer, Literal.TRUE);
+        /**
+         * search doc - remove the archived status
+         */
+        Document search_doc = new Document().append(Literal.archived, Literal.ZERO);
         /**
          * create the filters based on request
          */
@@ -482,15 +482,43 @@ public class PlannerService {
              * append the skills
              */
             // TODO :: implement skills :: each skill should be OR criteria not AND
+            throw new RequestValidationException("Filter by SKILLS not implemented");
         }
         /**
-         * search doc - remove the archived status
+         * get eligible interviewers
          */
-        Document search_doc = new Document().append(Literal.archived, Literal.ZERO);
+        List<Map<String, Object>> eligible_interviewers = MainMongoDao.getInstance().getDocuments(new BasicQuery(filter_doc, search_doc), MongoDBConnectionInfo.interviewer_col);
+        /**
+         * if request has start_time and end_time; go check freeBusy API for filtering the interviewers with free time
+         */
+        if(!eligible_interviewers.isEmpty() && req_map.get(Literal.start_time) != null && req_map.get(Literal.end_time)!=null) {
+            /**
+             * get the list of emails of eligible_interviewers
+             */
+            List<String> eligible_interviewers_emails = new ArrayList<>();
+            eligible_interviewers.forEach(interviewer-> {
+                eligible_interviewers_emails.add(interviewer.get(Literal.email).toString());
+            });
 
-        // TODO :: before returning :: check freeBusy API for filtering start_time and end_time
-
-        return MainMongoDao.getInstance().getDocuments(new BasicQuery(filter_doc, search_doc), MongoDBConnectionInfo.interviewer_col);
+            try {
+                DateTime start_time = new DateTime(req_map.get(Literal.start_time).toString());
+                DateTime end_time = new DateTime(req_map.get(Literal.end_time).toString());
+                // remove the busy ones
+                List<String> free_interviewers_emails = FreeBusyService.getInstance().filterBusyEmails(eligible_interviewers_emails, start_time, end_time);
+                List<Map<String, Object>> busy_interviewers = new ArrayList<>();
+                // populate the busy_interviewers list
+                eligible_interviewers.forEach(interviewer-> {
+                    if(!free_interviewers_emails.contains(interviewer.get(Literal.email))) {
+                        busy_interviewers.add(interviewer);
+                    }
+                });
+                // remove the busy interviewers from eligible interviewers list
+                eligible_interviewers.removeAll(busy_interviewers);
+            } catch (Exception e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+        return eligible_interviewers;
     }
 }
 

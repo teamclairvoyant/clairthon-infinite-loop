@@ -108,4 +108,5 @@ public class Literal {
     public static final String end_time = "end_time";
     public static final String SEARCH_FILTER_NOT_IMPLEMENTED = "This filter is not yet implemented. Coming soon";
     public static final String $gte = "$gte";
+    public static final String emails = "emails";
 }

@@ -1,12 +1,14 @@
 package com.clairvoyant.iPlanner.API.FreeBusy;
 
 import com.clairvoyant.iPlanner.Utility.Literal;
+import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.FreeBusyCalendar;
+import com.google.api.services.calendar.model.FreeBusyResponse;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class FreeBusyService {
@@ -54,7 +56,22 @@ public class FreeBusyService {
         }
     }
 
-    public String getFreeBusy(String email) throws GeneralSecurityException, IOException {
-        return FreeBusyHelper.getFreeBusy(email);
+    public FreeBusyResponse getFreeBusy(String email, DateTime startTime, DateTime endTime) throws GeneralSecurityException, IOException {
+        return FreeBusyHelper.getFreeBusy(new ArrayList<String>(Collections.singletonList(email)), startTime, endTime);
+    }
+
+    public List<String> filterBusyEmails(List<String> email_list, DateTime startTime, DateTime endTime) throws GeneralSecurityException, IOException {
+        FreeBusyResponse freeBusyResponse = FreeBusyHelper.getFreeBusy(email_list, startTime, endTime);
+        Map<String, FreeBusyCalendar> calendars = freeBusyResponse.getCalendars();
+        if(!calendars.isEmpty()) {
+            // if the calendars.email.busy is not empty in calendars, means the person is busy, so remove from the list
+            calendars.forEach((k, v) -> {
+                FreeBusyCalendar freeBusyCalendar = calendars.get(k);
+                if (!freeBusyCalendar.getBusy().isEmpty()) {
+                    email_list.remove(k);
+                }
+            });
+        }
+        return email_list;
     }
 }

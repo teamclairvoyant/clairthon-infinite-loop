@@ -137,24 +137,19 @@ public class FreeBusyHelper {
         return service;
     }
 
-    public static String getFreeBusy(String email) throws IOException, GeneralSecurityException {
-
+    public static FreeBusyResponse getFreeBusy(List<String> email_list, DateTime startTime, DateTime endTime) throws IOException, GeneralSecurityException {
         Calendar calendarClient = getCalendarClientV2();
         FreeBusyRequest req = new FreeBusyRequest();
-        DateTime startTime = new DateTime("2022-09-08T00:00:00.000Z");
-        DateTime endTime = new DateTime("2022-09-13T24:59:59.000Z");
+        req.setTimeZone("IST");
         req.setTimeMin(startTime);
         req.setTimeMax(endTime);
+
         List<FreeBusyRequestItem> items = new ArrayList<>();
-        FreeBusyRequestItem id = new FreeBusyRequestItem().setId(email);
-        items.add(id);
+        email_list.forEach(email-> items.add(new FreeBusyRequestItem().setId(email)));
         req.setItems(items);
 
         Calendar.Freebusy.Query fbq = calendarClient.freebusy().query(req);
-        FreeBusyResponse fbresponse = fbq.execute();
-        System.out.println("Getting freeBusy response");
-        System.out.println(fbresponse.toString());
-        return fbresponse.toString();
+        return fbq.execute();
     }
 
 }
