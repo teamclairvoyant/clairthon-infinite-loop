@@ -18,6 +18,8 @@ import com.google.api.client.util.store.DataStoreFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,6 +31,7 @@ import java.util.List;
 
 public class GoogleCredentialHelper {
 
+    private static Logger logger = LoggerFactory.getLogger(GoogleCredentialHelper.class);
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
     public static String AUTH_LINK = null;
@@ -52,9 +55,15 @@ public class GoogleCredentialHelper {
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES).setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH))).setAccessType("offline").build();
+        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow
+                .Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
+                .setAccessType("offline").build();
 
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
+        LocalServerReceiver receiver = new LocalServerReceiver
+                .Builder()
+                .setPort(8888)
+                .build();
         AuthorizationCodeInstalledApp authorizationCodeInstalledApp = new AuthorizationCodeInstalledApp(flow, receiver);
         Credential credential = authorizationCodeInstalledApp.getFlow().loadCredential("user");
         String redirectUri = receiver.getRedirectUri();
@@ -76,6 +85,7 @@ public class GoogleCredentialHelper {
             // store credentials into StoredCredential file
             try {
                 flow.createAndStoreCredential(response, "user");
+                logger.info("Google Credentials created and saved ");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -85,7 +95,17 @@ public class GoogleCredentialHelper {
         return AUTH_LINK;
     }
 
-    public static Calendar getCalendarClientV2() throws GeneralSecurityException, IOException {
+    /**
+     * Get Calendar service client
+     *
+     * @return
+     * @throws GeneralSecurityException
+     * @throws IOException
+     */
+    public static Calendar getCalendarClient() throws GeneralSecurityException, IOException {
+        if (HTTP_TRANSPORT == null) {
+            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        }
         return new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleCredentialHelper.getCredential(HTTP_TRANSPORT)).setApplicationName(APPLICATION_NAME).build();
     }
 

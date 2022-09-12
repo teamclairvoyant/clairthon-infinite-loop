@@ -14,7 +14,7 @@ import java.util.List;
 public class FreeBusyHelper {
 
     public static FreeBusyResponse getFreeBusy(List<String> email_list, DateTime startTime, DateTime endTime) throws IOException, GeneralSecurityException {
-        Calendar calendarClient = GoogleCredentialHelper.getCalendarClientV2();
+        Calendar calendarClient = GoogleCredentialHelper.getCalendarClient();
         FreeBusyRequest req = new FreeBusyRequest();
         req.setTimeZone("IST");
         req.setTimeMin(startTime);

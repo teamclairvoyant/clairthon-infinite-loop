@@ -32,10 +32,17 @@ public class FreeBusyController {
         return FreeBusyService.getInstance().initService();
     }
 
-    @GetMapping("/get")
-    public String getFreeBusy(@RequestParam(value = "email", required = true) String email,
-                                           @RequestParam(value = "start_time", required = true) String start_time,
-                                           @RequestParam(value = "end_time", required = true) String end_time) {
+    /**
+     * {
+     *     "email" : "abhinav.gogoi@clairvoyantsoft.com",
+     *     "start_time": "2022-09-13T12:00:00+05:30",
+     *     "end_time": "2022-09-13T15:59:00+05:30"
+     * }
+     * @param req_map
+     * @return
+     */
+    @PostMapping("/get")
+    public String getFreeBusy(@RequestBody Map<String, Object> req_map) {
         try {
             /**
              * Check token
@@ -44,11 +51,13 @@ public class FreeBusyController {
             /**
              * validate the request data
              */
+            String email;
             DateTime start;
             DateTime end;
             try {
-                start = new DateTime(start_time);
-                end = new DateTime(end_time);
+                email = req_map.get(Literal.email).toString();
+                start = new DateTime(req_map.get(Literal.start_time).toString());
+                end = new DateTime(req_map.get(Literal.end_time).toString());
             } catch (Exception e) {
                 throw new RequestValidationException(e.getMessage());
             }
@@ -112,7 +121,7 @@ public class FreeBusyController {
 
     /**
      * {
-     * "emails" : ["abhinav.gogoi@clairvoyantsoft.com", "kedar.shivshette@clairvoyantsoft.com"],
+     * "email" : "abhinav.gogoi@clairvoyantsoft.com",
      * "start_time": "2022-12-18T00:00:00",
      * "end_time": "2022-12-18T23:59:00"
      * }
@@ -131,18 +140,18 @@ public class FreeBusyController {
             /**
              * validate the request data
              */
-            List<String> emails_list;
+            String email;
             DateTime start_time;
             DateTime end_time;
             try{
-                emails_list = (List<String>) req_map.get(Literal.emails);
+                email =  req_map.get(Literal.email).toString();
                 start_time = new DateTime(req_map.get(Literal.start_time).toString());
                 end_time = new DateTime(req_map.get(Literal.end_time).toString());
             } catch (Exception e) {
                 throw new RequestValidationException(e.getMessage());
             }
             return_map.put(Literal.STATUS, Literal.SUCCESS);
-            return_map.put(Literal.DATA, FreeBusyService.getInstance().getEvents(emails_list, start_time, end_time));
+            return_map.put(Literal.DATA, FreeBusyService.getInstance().getEvents(email, start_time, end_time));
             return return_map;
         } catch (TokenValidationException e) {
             return_map.put(Literal.STATUS, Literal.ERROR);

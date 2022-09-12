@@ -13,11 +13,15 @@ public class GoogleCalendarHelper {
 
     public static List<Event> getEvents(String email, DateTime startTime, DateTime endTime) throws IOException, GeneralSecurityException {
         // Initialize Calendar service with valid OAuth credentials
-        Calendar calendarClient = GoogleCredentialHelper.getCalendarClientV2();
+        Calendar calendarClient = GoogleCredentialHelper.getCalendarClient();
         // Retrieve all events
-        Events events = calendarClient.events().list("primary").setTimeMin(startTime).setTimeMax(endTime).execute();
-
+        Events events = calendarClient.events().list(email)
+                .setTimeMin(startTime)
+                .setTimeMax(endTime)
+                .setTimeZone("IST")
+                .execute();
+        events.getItems()
+                .forEach(event -> System.out.println("EVENT NAME :::::::::::::" + event.getSummary()));
         return events.getItems();
-
     }
 }

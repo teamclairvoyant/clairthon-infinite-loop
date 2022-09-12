@@ -76,7 +76,7 @@ public class FreeBusyService {
         return email_list;
     }
 
-    public List<Event> getEvents(List<String> emails_list, DateTime start_time, DateTime end_time) throws GeneralSecurityException, IOException {
-        return GoogleCalendarHelper.getEvents("todo", start_time, end_time);
+    public List<Event> getEvents(String email, DateTime start_time, DateTime end_time) throws GeneralSecurityException, IOException {
+        return GoogleCalendarHelper.getEvents(email, start_time, end_time);
     }
 }
