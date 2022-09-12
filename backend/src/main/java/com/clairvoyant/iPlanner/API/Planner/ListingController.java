@@ -67,7 +67,7 @@ public class ListingController {
      *                <td>Items to ADD or DELETE to/from the listing</td>
      *                </tr>
      *                </table>
-     * @param
+     * {@code @apiNote} headers <br>
      *                <table border=1px>
      *                <tr>
      *                <th>Header Key</th>
@@ -142,7 +142,7 @@ public class ListingController {
 
 
     /**
-     * @param no_parameters  <br>
+     * {@code @apiNote} headers <br>
      *               REQUEST METHOD - GET <br>
      *                <table border=1px>
      *                <tr>
@@ -266,7 +266,7 @@ public class ListingController {
 
 
     /**
-     * @param no_parameters <br>
+     * {@code @apiNote} headers <br>
      *               REQUEST METHOD - POST <br>
      *                <table border=1px>
      *                <tr>

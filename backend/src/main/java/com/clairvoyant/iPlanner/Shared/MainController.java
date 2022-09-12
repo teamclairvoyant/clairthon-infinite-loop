@@ -3,7 +3,6 @@ package com.clairvoyant.iPlanner.Shared;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Date;
 
@@ -20,17 +19,10 @@ public class MainController {
         }
     }
 
-    @GetMapping("/")
-    public ModelAndView index() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("coming-soon");
-        return modelAndView;
-    }
-
-    @GetMapping("/javadoc")
-    public ModelAndView javadoc() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("javadoc/index");
-        return modelAndView;
-    }
+//    @GetMapping("/")
+//    public ModelAndView index() {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("coming-soon");
+//        return modelAndView;
+//    }
 }

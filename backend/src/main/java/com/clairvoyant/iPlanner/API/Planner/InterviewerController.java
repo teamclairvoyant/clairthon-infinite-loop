@@ -140,7 +140,7 @@ public class InterviewerController {
      *                <td>Employee skills as per listing</td>
      *                </tr>
      *                </table>
-     * @param
+     * {@code @apiNote} headers <br>
      *                <table border=1px>
      *                <tr>
      *                <th>Header Key</th>
@@ -211,7 +211,7 @@ public class InterviewerController {
 
 
     /**
-     * @param id <br>
+     * {@code @apiNote}
      *                REQUEST METHOD - GET <br>
      * 				  <br>
      *                <table border=1px>
@@ -229,7 +229,7 @@ public class InterviewerController {
      *                <td>Optional</td>
      *                <td>id of the interviewer or ALL</td>
      *                </tr>
-     *  @param
+     *
      *                <table border=1px>
      *                <tr>
      *                <th>Header Key</th>
@@ -304,7 +304,7 @@ public class InterviewerController {
 
     /**
      *
-     * @param id <br>
+     * {@code @apiNote}  
      *                REQUEST METHOD - DELETE <br>
      * 				  <br>
      *                <table border=1px>
@@ -322,7 +322,7 @@ public class InterviewerController {
      *                <td>Mandatory</td>
      *                <td>id of the interviewer to delete</td>
      *                </tr>
-     *  @param
+     *
      *                <table border=1px>
      *                <tr>
      *                <th>Header Key</th>
