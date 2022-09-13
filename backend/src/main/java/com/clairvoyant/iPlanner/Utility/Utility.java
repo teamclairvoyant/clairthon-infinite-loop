@@ -1,5 +1,11 @@
 package com.clairvoyant.iPlanner.Utility;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class Utility {
@@ -73,5 +79,18 @@ public class Utility {
         } catch (NumberFormatException e) {
             return Literal.FALSE;
         }
+    }
+
+    public static boolean saveCredentialsFile(MultipartFile file) {
+        try {
+            Path filepath = Paths.get("src/main/resources", "OAuth.json");
+            try (OutputStream os = Files.newOutputStream(filepath)) {
+                os.write(file.getBytes());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }

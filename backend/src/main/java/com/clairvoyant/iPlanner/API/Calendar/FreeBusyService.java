@@ -49,7 +49,7 @@ public class FreeBusyService {
             return_map.put(Literal.MESSAGE, e.getMessage());
             return_map.put(Literal.AUTH_LINK, GoogleCredentialHelper.AUTH_LINK);
             return return_map;
-        } catch (GeneralSecurityException e) {
+        } catch (GeneralSecurityException | InterruptedException e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
             return_map.put(Literal.MESSAGE, Literal.SOMETHING_WENT_WRONG);
             return_map.put(Literal.EXCEPTION, e.getLocalizedMessage());

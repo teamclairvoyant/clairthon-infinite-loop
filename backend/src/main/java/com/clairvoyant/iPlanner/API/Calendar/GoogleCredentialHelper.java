@@ -44,15 +44,26 @@ public class GoogleCredentialHelper {
      * Returns an authorized Credential link for user.
      * Creates a StoredCredential in token folder
      */
-    public static String getAuthorizationLink() throws IOException, GeneralSecurityException {
+    public static String getAuthorizationLink() throws IOException, GeneralSecurityException, InterruptedException {
         // Build a new authorized API client service.
         HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         // Load client secrets.
-        InputStream in = CalendarQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
-        if (in == null) {
-            throw new FileNotFoundException("Credentials json file not found: " + CREDENTIALS_FILE_PATH);
+        InputStream fileInputStream = null;
+        int t = 30;
+        // try for 30 seconds/ 30 times
+        while (t-->0 && fileInputStream == null) {
+            Thread.sleep(1000);
+            logger.info("Try count :: "+(30-t)+"/30 time to get credentials file from resource");
+            fileInputStream = CalendarQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+            if(fileInputStream != null) {
+                logger.info("Credentials File found");
+            }
         }
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+        if (fileInputStream == null) {
+            logger.error("Credentials file not found at resource " + CREDENTIALS_FILE_PATH);
+            throw new FileNotFoundException("Credentials file not found at resource " + CREDENTIALS_FILE_PATH);
+        }
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(fileInputStream));
 
         // Build flow and trigger user authorization request.
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow
@@ -82,7 +93,7 @@ public class GoogleCredentialHelper {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            // store credentials into StoredCredential file
+            // store credentials into StoredCredential file at tokens folder
             try {
                 flow.createAndStoreCredential(response, "user");
                 logger.info("Google Credentials created and saved ");
