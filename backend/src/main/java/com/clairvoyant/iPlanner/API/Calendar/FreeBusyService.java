@@ -1,4 +1,4 @@
-package com.clairvoyant.iPlanner.API.FreeBusy;
+package com.clairvoyant.iPlanner.API.Calendar;
 
 import com.clairvoyant.iPlanner.Utility.Literal;
 import com.google.api.client.util.DateTime;

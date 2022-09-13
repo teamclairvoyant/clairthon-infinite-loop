@@ -1,4 +1,4 @@
-package com.clairvoyant.iPlanner.API.FreeBusy;
+package com.clairvoyant.iPlanner.API.Calendar;
 
 import com.clairvoyant.iPlanner.CalendarQuickstart;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
@@ -58,7 +58,7 @@ public class GoogleCredentialHelper {
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow
                 .Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-                .setAccessType("offline").build();
+                .setAccessType("offline").setApprovalPrompt("force").build();
 
         LocalServerReceiver receiver = new LocalServerReceiver
                 .Builder()
@@ -118,15 +118,24 @@ public class GoogleCredentialHelper {
      */
     public static Credential getCredential(NetHttpTransport HTTP_TRANSPORT) throws IOException {
         DataStoreFactory dataStoreFactory = new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH));
+        final StoredCredential storedCredential = StoredCredential.getDefaultDataStore(dataStoreFactory).get("user");
+
+        InputStream in = CalendarQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        if (in == null) {
+            throw new FileNotFoundException("Credentials json file not found: " + CREDENTIALS_FILE_PATH);
+        }
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+
         final GoogleCredential credential = new GoogleCredential.Builder()
                 .setTransport(HTTP_TRANSPORT)
                 .setJsonFactory(JSON_FACTORY)
+                .setClientSecrets(clientSecrets)
                 .build();
-        final StoredCredential storedCredential = StoredCredential.getDefaultDataStore(dataStoreFactory).get("user");
+
         if (storedCredential != null) {
             credential.setAccessToken(storedCredential.getAccessToken());
             credential.setRefreshToken(storedCredential.getRefreshToken());
-            credential.setExpirationTimeMilliseconds(null);
+            credential.setExpirationTimeMilliseconds(storedCredential.getExpirationTimeMilliseconds());
         }
         if(credential.refreshToken()) {
             logger.info("Refreshed GoogleCredential accessToken");

@@ -1,6 +1,6 @@
 package com.clairvoyant.iPlanner.API.Planner;
 
-import com.clairvoyant.iPlanner.API.FreeBusy.FreeBusyService;
+import com.clairvoyant.iPlanner.API.Calendar.FreeBusyService;
 import com.clairvoyant.iPlanner.Exceptions.RequestValidationException;
 import com.clairvoyant.iPlanner.Shared.MainMongoDao;
 import com.clairvoyant.iPlanner.Utility.Literal;
