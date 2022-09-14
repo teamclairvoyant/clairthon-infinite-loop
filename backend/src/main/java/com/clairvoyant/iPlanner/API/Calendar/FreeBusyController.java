@@ -4,6 +4,7 @@ import com.clairvoyant.iPlanner.API.APIEndpoints;
 import com.clairvoyant.iPlanner.Exceptions.RequestValidationException;
 import com.clairvoyant.iPlanner.Exceptions.TokenValidationException;
 import com.clairvoyant.iPlanner.Services.TokenService;
+import com.clairvoyant.iPlanner.Shared.DTO.ReactCalendarEvent;
 import com.clairvoyant.iPlanner.Utility.Literal;
 import com.clairvoyant.iPlanner.Utility.Utility;
 import com.google.api.client.util.DateTime;
@@ -186,7 +187,7 @@ public class FreeBusyController {
             }
             List<Event> events = FreeBusyService.getInstance().getEvents(email, start_time, end_time);
             // todo mapConvertEventsToResource
-            List<Map<String, Object>> mapped_events = FreeBusyService.convertEventsToResource(events);
+            List<ReactCalendarEvent> mapped_events = FreeBusyService.convertEventsToResource(events);
             return_map.put(Literal.STATUS, Literal.SUCCESS);
             return_map.put(Literal.DATA, mapped_events);
             return return_map;

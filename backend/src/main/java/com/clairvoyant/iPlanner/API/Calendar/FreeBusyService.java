@@ -1,5 +1,6 @@
 package com.clairvoyant.iPlanner.API.Calendar;
 
+import com.clairvoyant.iPlanner.Shared.DTO.ReactCalendarEvent;
 import com.clairvoyant.iPlanner.Utility.Literal;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
@@ -36,9 +37,25 @@ public class FreeBusyService {
     private FreeBusyService() {
     }
 
-    public static List<Map<String, Object>> convertEventsToResource(List<Event> google_calendar_events) {
-        List<Map<String, Object>> converted_events = new ArrayList<>();
-        //todo
+    public static List<ReactCalendarEvent> convertEventsToResource(List<Event> google_calendar_events) {
+        List<ReactCalendarEvent> converted_events = new ArrayList<ReactCalendarEvent>();
+        google_calendar_events.parallelStream().forEach(google_event -> {
+            // todo test this; change  class 'fc-event-primary' based on logic
+            ReactCalendarEvent reactCalendarEvent = new ReactCalendarEvent();
+            ReactCalendarEvent.Type type = new ReactCalendarEvent.Type();
+            type.setLabel(google_event.getStatus());
+            type.setValue("fc-event-primary");
+
+            reactCalendarEvent.setId(google_event.getId());
+            reactCalendarEvent.setTitle(google_event.getSummary());
+            reactCalendarEvent.setStart(google_event.getStart().getDateTime().toString());
+            reactCalendarEvent.setEnd(google_event.getEnd().getDateTime().toString());
+            reactCalendarEvent.setClassName("fc-event-primary");
+            reactCalendarEvent.setDescription(google_event.getDescription());
+            reactCalendarEvent.setType(type);
+
+            converted_events.add(reactCalendarEvent);
+        });
         return converted_events;
     }
 
