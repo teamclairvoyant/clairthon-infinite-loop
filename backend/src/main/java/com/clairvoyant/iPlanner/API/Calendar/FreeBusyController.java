@@ -7,6 +7,7 @@ import com.clairvoyant.iPlanner.Services.TokenService;
 import com.clairvoyant.iPlanner.Utility.Literal;
 import com.clairvoyant.iPlanner.Utility.Utility;
 import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -183,8 +184,11 @@ public class FreeBusyController {
             } catch (Exception e) {
                 throw new RequestValidationException(e.getMessage());
             }
+            List<Event> events = FreeBusyService.getInstance().getEvents(email, start_time, end_time);
+            // todo mapConvertEventsToResource
+            List<Map<String, Object>> mapped_events = FreeBusyService.convertEventsToResource(events);
             return_map.put(Literal.STATUS, Literal.SUCCESS);
-            return_map.put(Literal.DATA, FreeBusyService.getInstance().getEvents(email, start_time, end_time));
+            return_map.put(Literal.DATA, mapped_events);
             return return_map;
         } catch (TokenValidationException e) {
             return_map.put(Literal.STATUS, Literal.ERROR);

@@ -36,6 +36,12 @@ public class FreeBusyService {
     private FreeBusyService() {
     }
 
+    public static List<Map<String, Object>> convertEventsToResource(List<Event> google_calendar_events) {
+        List<Map<String, Object>> converted_events = new ArrayList<>();
+        //todo
+        return converted_events;
+    }
+
     public Map<String, Object> initService() {
         Map<String, Object> return_map = new HashMap<>(Literal.SIX);
         try {

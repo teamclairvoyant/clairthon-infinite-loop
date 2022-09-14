@@ -430,7 +430,31 @@ public class PlannerService {
     }
 
     public void validateInterviewerSearchRequest(Map<String, Object> search_map) throws RequestValidationException {
-        // TODO validateInterviewerSearchRequest like date parse
+        // TODO TEST THIS
+        /**
+         * if start time is present but end time is missing
+         */
+        if(Utility.isEmptyString(search_map.get(Literal.start_time).toString())
+                && !Utility.isEmptyString(search_map.get(Literal.end_time).toString())) {
+            throw new RequestValidationException("Please provide start_time as well");
+        }
+        /**
+         * if end time is present but start time is missing
+         */
+        if(Utility.isEmptyString(search_map.get(Literal.end_time).toString())
+                && !Utility.isEmptyString(search_map.get(Literal.start_time).toString())) {
+            throw new RequestValidationException("Please provide end_time as well");
+        }
+        /**
+         * try to parse the experience integer
+         */
+        if(search_map.get(Literal.experience) != null) {
+            try {
+                Integer.parseInt(search_map.get(Literal.experience).toString());
+            } catch (Exception e) {
+                throw new RequestValidationException("Please provide valid Integer value in experience");
+            }
+        }
     }
 
     public List<Map<String, Object>> searchInterviewers(Map<String, Object> req_map) throws RequestValidationException {

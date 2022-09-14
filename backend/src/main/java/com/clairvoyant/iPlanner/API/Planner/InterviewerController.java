@@ -410,11 +410,60 @@ public class InterviewerController {
      *                <th>Description</th>
      *                </tr>
      *                <tr>
+     *                <td>start_time</td>
+     *                <td>2022-12-18T12:00:00+05:30</td>
+     *                <td>String</td>
+     *                <td>Optional</td>
+     *                <td>filter those interviewers who are free at this time range</td>
+     *                </tr>
+     *                <tr>
+     *                <td>end_time</td>
+     *                <td>2022-12-18T16:00:00+05:30</td>
+     *                <td>String</td>
+     *                <td>Optional</td>
+     *                <td>filter those interviewers who are free at this time range</td>
+     *                </tr>
+     *                <tr>
      *                <td>experience</td>
      *                <td>2</td>
      *                <td>Integer</td>
      *                <td>Optional</td>
-     *                <td>filter experience (years equal to or greater than) of the interviewer </td>
+     *                <td>filter by experience of the interviewers</td>
+     *                </tr>
+     *                <tr>
+     *                <td>job_title</td>
+     *                <td>Software Engineer</td>
+     *                <td>String</td>
+     *                <td>Optional</td>
+     *                <td>filter by job_title of the interviewers</td>
+     *                </tr>
+     *                <tr>
+     *                <td>department</td>
+     *                <td>Enterprise Engineering</td>
+     *                <td>String</td>
+     *                <td>Optional</td>
+     *                <td>filter by department of the interviewers</td>
+     *                </tr>
+     *                <tr>
+     *                <td>business_unit</td>
+     *                <td>Enterprise and Data Services</td>
+     *                <td>String</td>
+     *                <td>Optional</td>
+     *                <td>filter by business_unit of the interviewers</td>
+     *                </tr>
+     *                <tr>
+     *                <td>location</td>
+     *                <td>Pune</td>
+     *                <td>String</td>
+     *                <td>Optional</td>
+     *                <td>filter by location of the interviewers</td>
+     *                </tr>
+     *                <tr>
+     *                <td>skills</td>
+     *                <td>["Java", "React"]</td>
+     *                <td>List of Strings</td>
+     *                <td>Optional</td>
+     *                <td>filter by skills of the interviewers</td>
      *                </tr>
      *
      *                <table border=1px>
@@ -441,9 +490,52 @@ public class InterviewerController {
      *                </tr>
      *                </table>
      *                <br>
-     * @see <b>Functionality: </b> This API is used to search interviewer based on filters <br>
+     * @see <b>Functionality: </b>
+     * This API is used to search interviewer based on filters. <br>
+     * Note that each filter searches based on AND OPERATOR, whereas individual skills will be matched by OR OPERATOR<br>
      * @note All fields are filtered on AND operator and individual skills on OR/(IN) operator
      * @return <b>SUCCESS MESSAGE:</b> <br>
+     * {
+     *     "STATUS": "Success",
+     *     "DATA": [
+     *         {
+     *             "_id": "59cd855a-c691-4aa7-8ddf-6d57ee08f86a",
+     *             "business_unit": "Enterprise and Data Services",
+     *             "department": "Enterprise Engineering",
+     *             "email": "abhinav.gogoi@clairvoyantsoft.com",
+     *             "employee_no": "P010444",
+     *             "experience": 3,
+     *             "isInterviewer": true,
+     *             "job_title": "Software Engineer",
+     *             "location": "Pune",
+     *             "name": "Abhinov Gogoi 222",
+     *             "phone": "+91 1234567890",
+     *             "skills": [
+     *                 "Java"
+     *             ],
+     *             "updatedDate": "2022-09-11T18:14:38.757+0000",
+     *             "updatedDateMs": 1662920078757
+     *         },
+     *         {
+     *             "_id": "59cd855a-c691-4aa7-8ddf-6d57assdfs",
+     *             "business_unit": "Enterprise and Data Services",
+     *             "department": "Enterprise Engineering",
+     *             "email": "abhinav.in@clairvoyantsoft.com",
+     *             "employee_no": "P010444",
+     *             "experience": 3,
+     *             "isInterviewer": true,
+     *             "job_title": "Software Engineer",
+     *             "location": "Pune",
+     *             "name": "Abhinov Gogoi 222",
+     *             "phone": "+91 1234567890",
+     *             "skills": [
+     *                 "Java"
+     *             ],
+     *             "updatedDate": "2022-09-11T18:14:38.757+0000",
+     *             "updatedDateMs": 1662920078757
+     *         }
+     *     ]
+     * } <br>
      *         <b>ERROR MESSAGE:</b> <br>
      *         {"EXCEPTION":"Invalid Token","MESSAGE":"TOKEN missing in request header","STATUS":"Error"} <br>
      *         {"EXCEPTION":"Invalid Token","MESSAGE":"Invalid TOKEN for given LOGIN_ID :: admin","STATUS":"Error"} <br>
@@ -452,6 +544,21 @@ public class InterviewerController {
     public Map<String, Object> searchInterviewers(@RequestBody Map<String, Object> req_map) {
         Map<String, Object> return_map = new HashMap<>(Literal.SIX);
         try {
+            /**
+             * TODO ::
+             * One issue with search is that this removes any interviewer who has an event scheduled at the start time and end time
+             * This is good for approach 1. i.e Filtering out the busy interviewers from the eligible interviewers list
+             *
+             * BUT this would CONTRADICT the 2nd approach where, we also want each interviewer to mention their free time on google calendar
+             * by creating an event with a specific name like 'FREE TIME'. Because, while scanning events in 1st approach ,
+             * these events would be picked up too and the interviewer would be considered BUSY at that time.
+             * 2 approaches are Self contradictory.
+             *
+             * Solution is :
+             * DON'T Let interviewers slot their FREE TIME on google calendar. This involves manual work.
+             * But Let the HR Admin, view the calendars of each suitable interviewer
+             * and decide upon to select the final interviewer
+             *
             /**
              * Check token
              */
