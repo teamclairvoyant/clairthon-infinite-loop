@@ -31,10 +31,18 @@ public class ReactCalendarEvent {
     public String className;
     public Type type;
     public String description;
+    public Metadata metadata;
 
     @Data
     public static class Type {
         public String value;
         public String label;
+    }
+
+    @Data
+    public static class Metadata {
+        public String colour;
+        public  String hangoutsLink;
+        public String availability;
     }
 }

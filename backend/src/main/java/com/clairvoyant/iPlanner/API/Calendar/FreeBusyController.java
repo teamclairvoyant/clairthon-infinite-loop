@@ -32,6 +32,7 @@ public class FreeBusyController {
     }
 
     @PostMapping("/initialize")
+    // TODO :: Allow the option to upload StoredCredentials file also directly along with OAuth file
     public Map<String, Object> initFreeBusyCredentials(@RequestParam(name = "file", required = false) MultipartFile file) {
         Map<String, Object> return_map = new HashMap<>(Literal.SIX);
         try {
@@ -160,12 +161,11 @@ public class FreeBusyController {
      * "start_time": "2022-12-18T00:00:00",
      * "end_time": "2022-12-18T23:59:00"
      * }
-     *
      * @param req_map
      * @return
      */
-    @PostMapping("/events")
-    public Map<String, Object> getEvents(@RequestBody Map<String, Object> req_map) {
+    @PostMapping("/calendar")
+    public Map<String, Object> getCalendar(@RequestBody Map<String, Object> req_map) {
         Map<String, Object> return_map = new HashMap<>(Literal.SIX);
         try {
             /**
@@ -186,7 +186,6 @@ public class FreeBusyController {
                 throw new RequestValidationException(e.getMessage());
             }
             List<Event> events = FreeBusyService.getInstance().getEvents(email, start_time, end_time);
-            // todo mapConvertEventsToResource
             List<ReactCalendarEvent> mapped_events = FreeBusyService.convertEventsToResource(events);
             return_map.put(Literal.STATUS, Literal.SUCCESS);
             return_map.put(Literal.DATA, mapped_events);

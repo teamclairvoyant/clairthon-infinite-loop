@@ -110,4 +110,9 @@ public class Literal {
     public static final String $gte = "$gte";
     public static final String emails = "emails";
     public static final String $in = "$in";
+    public static final String PRIVATE_EVENT = "Private Event";
+    public static final String OPAQUE = "OPAQUE";
+    public static final String TRANSPARENT = "TRANSPARENT";
+    public static final String busy = "busy";
+    public static final String free = "free";
 }

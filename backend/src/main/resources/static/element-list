@@ -6,4 +6,5 @@ com.clairvoyant.iPlanner.API.Planner
 com.clairvoyant.iPlanner.Exceptions
 com.clairvoyant.iPlanner.Services
 com.clairvoyant.iPlanner.Shared
+com.clairvoyant.iPlanner.Shared.DTO
 com.clairvoyant.iPlanner.Utility

@@ -434,15 +434,15 @@ public class PlannerService {
         /**
          * if start time is present but end time is missing
          */
-        if(Utility.isEmptyString(search_map.get(Literal.start_time).toString())
-                && !Utility.isEmptyString(search_map.get(Literal.end_time).toString())) {
+        if(search_map.get(Literal.start_time) == null
+                && search_map.get(Literal.end_time) != null) {
             throw new RequestValidationException("Please provide start_time as well");
         }
         /**
          * if end time is present but start time is missing
          */
-        if(Utility.isEmptyString(search_map.get(Literal.end_time).toString())
-                && !Utility.isEmptyString(search_map.get(Literal.start_time).toString())) {
+        if(search_map.get(Literal.end_time)==null
+                && search_map.get(Literal.start_time) != null) {
             throw new RequestValidationException("Please provide end_time as well");
         }
         /**
@@ -499,7 +499,12 @@ public class PlannerService {
             /**
              * append the department (AND OPERATOR)
              */
-            filter_doc.append(Literal.location, req_map.get(Literal.location));
+            List<String> locations = (List<String>) req_map.get(Literal.location);
+            /**
+             * Individual locations are matched by (OR/IN OPERATOR)
+             */
+            Document in_doc = new Document().append(Literal.$in, locations);
+            filter_doc.append(Literal.location, in_doc);
         }
         if(req_map.get(Literal.skills) != null) {
             /**

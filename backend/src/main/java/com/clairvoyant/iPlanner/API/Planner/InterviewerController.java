@@ -453,8 +453,8 @@ public class InterviewerController {
      *                </tr>
      *                <tr>
      *                <td>location</td>
-     *                <td>Pune</td>
-     *                <td>String</td>
+     *                <td>["Pune", "Hyderabad"]</td>
+     *                <td>List of Strings</td>
      *                <td>Optional</td>
      *                <td>filter by location of the interviewers</td>
      *                </tr>
@@ -555,9 +555,11 @@ public class InterviewerController {
              * 2 approaches are Self contradictory.
              *
              * Solution is :
-             * DON'T Let interviewers slot their FREE TIME on google calendar. This involves manual work.
-             * But Let the HR Admin, view the calendars of each suitable interviewer
-             * and decide upon to select the final interviewer
+             * Interviewers HAVE TO MARK calendars' with a specific name like 'FREE TIME'
+             * visibility as PUBLIC and
+             * slot their availability/transparency as 'FREE' on google calendar UI.
+             * This should be strictly followed by all employees for the scanning logic to work
+             *
              *
             /**
              * Check token

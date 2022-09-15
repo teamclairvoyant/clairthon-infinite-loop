@@ -6,6 +6,7 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.FreeBusyCalendar;
 import com.google.api.services.calendar.model.FreeBusyResponse;
+import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -47,12 +48,39 @@ public class FreeBusyService {
             type.setValue("fc-event-primary");
 
             reactCalendarEvent.setId(google_event.getId());
-            reactCalendarEvent.setTitle(google_event.getSummary());
+            if(google_event.getSummary() == null) {
+                // means it's a private event
+                reactCalendarEvent.setTitle(Literal.PRIVATE_EVENT);
+            } else {
+                reactCalendarEvent.setTitle(google_event.getSummary());
+            }
             reactCalendarEvent.setStart(google_event.getStart().getDateTime().toString());
             reactCalendarEvent.setEnd(google_event.getEnd().getDateTime().toString());
             reactCalendarEvent.setClassName("fc-event-primary");
-            reactCalendarEvent.setDescription(google_event.getDescription());
+            /**
+             * parse the description html to String text
+             */
+            if(google_event.getDescription() != null) {
+                reactCalendarEvent.setDescription(Jsoup.parse(google_event.getDescription()).text());
+            }
             reactCalendarEvent.setType(type);
+
+            /**
+             * Metadata will have other important info about the event
+             */
+            ReactCalendarEvent.Metadata metadata = new ReactCalendarEvent.Metadata();
+            metadata.setColour(google_event.getColorId());
+            metadata.setHangoutsLink(google_event.getHangoutLink());
+            // set availability means free or busy status
+            if(google_event.getTransparency()!=null && google_event.getTransparency().equalsIgnoreCase(Literal.OPAQUE)) {
+                // transparency opaque means person has blocked calendar event as BUSY on the UI
+                metadata.setAvailability(Literal.busy);
+            }
+            if(google_event.getTransparency()!=null && google_event.getTransparency().equalsIgnoreCase(Literal.TRANSPARENT)) {
+                // transparency opaque means person has blocked calendar event as FREE on the UI
+                metadata.setAvailability(Literal.free);
+            }
+            reactCalendarEvent.setMetadata(metadata);
 
             converted_events.add(reactCalendarEvent);
         });
@@ -101,5 +129,10 @@ public class FreeBusyService {
 
     public List<Event> getEvents(String email, DateTime start_time, DateTime end_time) throws GeneralSecurityException, IOException {
         return GoogleCalendarHelper.getEvents(email, start_time, end_time);
+    }
+
+    public String getPhotoUrl(String email) throws GeneralSecurityException, IOException {
+        return GoogleCalendarHelper.getPhotoUrl(email);
+
     }
 }

@@ -24,4 +24,9 @@ public class GoogleCalendarHelper {
                 .forEach(event -> System.out.println("EVENT NAME :::::::::::::" + event.getSummary()));
         return events.getItems();
     }
+
+    public static String getPhotoUrl(String email) {
+
+        return "";
+    }
 }
