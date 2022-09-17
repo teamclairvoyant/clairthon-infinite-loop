@@ -115,4 +115,6 @@ public class Literal {
     public static final String TRANSPARENT = "TRANSPARENT";
     public static final String busy = "busy";
     public static final String free = "free";
+    public static final String event_keywords = "event_keywords";
+    public static final String availability = "availability";
 }

@@ -1,7 +1,9 @@
 package com.clairvoyant.iPlanner.API.Calendar;
 
+import com.clairvoyant.iPlanner.Exceptions.RequestValidationException;
 import com.clairvoyant.iPlanner.Shared.DTO.ReactCalendarEvent;
 import com.clairvoyant.iPlanner.Utility.Literal;
+import com.clairvoyant.iPlanner.Utility.Utility;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.FreeBusyCalendar;
@@ -12,21 +14,22 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
-public class FreeBusyService {
+public class CalendarService {
 
-    private static FreeBusyService instance;
+    private static CalendarService instance;
 
     /**
      * Singleton class Lazy initialization with Double check locking
      *
      * @return FreeBusyService
      */
-    public static FreeBusyService getInstance() {
+    public static CalendarService getInstance() {
         if (instance == null) {
-            synchronized (FreeBusyService.class) {
-                instance = new FreeBusyService();
+            synchronized (CalendarService.class) {
+                instance = new CalendarService();
             }
         }
         return instance;
@@ -35,7 +38,7 @@ public class FreeBusyService {
     /**
      * private constructor for singleton class
      */
-    private FreeBusyService() {
+    private CalendarService() {
     }
 
     public static List<ReactCalendarEvent> convertEventsToResource(List<Event> google_calendar_events) {
@@ -87,6 +90,56 @@ public class FreeBusyService {
         return converted_events;
     }
 
+    public static void validateFilterCalendarEventsRequest(Map<String, Object> req_map) throws RequestValidationException {
+        List<String> emails;
+        DateTime start_time;
+        DateTime end_time;
+        boolean availability;
+        try{
+            emails = (List<String>) req_map.get(Literal.emails);
+            start_time = new DateTime(req_map.get(Literal.start_time).toString());
+            end_time = new DateTime(req_map.get(Literal.end_time).toString());
+            if(!Utility.isEmptyString(req_map.get(Literal.availability))) {
+                availability = Boolean.parseBoolean(req_map.get(Literal.availability).toString());
+            }
+        } catch (Exception e) {
+            throw new RequestValidationException(e.getMessage());
+        }
+    }
+
+    /**
+     * the will filter and include only those events that have the keywords
+     * @return
+     */
+    public static List<Event> filterByEventKeywords(List<Event> events, List<String> keywords) {
+        // todo null pointer exception
+        List<Event> ret_events = new ArrayList<Event>();
+        // make keywords lowercase
+        final List<String> lowercase_keywords = keywords.stream().map(String::toLowerCase).collect(Collectors.toList());
+        events.forEach(event -> {
+            if(event.getSummary() != null && !Utility.isEmptyString(event.getSummary())) {
+                List<String> words_in_event_title = Arrays.asList(event.getSummary().split(" "));
+
+                for (String word: words_in_event_title) {
+                    if(lowercase_keywords.contains(word.toLowerCase())){
+                        ret_events.add(event);
+                    }
+                    break;
+                }
+//                words_in_event_title.forEach(word -> {
+//                    if(lowercase_keywords.contains(word.toLowerCase())){
+//                        ret_events.add(event);
+//                    }
+//                });
+            }
+        });
+        return ret_events;
+    }
+
+    public static List<Event> filterByAvailability(List<Event> events) {
+        return events.parallelStream().filter(event -> event.getTransparency().equalsIgnoreCase("transparent")).collect(Collectors.toList());
+    }
+
     public Map<String, Object> initService() {
         Map<String, Object> return_map = new HashMap<>(Literal.SIX);
         try {
@@ -109,11 +162,11 @@ public class FreeBusyService {
     }
 
     public FreeBusyResponse getFreeBusy(String email, DateTime startTime, DateTime endTime) throws GeneralSecurityException, IOException {
-        return FreeBusyHelper.getFreeBusy(new ArrayList<String>(Collections.singletonList(email)), startTime, endTime);
+        return CalendarHelper.getFreeBusy(new ArrayList<String>(Collections.singletonList(email)), startTime, endTime);
     }
 
     public List<String> filterBusyEmails(List<String> email_list, DateTime startTime, DateTime endTime) throws GeneralSecurityException, IOException {
-        FreeBusyResponse freeBusyResponse = FreeBusyHelper.getFreeBusy(email_list, startTime, endTime);
+        FreeBusyResponse freeBusyResponse = CalendarHelper.getFreeBusy(email_list, startTime, endTime);
         Map<String, FreeBusyCalendar> calendars = freeBusyResponse.getCalendars();
         if(!calendars.isEmpty()) {
             // if the calendars.email.busy is not empty in calendars, means the person is busy, so remove from the list
@@ -128,11 +181,11 @@ public class FreeBusyService {
     }
 
     public List<Event> getEvents(String email, DateTime start_time, DateTime end_time) throws GeneralSecurityException, IOException {
-        return GoogleCalendarHelper.getEvents(email, start_time, end_time);
+        return CalendarHelper.getEvents(email, start_time, end_time);
     }
 
     public String getPhotoUrl(String email) throws GeneralSecurityException, IOException {
-        return GoogleCalendarHelper.getPhotoUrl(email);
+        return CalendarHelper.getPhotoUrl(email);
 
     }
 }

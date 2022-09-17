@@ -39,6 +39,8 @@ public class GoogleCredentialHelper {
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
     private static final String CREDENTIALS_FILE_PATH = "/OAuth.json";
     public static NetHttpTransport HTTP_TRANSPORT = null;
+    public static Calendar CALENDAR_CLIENT = null;
+    public static Credential CREDENTIAL = null;
 
     /**
      * Returns an authorized Credential link for user.
@@ -117,8 +119,13 @@ public class GoogleCredentialHelper {
         if (HTTP_TRANSPORT == null) {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         }
-        Credential credential = GoogleCredentialHelper.getCredential(HTTP_TRANSPORT);
-        return new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
+        if ( CREDENTIAL == null) {
+            CREDENTIAL = GoogleCredentialHelper.getCredential(HTTP_TRANSPORT);
+        }
+        if ( CALENDAR_CLIENT == null ) {
+            CALENDAR_CLIENT = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, CREDENTIAL).setApplicationName(APPLICATION_NAME).build();
+        }
+        return CALENDAR_CLIENT;
     }
 
     /**

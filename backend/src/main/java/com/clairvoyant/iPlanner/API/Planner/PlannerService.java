@@ -1,6 +1,6 @@
 package com.clairvoyant.iPlanner.API.Planner;
 
-import com.clairvoyant.iPlanner.API.Calendar.FreeBusyService;
+import com.clairvoyant.iPlanner.API.Calendar.CalendarService;
 import com.clairvoyant.iPlanner.Exceptions.RequestValidationException;
 import com.clairvoyant.iPlanner.Shared.MainMongoDao;
 import com.clairvoyant.iPlanner.Utility.Literal;
@@ -537,7 +537,7 @@ public class PlannerService {
                 DateTime start_time = new DateTime(req_map.get(Literal.start_time).toString());
                 DateTime end_time = new DateTime(req_map.get(Literal.end_time).toString());
                 // remove the busy ones
-                List<String> free_interviewers_emails = FreeBusyService.getInstance().filterBusyEmails(eligible_interviewers_emails, start_time, end_time);
+                List<String> free_interviewers_emails = CalendarService.getInstance().filterBusyEmails(eligible_interviewers_emails, start_time, end_time);
                 List<Map<String, Object>> busy_interviewers = new ArrayList<>();
                 // populate the busy_interviewers list
                 eligible_interviewers.forEach(interviewer-> {

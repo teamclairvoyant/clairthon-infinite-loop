@@ -1,4 +1,4 @@
 package com.clairvoyant.iPlanner.API.Calendar;
 
-public class FreeBusyDao {
+public class CalendarDao {
 }
