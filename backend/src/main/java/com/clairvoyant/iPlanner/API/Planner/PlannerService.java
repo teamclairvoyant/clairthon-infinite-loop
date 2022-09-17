@@ -405,6 +405,7 @@ public class PlannerService {
         PlannerService.getInstance().saveListing(Literal.BUSINESS_UNIT, Literal.ADD, Utility.BUSINESS_UNIT_LIST);
         PlannerService.getInstance().saveListing(Literal.SKILLS, Literal.ADD, Utility.SKILLS_LIST);
         PlannerService.getInstance().saveListing(Literal.LOCATION, Literal.ADD, Utility.LOCATION_LIST);
+        PlannerService.getInstance().saveListing(Literal.PROJECT, Literal.ADD, Utility.PROJECT_LIST);
         return Literal.TRUE;
     }
 

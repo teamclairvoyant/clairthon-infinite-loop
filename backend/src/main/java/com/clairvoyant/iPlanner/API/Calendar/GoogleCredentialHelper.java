@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class GoogleCredentialHelper {
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
     public static String AUTH_LINK = null;
     private static final String APPLICATION_NAME = "Google Calendar API Java Quickstart";
-    private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
+    private static final List<String> SCOPES = new ArrayList<>(CalendarScopes.all());
     private static final String CREDENTIALS_FILE_PATH = "/OAuth.json";
     public static NetHttpTransport HTTP_TRANSPORT = null;
     public static Calendar CALENDAR_CLIENT = null;

@@ -2,13 +2,19 @@ package com.clairvoyant.iPlanner.API.Calendar;
 
 import com.clairvoyant.iPlanner.Exceptions.RequestValidationException;
 import com.clairvoyant.iPlanner.Shared.DTO.ReactCalendarEvent;
+import com.clairvoyant.iPlanner.Shared.MainMongoDao;
 import com.clairvoyant.iPlanner.Utility.Literal;
+import com.clairvoyant.iPlanner.Utility.MongoDBConnectionInfo;
 import com.clairvoyant.iPlanner.Utility.Utility;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.FreeBusyCalendar;
 import com.google.api.services.calendar.model.FreeBusyResponse;
+import com.mongodb.MongoException;
+import org.bson.Document;
 import org.jsoup.Jsoup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -18,6 +24,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class CalendarService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CalendarService.class);
 
     private static CalendarService instance;
 
@@ -123,8 +131,8 @@ public class CalendarService {
                 for (String word: words_in_event_title) {
                     if(lowercase_keywords.contains(word.toLowerCase())){
                         ret_events.add(event);
+                        break;
                     }
-                    break;
                 }
 //                words_in_event_title.forEach(word -> {
 //                    if(lowercase_keywords.contains(word.toLowerCase())){
@@ -138,6 +146,69 @@ public class CalendarService {
 
     public static List<Event> filterByAvailability(List<Event> events) {
         return events.parallelStream().filter(event -> event.getTransparency().equalsIgnoreCase("transparent")).collect(Collectors.toList());
+    }
+
+    public static Event createCalendarEvent(Map<String, Object> req_map) throws GeneralSecurityException, IOException {
+        String event_title = req_map.get(Literal.title).toString();
+        DateTime startTime = new DateTime(req_map.get(Literal.start_time).toString());
+        DateTime endTime = new DateTime(req_map.get(Literal.end_time).toString());
+        List<String> attendees = (List<String>) req_map.get(Literal.attendees);
+        String description = req_map.get(Literal.description).toString();
+
+        Event event = CalendarHelper.createEvent(event_title, startTime, endTime, description, attendees);
+        logger.info("Created event ::::::::::::::  " + event.toString());
+        try{
+            // save the event to mongo to generate dashboard reporting
+            MainMongoDao.getInstance().upsertDocument(new Document(event).append(Literal._id, event.getId()), MongoDBConnectionInfo.events_col);
+            logger.info("Saved event to MongoDb ::::::::::::::  " + event.getId());
+        } catch (MongoException me) {
+            logger.error("Failed to save event to MongoDb ::::::::::::::  " + event.getId());
+        }
+        return event;
+    }
+
+    public static void validateCreateCalendarEventRequest(Map<String, Object> req_map) throws RequestValidationException {
+        /**
+         * check null event title
+         */
+        if (Utility.isEmptyString(req_map.get(Literal.title))) {
+            throw new RequestValidationException(Literal.EVENT_TITLE_NULL);
+        }
+        /**
+         * check null start_time
+         */
+        if (Utility.isEmptyString(req_map.get(Literal.start_time))) {
+            throw new RequestValidationException(Literal.START_TIME_NULL);
+        }
+
+        /**
+         * check null end_time
+         */
+        if (Utility.isEmptyString(req_map.get(Literal.end_time))) {
+            throw new RequestValidationException(Literal.END_TIME_NULL);
+        }
+        /**
+         * check null attendees
+         */
+        if (req_map.get(Literal.attendees)==null) {
+            throw new RequestValidationException(Literal.ATTENDEES_NULL);
+        }
+        /**
+         * put default description
+         */
+        if(Utility.isEmptyString(req_map.get(Literal.description).toString())) {
+            req_map.put(Literal.description, Literal.EMPTY_STRING);
+        }
+        /**
+         * check valid start_time, end_time, attendees
+         */
+        try{
+            DateTime startTime = new DateTime(req_map.get(Literal.start_time).toString());
+            DateTime endTime = new DateTime(req_map.get(Literal.end_time).toString());
+            List<String> attendees = (List<String>) req_map.get(Literal.attendees);
+        } catch (Exception e) {
+            throw new RequestValidationException(e.getMessage());
+        }
     }
 
     public Map<String, Object> initService() {
@@ -184,8 +255,4 @@ public class CalendarService {
         return CalendarHelper.getEvents(email, start_time, end_time);
     }
 
-    public String getPhotoUrl(String email) throws GeneralSecurityException, IOException {
-        return CalendarHelper.getPhotoUrl(email);
-
-    }
 }

@@ -18,10 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin("*")
@@ -283,6 +280,58 @@ public class CalendarController {
 
             return_map.put(Literal.STATUS, Literal.SUCCESS);
             return_map.put(Literal.DATA, all_users_events);
+            return return_map;
+        } catch (TokenValidationException e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.TOKEN_INVALID);
+            return return_map;
+        } catch (RequestValidationException e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.REQUEST_VALIDATION_FAILED);
+            return return_map;
+        } catch (Exception e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.SOMETHING_WENT_WRONG);
+            return return_map;
+        }
+    }
+
+
+    /**
+     * {
+     *     "title" : "Interview Scheduled",
+     *     "start_time": "2022-09-14T00:00:00+05:30",
+     *     "end_time": "2022-09-16T23:59:00+05:30",
+     *     "description" : "some html or text content",
+     *     "attendees" : ["abhinav.gogoi@clairvoyantsoft.com", "kedar.shivshette@clairvoyantsoft.com"]
+     * }
+     */
+    @PostMapping("/createEvent")
+    public Map<String, Object> createCalendarEvent(@RequestBody Map<String, Object> req_map) {
+        Map<String, Object> return_map = new HashMap<>(Literal.SIX);
+        try {
+            /**
+             * Check token
+             */
+            TokenService.getInstance().validateToken(request);
+            /**
+             * validate the request data
+             */
+            CalendarService.validateCreateCalendarEventRequest(req_map);
+            /**
+             * call the service
+             */
+            Event createdEvent = CalendarService.createCalendarEvent(req_map);
+            /**
+             * return success data
+             */
+            return_map.put(Literal.STATUS, Literal.SUCCESS);
+            return_map.put(Literal.MESSAGE, Literal.EVENT_CREATED_SUCCESSFULLY);
+            return_map.put(Literal.DATA, createdEvent);
+            return_map.put(Literal.EVENT, CalendarService.convertEventsToResource(new ArrayList<>(Collections.singleton(createdEvent))));
             return return_map;
         } catch (TokenValidationException e) {
             return_map.put(Literal.STATUS, Literal.ERROR);

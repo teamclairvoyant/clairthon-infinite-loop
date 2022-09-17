@@ -10,12 +10,13 @@ import java.util.*;
 
 public class Utility {
 
-    public static final List<String> LISTING_TYPE = new ArrayList<>(Arrays.asList("JOB_TITLE", "DEPARTMENT", "BUSINESS_UNIT", "SKILLS", "LOCATION"));
+    public static final List<String> LISTING_TYPE = new ArrayList<>(Arrays.asList("JOB_TITLE", "DEPARTMENT", "BUSINESS_UNIT", "SKILLS", "LOCATION", "PROJECT"));
     public static final List<String> JOB_TITLE_LIST = new ArrayList<>(Arrays.asList("Software Engineer", "Software Engineer II", "QA Engineer", "HR"));
     public static final List<String> DEPARTMENT_LIST = new ArrayList<>(Arrays.asList("Enterprise Engineering", "Business Development"));
     public static final List<String> BUSINESS_UNIT_LIST = new ArrayList<>(Arrays.asList("Enterprise and Data Services", "Sales"));
     public static final List<String> SKILLS_LIST = new ArrayList<>(Arrays.asList("Java", "Angular", "ReactJS", "Big Data", "Python"));
     public static final List<String> LOCATION_LIST = new ArrayList<>(Arrays.asList("Pune", "Hyderabad", "US", "Canada"));
+    public static final List<String> PROJECT_LIST = new ArrayList<>(Arrays.asList("Kogni", "CLA"));
 
     /**
      * check null object or empty string

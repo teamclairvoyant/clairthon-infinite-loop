@@ -33,4 +33,8 @@ public class MongoDBConnectionInfo {
      * Mongodb collection for interviewers
      */
     public static final String interviewer_col = "interviewer_col";
+    /**
+     * Mongodb collection for calendar events created through the app
+     */
+    public static final String events_col = "events_col";
 }

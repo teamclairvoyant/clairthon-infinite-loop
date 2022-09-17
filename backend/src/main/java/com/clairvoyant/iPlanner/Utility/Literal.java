@@ -117,4 +117,14 @@ public class Literal {
     public static final String free = "free";
     public static final String event_keywords = "event_keywords";
     public static final String availability = "availability";
+    public static final String PROJECT = "PROJECT";
+    public static final String title = "title";
+    public static final String EVENT_TITLE_NULL = "Please provide event title";
+    public static final String START_TIME_NULL = "please provide start time";
+    public static final String END_TIME_NULL = "Please provide end time";
+    public static final String attendees = "attendees";
+    public static final String ATTENDEES_NULL = "Kindly provide attendees list";
+    public static final String description = "description";
+    public static final String EVENT_CREATED_SUCCESSFULLY = "The event has been created successfully";
+    public static final String EVENT = "EVENT";
 }
