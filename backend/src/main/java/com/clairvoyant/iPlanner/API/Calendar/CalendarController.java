@@ -47,7 +47,7 @@ public class CalendarController {
             /**
              * validate the request data
              */
-            if(file == null || file.isEmpty()) {
+            if (file == null || file.isEmpty()) {
                 throw new RequestValidationException("Please provide credentials.json file for Google OAuth");
             } else {
                 Utility.saveCredentialsFile(file);
@@ -74,10 +74,11 @@ public class CalendarController {
 
     /**
      * {
-     *     "email" : "abhinav.gogoi@clairvoyantsoft.com",
-     *     "start_time": "2022-09-13T12:00:00+05:30",
-     *     "end_time": "2022-09-13T15:59:00+05:30"
+     * "email" : "abhinav.gogoi@clairvoyantsoft.com",
+     * "start_time": "2022-09-13T12:00:00+05:30",
+     * "end_time": "2022-09-13T15:59:00+05:30"
      * }
+     *
      * @param req_map
      * @return
      */
@@ -131,7 +132,7 @@ public class CalendarController {
             List<String> emails_list;
             DateTime start_time;
             DateTime end_time;
-            try{
+            try {
                 emails_list = (List<String>) req_map.get(Literal.emails);
                 start_time = new DateTime(req_map.get(Literal.start_time).toString());
                 end_time = new DateTime(req_map.get(Literal.end_time).toString());
@@ -165,6 +166,7 @@ public class CalendarController {
      * "start_time": "2022-12-18T00:00:00",
      * "end_time": "2022-12-18T23:59:00"
      * }
+     *
      * @param req_map
      * @return
      */
@@ -182,8 +184,8 @@ public class CalendarController {
             String email;
             DateTime start_time;
             DateTime end_time;
-            try{
-                email =  req_map.get(Literal.email).toString();
+            try {
+                email = req_map.get(Literal.email).toString();
                 start_time = new DateTime(req_map.get(Literal.start_time).toString());
                 end_time = new DateTime(req_map.get(Literal.end_time).toString());
             } catch (Exception e) {
@@ -214,12 +216,13 @@ public class CalendarController {
 
     /**
      * {
-     *     "emails" : ["abhinav.gogoi@clairvoyantsoft.com", "kedar.shivshette@clairvoyantsoft.com"],
-     *     "start_time": "2022-12-18T00:00:00+05:30",
-     *     "end_time": "2022-12-18T23:59:00+05:30",
-     *     "availability" : true,
-     *     "event_title" : ["Interview", "free time", "slot", "iPlanner"]
+     * "emails" : ["abhinav.gogoi@clairvoyantsoft.com", "kedar.shivshette@clairvoyantsoft.com"],
+     * "start_time": "2022-12-18T00:00:00+05:30",
+     * "end_time": "2022-12-18T23:59:00+05:30",
+     * "availability" : true,
+     * "event_title" : ["Interview", "free time", "slot", "iPlanner"]
      * }
+     *
      * @param req_map
      * @return
      */
@@ -238,18 +241,18 @@ public class CalendarController {
 
             List<String> emails = (List<String>) req_map.get(Literal.emails);
             boolean availability = true;
-            if(!Utility.isEmptyString(req_map.get(Literal.availability))) {
+            if (!Utility.isEmptyString(req_map.get(Literal.availability))) {
                 availability = Boolean.parseBoolean(req_map.get(Literal.availability).toString());
             }
 
             List<String> event_keywords = null;
-            if(req_map.get(Literal.event_keywords) != null) {
+            if (req_map.get(Literal.event_keywords) != null) {
                 event_keywords = (List<String>) req_map.get(Literal.event_keywords);
             }
 
             List<Map<String, Object>> all_users_events = new ArrayList<>();
 
-            for (String email: emails) {
+            for (String email : emails) {
                 List<Event> events = null;
                 try {
                     events = CalendarService.getInstance()
@@ -260,13 +263,13 @@ public class CalendarController {
                     /**
                      * remove the events not matching the keywords
                      */
-                    if(event_keywords != null) {
+                    if (event_keywords != null) {
                         events = CalendarService.filterByEventKeywords(events, event_keywords);
                     }
                     /**
                      * keep only the 'free/transparent' events that do not block the calendar
                      */
-                    if(availability) {
+                    if (availability) {
                         events = CalendarService.filterByAvailability(events);
                     }
                     List<ReactCalendarEvent> mapped_events = CalendarService.convertEventsToResource(events);
@@ -274,7 +277,7 @@ public class CalendarController {
                     single_user_events.put(email, mapped_events);
                     all_users_events.add(single_user_events);
                 } catch (GeneralSecurityException | IOException e) {
-                    logger.info("Could not get events for the user :: "+email);
+                    logger.info("Could not get events for the user :: " + email);
                 }
             }
 
@@ -302,11 +305,11 @@ public class CalendarController {
 
     /**
      * {
-     *     "title" : "Interview Scheduled",
-     *     "start_time": "2022-09-14T00:00:00+05:30",
-     *     "end_time": "2022-09-16T23:59:00+05:30",
-     *     "description" : "some html or text content",
-     *     "attendees" : ["abhinav.gogoi@clairvoyantsoft.com", "kedar.shivshette@clairvoyantsoft.com"]
+     * "title" : "Interview Scheduled",
+     * "start_time": "2022-09-14T00:00:00+05:30",
+     * "end_time": "2022-09-16T23:59:00+05:30",
+     * "description" : "some html or text content",
+     * "attendees" : ["abhinav.gogoi@clairvoyantsoft.com", "kedar.shivshette@clairvoyantsoft.com"]
      * }
      */
     @PostMapping("/createEvent")
