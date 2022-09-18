@@ -1,4 +1,4 @@
-package com.clairvoyant.iPlanner.Slack;
+package com.clairvoyant.iPlanner.API.Slack;
 
 import com.clairvoyant.iPlanner.Shared.MainMongoDao;
 import com.clairvoyant.iPlanner.Utility.MongoDBConnectionInfo;

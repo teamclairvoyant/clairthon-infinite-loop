@@ -1,6 +1,6 @@
 package com.clairvoyant.iPlanner;
 
-import com.clairvoyant.iPlanner.Slack.SlackHelper;
+import com.clairvoyant.iPlanner.API.Slack.SlackHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -19,12 +19,17 @@ public class IPlannerApplication {
 		logger.info("Starting IPlanner");
 		SpringApplication.run(IPlannerApplication.class, args);
 //		sendSlackTestMessage();
+//		getSlackUsers();
+	}
+
+	private static void getSlackUsers() {
+		SlackHelper.getSlackUsers();
 	}
 
 	public static void sendSlackTestMessage() {
 		logger.info("sendSlackTestMessage :::::::::::::::::::::::::::");
 		String channelId = SlackHelper.getChannelId("big-data");
-		SlackHelper.publishMessage(channelId, "Hello from slack bot "+new Timestamp(System.currentTimeMillis()));
+		SlackHelper.publishMessageToChannel(channelId, "Hello from slack bot "+new Timestamp(System.currentTimeMillis()));
 	}
 
 }

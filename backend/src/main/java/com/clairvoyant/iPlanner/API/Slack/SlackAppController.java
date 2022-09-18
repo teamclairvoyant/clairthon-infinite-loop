@@ -1,4 +1,4 @@
-package com.clairvoyant.iPlanner.Slack;
+package com.clairvoyant.iPlanner.API.Slack;
 
 import com.slack.api.bolt.App;
 import com.slack.api.bolt.servlet.SlackAppServlet;
