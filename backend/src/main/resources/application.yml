@@ -1,4 +1,4 @@
 logging.level:
   com.slack.api: INFO
 server:
-  port: 3000
+  port: 8000
