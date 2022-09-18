@@ -65,6 +65,7 @@ public class CalendarService {
             } else {
                 reactCalendarEvent.setTitle(google_event.getSummary());
             }
+            // todo :: event start time for a recurring event is shown as the created datetime fix this
             reactCalendarEvent.setStart(google_event.getStart().getDateTime().toString());
             reactCalendarEvent.setEnd(google_event.getEnd().getDateTime().toString());
             reactCalendarEvent.setClassName("fc-event-primary");

@@ -29,9 +29,8 @@ public class SlackApp {
     @Bean
     public App initSlackApp() throws Exception {
 
-        String botToken = "xoxb-1597172380741-4097046480819-KIaB9cH2d4TBjPS2lPfNIZZ1";
-        App app = new App(AppConfig.builder().singleTeamBotToken(botToken).build());
-        String appToken = "xapp-1-A043JR2B0AC-4120983914784-9df9a4f0a7d67466ef96eaf5fd930cb87c8d58f9d9ee03922240b8435880f52f";
+
+        App app = new App(AppConfig.builder().singleTeamBotToken(SlackHelper.BOT_TOKEN).build());
 
 //        AppConfig appConfig = new AppConfig();
 //        appConfig.setSigningSecret("e7e55498e8fa71bfa20fb398f7e81a3c");
@@ -87,8 +86,12 @@ public class SlackApp {
             return ctx.ack();
         });
 
-        SocketModeApp socketModeApp = new SocketModeApp(appToken, app);
-        socketModeApp.start();
+        SocketModeApp socketModeApp = new SocketModeApp(SlackHelper.APP_TOKEN, app);
+
+        // todo if this websocket server starts then http APIs are not working
+//        socketModeApp.start();
+
+
 
         return app;
     }

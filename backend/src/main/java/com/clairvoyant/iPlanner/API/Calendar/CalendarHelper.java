@@ -21,6 +21,7 @@ public class CalendarHelper {
         Calendar calendarClient = GoogleCredentialHelper.getCalendarClient();
         // Retrieve all events
         Events events = calendarClient.events().list(email)
+                .setSingleEvents(true) // add recurring events too
                 .setTimeMin(startTime)
                 .setTimeMax(endTime)
                 .setTimeZone("IST")
