@@ -1,3 +1,9 @@
 1. Problem Slack Event Subscriptions fails - Your URL didn't respond with the value of the challenge parameter
 Set the env variables in IDE configuration instead of linux terminal -
 https://stackoverflow.com/questions/64337957/slack-app-slash-command-invalid-signature-detected-401-unauthorized
+
+2. c.s.api.bolt.util.SlackRequestParser : No request pattern detected for (NOT RESOLVED)
+https://github.com/slackapi/java-slack-sdk/issues/582
+
+
+
