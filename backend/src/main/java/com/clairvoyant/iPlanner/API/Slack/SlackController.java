@@ -84,4 +84,40 @@ public class SlackController {
             return return_map;
         }
     }
+
+    @GetMapping("/interviewNotification")
+    public Map<String, Object> interviewNotification(@RequestParam(value = "email", required = true) String email) {
+        Map<String, Object> return_map = new HashMap<>(Literal.SIX);
+        try {
+            /**
+             * send the message
+             */
+            return_map.put(Literal.STATUS, Literal.SUCCESS);
+            return_map.put(Literal.MESSAGE, SlackService.getInstance().interviewNotification(email, null, null, null, null));
+            return return_map;
+        } catch (Exception e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.SOMETHING_WENT_WRONG);
+            return return_map;
+        }
+    }
+
+    @GetMapping("/interviewConfirmation")
+    public Map<String, Object> interviewConfirmation(@RequestParam(value = "email", required = true) String email) {
+        Map<String, Object> return_map = new HashMap<>(Literal.SIX);
+        try {
+            /**
+             * send the message
+             */
+            return_map.put(Literal.STATUS, Literal.SUCCESS);
+            return_map.put(Literal.MESSAGE, SlackService.getInstance().interviewConfirmation(email));
+            return return_map;
+        } catch (Exception e) {
+            return_map.put(Literal.STATUS, Literal.ERROR);
+            return_map.put(Literal.MESSAGE, e.getMessage());
+            return_map.put(Literal.EXCEPTION, Literal.SOMETHING_WENT_WRONG);
+            return return_map;
+        }
+    }
 }
