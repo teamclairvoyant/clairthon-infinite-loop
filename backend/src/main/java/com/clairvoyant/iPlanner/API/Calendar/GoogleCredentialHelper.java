@@ -54,11 +54,11 @@ public class GoogleCredentialHelper {
         InputStream fileInputStream = null;
         int t = 30;
         // try for 30 seconds/ 30 times
-        while (t-->0 && fileInputStream == null) {
+        while (t-- > 0 && fileInputStream == null) {
             Thread.sleep(1000);
-            logger.info("Try count :: "+(30-t)+"/30 time to get credentials file from resource");
+            logger.info("Try count :: " + (30 - t) + "/30 time to get credentials file from resource");
             fileInputStream = CalendarQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
-            if(fileInputStream != null) {
+            if (fileInputStream != null) {
                 logger.info("Credentials File found");
             }
         }
@@ -120,10 +120,10 @@ public class GoogleCredentialHelper {
         if (HTTP_TRANSPORT == null) {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         }
-        if ( CREDENTIAL == null) {
+        if (CREDENTIAL == null) {
             CREDENTIAL = GoogleCredentialHelper.getCredential(HTTP_TRANSPORT);
         }
-        if ( CALENDAR_CLIENT == null ) {
+        if (CALENDAR_CLIENT == null) {
             CALENDAR_CLIENT = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, CREDENTIAL).setApplicationName(APPLICATION_NAME).build();
         }
         return CALENDAR_CLIENT;
@@ -156,7 +156,7 @@ public class GoogleCredentialHelper {
             credential.setRefreshToken(storedCredential.getRefreshToken());
             credential.setExpirationTimeMilliseconds(storedCredential.getExpirationTimeMilliseconds());
         }
-        if(credential.refreshToken()) {
+        if (credential.refreshToken()) {
             logger.info("Refreshed GoogleCredential accessToken");
         }
         return credential;

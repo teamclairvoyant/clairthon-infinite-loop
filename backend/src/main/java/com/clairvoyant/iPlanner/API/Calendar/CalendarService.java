@@ -59,7 +59,7 @@ public class CalendarService {
             type.setValue("fc-event-primary");
 
             reactCalendarEvent.setId(google_event.getId());
-            if(google_event.getSummary() == null) {
+            if (google_event.getSummary() == null) {
                 // means it's a private event
                 reactCalendarEvent.setTitle(Literal.PRIVATE_EVENT);
             } else {
@@ -72,7 +72,7 @@ public class CalendarService {
             /**
              * parse the description html to String text
              */
-            if(google_event.getDescription() != null) {
+            if (google_event.getDescription() != null) {
                 reactCalendarEvent.setDescription(Jsoup.parse(google_event.getDescription()).text());
             }
             reactCalendarEvent.setType(type);
@@ -84,11 +84,11 @@ public class CalendarService {
             metadata.setColour(google_event.getColorId());
             metadata.setHangoutsLink(google_event.getHangoutLink());
             // set availability means free or busy status
-            if(google_event.getTransparency()!=null && google_event.getTransparency().equalsIgnoreCase(Literal.OPAQUE)) {
+            if (google_event.getTransparency() != null && google_event.getTransparency().equalsIgnoreCase(Literal.OPAQUE)) {
                 // transparency opaque means person has blocked calendar event as BUSY on the UI
                 metadata.setAvailability(Literal.busy);
             }
-            if(google_event.getTransparency()!=null && google_event.getTransparency().equalsIgnoreCase(Literal.TRANSPARENT)) {
+            if (google_event.getTransparency() != null && google_event.getTransparency().equalsIgnoreCase(Literal.TRANSPARENT)) {
                 // transparency opaque means person has blocked calendar event as FREE on the UI
                 metadata.setAvailability(Literal.free);
             }
@@ -104,11 +104,11 @@ public class CalendarService {
         DateTime start_time;
         DateTime end_time;
         boolean availability;
-        try{
+        try {
             emails = (List<String>) req_map.get(Literal.emails);
             start_time = new DateTime(req_map.get(Literal.start_time).toString());
             end_time = new DateTime(req_map.get(Literal.end_time).toString());
-            if(!Utility.isEmptyString(req_map.get(Literal.availability))) {
+            if (!Utility.isEmptyString(req_map.get(Literal.availability))) {
                 availability = Boolean.parseBoolean(req_map.get(Literal.availability).toString());
             }
         } catch (Exception e) {
@@ -118,6 +118,7 @@ public class CalendarService {
 
     /**
      * the will filter and include only those events that have the keywords
+     *
      * @return
      */
     public static List<Event> filterByEventKeywords(List<Event> events, List<String> keywords) {
@@ -126,11 +127,11 @@ public class CalendarService {
         // make keywords lowercase
         final List<String> lowercase_keywords = keywords.stream().map(String::toLowerCase).collect(Collectors.toList());
         events.forEach(event -> {
-            if(event.getSummary() != null && !Utility.isEmptyString(event.getSummary())) {
+            if (event.getSummary() != null && !Utility.isEmptyString(event.getSummary())) {
                 List<String> words_in_event_title = Arrays.asList(event.getSummary().split(" "));
 
-                for (String word: words_in_event_title) {
-                    if(lowercase_keywords.contains(word.toLowerCase())){
+                for (String word : words_in_event_title) {
+                    if (lowercase_keywords.contains(word.toLowerCase())) {
                         ret_events.add(event);
                         break;
                     }
@@ -146,7 +147,7 @@ public class CalendarService {
     }
 
     public static List<Event> filterByAvailability(List<Event> events) {
-        return events.parallelStream().filter(event -> event.getTransparency().equalsIgnoreCase("transparent")).collect(Collectors.toList());
+        return events.stream().filter(event -> event.getTransparency().equalsIgnoreCase("transparent")).collect(Collectors.toList());
     }
 
     public static Event createCalendarEvent(Map<String, Object> req_map) throws GeneralSecurityException, IOException {
@@ -158,7 +159,7 @@ public class CalendarService {
 
         Event event = CalendarHelper.createEvent(event_title, startTime, endTime, description, attendees);
         logger.info("Created event ::::::::::::::  " + event.toString());
-        try{
+        try {
             // save the event to mongo to generate dashboard reporting
             MainMongoDao.getInstance().upsertDocument(new Document(event).append(Literal._id, event.getId()), MongoDBConnectionInfo.events_col);
             logger.info("Saved event to MongoDb ::::::::::::::  " + event.getId());
@@ -191,19 +192,19 @@ public class CalendarService {
         /**
          * check null attendees
          */
-        if (req_map.get(Literal.attendees)==null) {
+        if (req_map.get(Literal.attendees) == null) {
             throw new RequestValidationException(Literal.ATTENDEES_NULL);
         }
         /**
          * put default description
          */
-        if(Utility.isEmptyString(req_map.get(Literal.description).toString())) {
+        if (Utility.isEmptyString(req_map.get(Literal.description).toString())) {
             req_map.put(Literal.description, Literal.EMPTY_STRING);
         }
         /**
          * check valid start_time, end_time, attendees
          */
-        try{
+        try {
             DateTime startTime = new DateTime(req_map.get(Literal.start_time).toString());
             DateTime endTime = new DateTime(req_map.get(Literal.end_time).toString());
             List<String> attendees = (List<String>) req_map.get(Literal.attendees);
@@ -221,7 +222,7 @@ public class CalendarService {
         } catch (IOException e) {
             // todo :: improve this, kill jetty process on port 8888 before even trying to start jetty
             // in case already authorised and port in use send already existing auth link
-            return_map.put(Literal.STATUS, Literal.SUCCESS);
+            return_map.put(Literal.STATUS, Literal.ERROR);
             return_map.put(Literal.MESSAGE, e.getMessage());
             return_map.put(Literal.AUTH_LINK, GoogleCredentialHelper.AUTH_LINK);
             return return_map;
@@ -240,7 +241,7 @@ public class CalendarService {
     public List<String> filterBusyEmails(List<String> email_list, DateTime startTime, DateTime endTime) throws GeneralSecurityException, IOException {
         FreeBusyResponse freeBusyResponse = CalendarHelper.getFreeBusy(email_list, startTime, endTime);
         Map<String, FreeBusyCalendar> calendars = freeBusyResponse.getCalendars();
-        if(!calendars.isEmpty()) {
+        if (!calendars.isEmpty()) {
             // if the calendars.email.busy is not empty in calendars, means the person is busy, so remove from the list
             calendars.forEach((k, v) -> {
                 FreeBusyCalendar freeBusyCalendar = calendars.get(k);

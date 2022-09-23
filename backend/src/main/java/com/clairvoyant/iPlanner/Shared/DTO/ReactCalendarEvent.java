@@ -3,20 +3,20 @@ package com.clairvoyant.iPlanner.Shared.DTO;
 import lombok.*;
 
 /**
- [
- {
- "id": "default-event-id-5934302",
- "title": "simply dummy text of the printing",
- "start": "2022-09-12",
- "end": "2022-09-12",
- "className": "fc-event-primary",
- "type": {
- "value": "fc-event-primary",
- "label": "Company"
- },
- "description": "Use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden."
- }
- ]
+ * [
+ * {
+ * "id": "default-event-id-5934302",
+ * "title": "simply dummy text of the printing",
+ * "start": "2022-09-12",
+ * "end": "2022-09-12",
+ * "className": "fc-event-primary",
+ * "type": {
+ * "value": "fc-event-primary",
+ * "label": "Company"
+ * },
+ * "description": "Use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden."
+ * }
+ * ]
  */
 @Data
 @Getter
@@ -42,7 +42,7 @@ public class ReactCalendarEvent {
     @Data
     public static class Metadata {
         public String colour;
-        public  String hangoutsLink;
+        public String hangoutsLink;
         public String availability;
     }
 }

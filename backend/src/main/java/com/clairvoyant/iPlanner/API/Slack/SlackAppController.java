@@ -2,6 +2,7 @@ package com.clairvoyant.iPlanner.API.Slack;
 
 import com.slack.api.bolt.App;
 import com.slack.api.bolt.servlet.SlackAppServlet;
+
 import javax.servlet.annotation.WebServlet;
 
 @WebServlet("/slack/events")

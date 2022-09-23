@@ -181,20 +181,32 @@ public class CalendarController {
             /**
              * validate the request data
              */
-            String email;
+            List<String> emails = new ArrayList<>();
             DateTime start_time;
             DateTime end_time;
             try {
-                email = req_map.get(Literal.email).toString();
+                emails = (List<String>) req_map.get(Literal.emails);
                 start_time = new DateTime(req_map.get(Literal.start_time).toString());
                 end_time = new DateTime(req_map.get(Literal.end_time).toString());
             } catch (Exception e) {
                 throw new RequestValidationException(e.getMessage());
             }
-            List<Event> events = CalendarService.getInstance().getEvents(email, start_time, end_time);
-            List<ReactCalendarEvent> mapped_events = CalendarService.convertEventsToResource(events);
+            List<Map<String, Object>> all_users_events = new ArrayList<>();
+
+            for (String email : emails) {
+                List<Event> events = null;
+                try {
+                    events = CalendarService.getInstance().getEvents(email, start_time, end_time);
+                    List<ReactCalendarEvent> mapped_events = CalendarService.convertEventsToResource(events);
+                    Map<String, Object> single_user_events = new HashMap<>();
+                    single_user_events.put(email, mapped_events);
+                    all_users_events.add(single_user_events);
+                } catch (GeneralSecurityException | IOException e) {
+                    logger.info("Could not get events for the user :: " + email);
+                }
+            }
             return_map.put(Literal.STATUS, Literal.SUCCESS);
-            return_map.put(Literal.DATA, mapped_events);
+            return_map.put(Literal.DATA, all_users_events);
             return return_map;
         } catch (TokenValidationException e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
@@ -220,7 +232,7 @@ public class CalendarController {
      * "start_time": "2022-12-18T00:00:00+05:30",
      * "end_time": "2022-12-18T23:59:00+05:30",
      * "availability" : true,
-     * "event_title" : ["Interview", "free time", "slot", "iPlanner"]
+     * "event_keywords" : ["Interview", "free time", "slot", "iPlanner"]
      * }
      *
      * @param req_map
@@ -255,10 +267,7 @@ public class CalendarController {
             for (String email : emails) {
                 List<Event> events = null;
                 try {
-                    events = CalendarService.getInstance()
-                            .getEvents(email,
-                                    new DateTime(req_map.get(Literal.start_time).toString()),
-                                    new DateTime(req_map.get(Literal.end_time).toString()));
+                    events = CalendarService.getInstance().getEvents(email, new DateTime(req_map.get(Literal.start_time).toString()), new DateTime(req_map.get(Literal.end_time).toString()));
 
                     /**
                      * remove the events not matching the keywords
@@ -269,9 +278,9 @@ public class CalendarController {
                     /**
                      * keep only the 'free/transparent' events that do not block the calendar
                      */
-                    if (availability) {
-                        events = CalendarService.filterByAvailability(events);
-                    }
+//                    if (availability) {
+//                        events = CalendarService.filterByAvailability(events);
+//                    }
                     List<ReactCalendarEvent> mapped_events = CalendarService.convertEventsToResource(events);
                     Map<String, Object> single_user_events = new HashMap<>();
                     single_user_events.put(email, mapped_events);

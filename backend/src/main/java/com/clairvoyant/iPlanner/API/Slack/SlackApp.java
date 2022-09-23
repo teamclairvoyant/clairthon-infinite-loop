@@ -4,7 +4,6 @@ import com.clairvoyant.iPlanner.Shared.MainMongoDao;
 import com.clairvoyant.iPlanner.Utility.MongoDBConnectionInfo;
 import com.slack.api.bolt.App;
 import com.slack.api.bolt.AppConfig;
-import com.slack.api.bolt.socket_mode.SocketModeApp;
 import com.slack.api.methods.response.views.ViewsPublishResponse;
 import com.slack.api.model.event.AppHomeOpenedEvent;
 import com.slack.api.model.view.View;
@@ -26,23 +25,18 @@ import static com.slack.api.model.view.Views.view;
 
 @Configuration
 public class SlackApp {
+
     @Bean
     public App initSlackApp() throws Exception {
 
-
         App app = new App(AppConfig.builder().singleTeamBotToken(SlackHelper.BOT_TOKEN).build());
-
-//        AppConfig appConfig = new AppConfig();
-//        appConfig.setSigningSecret("e7e55498e8fa71bfa20fb398f7e81a3c");
-//        appConfig.setSingleTeamBotToken("xoxb-1597172380741-4097046480819-0veZK0aW4MYvD7WcYPwwSXhh");
-//        App app = new App(appConfig);
 
         app.command("/hello", (req, ctx) -> {
             return ctx.ack("OK, let's do it!");
         });
 
         app.command("/test", (req, ctx) -> {
-            if(MainMongoDao.getInstance().testMongoConnection()) {
+            if (MainMongoDao.getInstance().testMongoConnection()) {
                 return ctx.ack("Success. MongoDB is UP");
             } else {
                 return ctx.ack("Failed to connect to MongoDB");
@@ -52,7 +46,7 @@ public class SlackApp {
         app.command("/interviews", (req, ctx) -> {
             List<Document> allDocuments = MainMongoDao.getInstance().getAllDocuments(MongoDBConnectionInfo.events_col);
             Stream<String> objectStream = allDocuments.stream().map(Document::toJson);
-            return ctx.ack("Here are your scheduled interviews :: \n"+objectStream.collect(Collectors.toList()));
+            return ctx.ack("Here are your scheduled interviews :: \n" + objectStream.collect(Collectors.toList()));
         });
 
         // display home page
@@ -64,9 +58,9 @@ public class SlackApp {
                             section(section -> section.text(markdownText(mt -> mt.text("You will get notified on any interviews scheduled by HR as per your given time slot.")))),
                             divider(),
                             section(section -> section.text(markdownText(mt -> mt.text("SYSTEM INFORMATION")))),
-                            section(section -> section.text(markdownText(mt -> mt.text("Current Time :: "+new Timestamp(System.currentTimeMillis()))))),
-                            section(section -> section.text(markdownText(mt -> mt.text("Available Memory :: "+ Runtime.getRuntime().freeMemory())))),
-                            section(section -> section.text(markdownText(mt -> mt.text("Total Memory :: "+Runtime.getRuntime().totalMemory())))),
+                            section(section -> section.text(markdownText(mt -> mt.text("Current Time :: " + new Timestamp(System.currentTimeMillis()))))),
+                            section(section -> section.text(markdownText(mt -> mt.text("Available Memory :: " + Runtime.getRuntime().freeMemory())))),
+                            section(section -> section.text(markdownText(mt -> mt.text("Total Memory :: " + Runtime.getRuntime().totalMemory())))),
                             divider(),
                             section(section -> section.text(markdownText(mt -> mt.text("In some cases you have to respond to a YES or NO for an interview")))),
                             actions(actions -> actions
@@ -86,13 +80,14 @@ public class SlackApp {
             return ctx.ack();
         });
 
-        SocketModeApp socketModeApp = new SocketModeApp(SlackHelper.APP_TOKEN, app);
 
         // todo if this websocket server starts then http APIs are not working
+//        SocketModeApp socketModeApp = new SocketModeApp(SlackHelper.APP_TOKEN, app);
 //        socketModeApp.start();
-
 
 
         return app;
     }
+
+
 }

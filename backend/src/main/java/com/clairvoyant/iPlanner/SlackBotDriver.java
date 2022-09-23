@@ -5,7 +5,6 @@ package com.clairvoyant.iPlanner;
  * set these env variables in IntelliJ configuration window
  * SLACK_BOT_TOKEN=xoxb-xxxxx
  * SLACK_SIGNING_SECRET=xxxxx
- *
  */
 public class SlackBotDriver {
 

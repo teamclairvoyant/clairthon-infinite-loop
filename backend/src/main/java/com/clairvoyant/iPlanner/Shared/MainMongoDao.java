@@ -313,7 +313,7 @@ public class MainMongoDao {
     /**
      * Generic method to upsert a document into mongo collection.
      * Upsert will insert new document if not found (update+insert)
-     *
+     * <p>
      * document should contain _id to upsert
      *
      * @param collection

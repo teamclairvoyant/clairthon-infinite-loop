@@ -1,6 +1,5 @@
 package com.clairvoyant.iPlanner.API.Slack;
 
-
 import com.clairvoyant.iPlanner.API.APIEndpoints;
 import com.clairvoyant.iPlanner.Utility.Literal;
 import com.slack.api.methods.response.chat.ChatPostMessageResponse;

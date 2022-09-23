@@ -2,6 +2,7 @@ package com.clairvoyant.iPlanner.Utility;
 
 /**
  * This is a Utility class for MongoDb Connection constants
+ *
  * @author Abhinov Gogoi
  */
 public class MongoDBConnectionInfo {

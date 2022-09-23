@@ -25,8 +25,9 @@ public class SlackHelper {
 
     // todo :: token should not expire allow Auto rotation of BOT_TOKEN
     //  opt in for 'Advanced token security via token rotation'
-    public static final String BOT_TOKEN = "xoxb-1597172380741-4097046480819-wQmYVOQMcyRLFvMvduayI9jM";
-    public static final String APP_TOKEN = "xapp-1-A043JR2B0AC-4121068359728-0e85bc9defce66654578e1bcfac721112e7cd504f8cda2d40350c0e92ee28140";
+    //  Warning before doing this configure redirect urls properly because we cannot opt out once opt in
+    public static final String BOT_TOKEN = "xoxb-1597172380741-4095699097526-1EUvgKFg3008Qtcco3SkIJAH";
+    public static final String APP_TOKEN = "xapp-1-A042TL8GSHL-4102555065781-dfde9ea9a073d46993c5163f6eadd06587d33f657e82eb674b1680591fd59b65";
 
     /**
      * Find conversation/channel ID for the channel name using the conversations.list method
@@ -179,6 +180,4 @@ public class SlackHelper {
         Slack slack = Slack.getInstance();
         return slack.status().current();
     }
-
-
 }

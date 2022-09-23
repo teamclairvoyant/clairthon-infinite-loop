@@ -79,7 +79,7 @@ public class CalendarHelper {
         event.setAttendees(attendees);
 
         // set Reminders 10 minutes before
-        EventReminder[] reminderOverrides = new EventReminder[] {
+        EventReminder[] reminderOverrides = new EventReminder[]{
                 new EventReminder().setMethod("email").setMinutes(24 * 60),
                 new EventReminder().setMethod("popup").setMinutes(10),
         };

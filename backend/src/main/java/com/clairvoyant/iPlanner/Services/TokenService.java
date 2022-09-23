@@ -45,7 +45,7 @@ public class TokenService {
         if (LOGIN_ID.equals(Literal.admin) && TOKEN.equals(Literal.iPlanner)) {
             // valid token, don't throw exception
         } else {
-            throw new TokenValidationException("Invalid TOKEN for given LOGIN_ID :: "+LOGIN_ID);
+            throw new TokenValidationException("Invalid TOKEN for given LOGIN_ID :: " + LOGIN_ID);
         }
 
     }

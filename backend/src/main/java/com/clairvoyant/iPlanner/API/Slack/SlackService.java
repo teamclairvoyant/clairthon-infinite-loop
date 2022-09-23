@@ -54,9 +54,9 @@ public class SlackService {
         calendarEventLink = "https://calendar.google.com/calendar/u/0/r/eventedit/XzZ0bG5hcXJsZTVwNmNwYjRkaG1qNHBocGVoazcycjNoNjlrbWNzM2VjOHFtZXByamVkamo0ZTlpY2xoamFvOW1lZG4zNnMzaGQwb21xc2JtZDVsajRjajk2a3I2dXNyY2RwaG4yb2piZDVvbWUgYWJoaW5vdi5pbkBt?tab=rc";
 
         List<LayoutBlock> message = new ArrayList<>();
-        message.add(SectionBlock
+        message.add(HeaderBlock
                 .builder()
-                .text(MarkdownTextObject
+                .text(PlainTextObject
                         .builder()
                         .text("*Hi " + name + ":wave: You have been assigned an Interview!*")
                         .build())

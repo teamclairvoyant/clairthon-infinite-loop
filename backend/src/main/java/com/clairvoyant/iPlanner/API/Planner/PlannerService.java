@@ -435,21 +435,21 @@ public class PlannerService {
         /**
          * if start time is present but end time is missing
          */
-        if(search_map.get(Literal.start_time) == null
+        if (search_map.get(Literal.start_time) == null
                 && search_map.get(Literal.end_time) != null) {
             throw new RequestValidationException("Please provide start_time as well");
         }
         /**
          * if end time is present but start time is missing
          */
-        if(search_map.get(Literal.end_time)==null
+        if (search_map.get(Literal.end_time) == null
                 && search_map.get(Literal.start_time) != null) {
             throw new RequestValidationException("Please provide end_time as well");
         }
         /**
          * try to parse the experience integer
          */
-        if(search_map.get(Literal.experience) != null) {
+        if (search_map.get(Literal.experience) != null) {
             try {
                 Integer.parseInt(search_map.get(Literal.experience).toString());
             } catch (Exception e) {
@@ -472,31 +472,31 @@ public class PlannerService {
         /**
          * create the filters based on request
          */
-        if(!Utility.isEmptyString(req_map.get(Literal.experience))) {
+        if (!Utility.isEmptyString(req_map.get(Literal.experience))) {
             /**
              * append the experience (AND OPERATOR)
              */
             filter_doc.append(Literal.experience, new Document().append(Literal.$gte, req_map.get(Literal.experience)));
         }
-        if(!Utility.isEmptyString(req_map.get(Literal.job_title))) {
+        if (!Utility.isEmptyString(req_map.get(Literal.job_title))) {
             /**
              * append the job_title (AND OPERATOR)
              */
             filter_doc.append(Literal.job_title, req_map.get(Literal.job_title));
         }
-        if(!Utility.isEmptyString(req_map.get(Literal.department))) {
+        if (!Utility.isEmptyString(req_map.get(Literal.department))) {
             /**
              * append the department (AND OPERATOR)
              */
             filter_doc.append(Literal.department, req_map.get(Literal.department));
         }
-        if(!Utility.isEmptyString(req_map.get(Literal.business_unit))) {
+        if (!Utility.isEmptyString(req_map.get(Literal.business_unit))) {
             /**
              * append the business_unit (AND OPERATOR)
              */
             filter_doc.append(Literal.business_unit, req_map.get(Literal.business_unit));
         }
-        if(!Utility.isEmptyString(req_map.get(Literal.location))) {
+        if (!Utility.isEmptyString(req_map.get(Literal.location))) {
             /**
              * append the department (AND OPERATOR)
              */
@@ -507,7 +507,7 @@ public class PlannerService {
             Document in_doc = new Document().append(Literal.$in, locations);
             filter_doc.append(Literal.location, in_doc);
         }
-        if(req_map.get(Literal.skills) != null) {
+        if (req_map.get(Literal.skills) != null) {
             /**
              * append the skills (AND OPERATOR)
              */
@@ -525,12 +525,12 @@ public class PlannerService {
         /**
          * if request has start_time and end_time; go check freeBusy API for filtering the interviewers with free time (AND OPERATOR)
          */
-        if(!eligible_interviewers.isEmpty() && req_map.get(Literal.start_time) != null && req_map.get(Literal.end_time)!=null) {
+        if (!eligible_interviewers.isEmpty() && req_map.get(Literal.start_time) != null && req_map.get(Literal.end_time) != null) {
             /**
              * get the list of emails of eligible_interviewers
              */
             List<String> eligible_interviewers_emails = new ArrayList<>();
-            eligible_interviewers.forEach(interviewer-> {
+            eligible_interviewers.forEach(interviewer -> {
                 eligible_interviewers_emails.add(interviewer.get(Literal.email).toString());
             });
 
@@ -541,8 +541,8 @@ public class PlannerService {
                 List<String> free_interviewers_emails = CalendarService.getInstance().filterBusyEmails(eligible_interviewers_emails, start_time, end_time);
                 List<Map<String, Object>> busy_interviewers = new ArrayList<>();
                 // populate the busy_interviewers list
-                eligible_interviewers.forEach(interviewer-> {
-                    if(!free_interviewers_emails.contains(interviewer.get(Literal.email))) {
+                eligible_interviewers.forEach(interviewer -> {
+                    if (!free_interviewers_emails.contains(interviewer.get(Literal.email))) {
                         busy_interviewers.add(interviewer);
                     }
                 });
