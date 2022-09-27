@@ -1,0 +1,91 @@
+.fc-event-primary-dim {
+  background-color: #ebedff;
+  border-color: #ebedff;
+  color: #6576ff;
+}
+
+.fc-event-danger-dim {
+  background-color: #fce9e7;
+  border-color: #fce9e7;
+  color: #e85347;
+}
+
+.fc-event-pinkdim {
+  background-color: #ffebf3;
+  border-color: #ffebf3;
+  color: #ff63a5;
+}
+.fc-event-pink {
+  background-color: #ff63a5;
+  border-color: #ff63a5;
+  color: #fff;
+}
+.fc-event-success {
+  background-color: #1ee0ac;
+  border-color: #1ee0ac;
+  color: #fff;
+}
+.fc-event-primary {
+  background-color: #6576ff;
+  border-color: #6576ff;
+  color: #fff;
+}
+
+.fc-event-infoDim {
+  background-color: #dff7fb;
+  border-color: #dff7fb;
+  color: #09c2de;
+}
+
+.fc-event-info {
+  background-color: #09c2de;
+  border-color: #09c2de;
+  color: #fff;
+}
+
+.fc-event-success-dim {
+  background-color: #e2fbf4;
+  border-color: #e2fbf4;
+  color: #1ee0ac;
+}
+
+.fc-event-warning {
+  background-color: #f4bd0e;
+  border-color: #f4bd0e;
+  color: #fff;
+}
+
+.fc-event-danger {
+  background-color: #e85347;
+  border-color: #e85347;
+  color: #fff;
+}
+
+.fc-event-warning-dim {
+  background-color: #fef6e0;
+  border-color: #fef6e0;
+  color: #f4bd0e;
+}
+
+.mailList {
+  font-size: 10px;
+  padding: 0.3rem;
+  margin-bottom: 0.2rem;
+}
+
+.mailListBlock {
+  display: flex;
+  width: 13rem;
+  max-height: 100px;
+  overflow-y: auto;
+  flex-wrap: wrap;
+  gap: 5px;
+  border: 1px solid gainsboro;
+  padding-left: 3px;
+  padding-top: 3px;
+}
+
+.mailCloseIcon {
+  font-size: 0.8rem;
+  cursor: pointer;
+}
