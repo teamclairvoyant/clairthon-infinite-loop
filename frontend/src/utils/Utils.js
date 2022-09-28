@@ -22,6 +22,10 @@ export const checkForm = (formData) => {
   return errorState;
 };
 
+export const mapOptions = (optionValue) => {
+  return optionValue.map((item) => ({ value: item, label: item }));
+};
+
 //Function that returns the first or first two letters from a name
 export const findUpper = (string) => {
   let extractedString = [];
@@ -72,6 +76,7 @@ export const setDateForPicker = (rdate) => {
 
 // Function to structure date ex: YYYY-MM-DD
 export const getDate = (rdate) => {
+  if (!rdate) return null;
   let d = rdate.getDate();
   d < 10 && (d = "0" + d);
   let m = rdate.getMonth() + 1;
@@ -83,7 +88,7 @@ export const getDate = (rdate) => {
 };
 
 export const getDateNTime = (date, time) => {
-  if (!date || !time) return new Date();
+  if (!date || !time) return null;
   return getDate(date) + getTime(time);
 };
 

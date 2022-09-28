@@ -3,12 +3,13 @@ import { Icon, Col, Button, RSelect } from "../../../../components/Component";
 import { Controller, useForm } from "react-hook-form";
 import { FormGroup, Form } from "reactstrap";
 import { COPY, TEST_ID } from "../../../../constants/constant";
-import { filterExperience, filterLocation, filterSkills } from "../UserData";
+import { filterExperience } from "../../../../common/listing/ListingData";
 import { ErrorMessage } from "../../../../components/error-message/ErrorMessage";
-
+import { useListContext } from "../../../../context/listContext";
 const AddInterviewer = (props) => {
   const { onFormCancel, interviewerValidationError, addInterviewers } = props;
   const { errors, register, handleSubmit, control } = useForm();
+  const { skillOptions, locationOptions } = useListContext();
 
   // submit function to add a new item
   const onFormSubmit = (interviewerData) => {
@@ -132,11 +133,11 @@ const AddInterviewer = (props) => {
                   <Controller
                     control={control}
                     name="location"
-                    defaultValue={filterLocation[0]}
+                    defaultValue={locationOptions[0]}
                     render={({ onChange, value, ref }) => (
                       <RSelect
                         inputRef={ref}
-                        options={filterLocation}
+                        options={locationOptions}
                         value={value}
                         name={COPY.LOCATION}
                         id={COPY.LOCATION}
@@ -195,7 +196,7 @@ const AddInterviewer = (props) => {
                 <div className="form-control-wrap">
                   <Controller
                     control={control}
-                    defaultValue={[filterSkills[0]]}
+                    defaultValue={[skillOptions[0]]}
                     name="skills"
                     render={({ onChange, value, ref }) => (
                       <RSelect
@@ -204,7 +205,7 @@ const AddInterviewer = (props) => {
                         inputRef={ref}
                         name={COPY.SKILLS}
                         closeMenuOnSelect={false}
-                        options={filterSkills}
+                        options={skillOptions}
                         placeholder={COPY.PLACEHOLDER_SKILLS}
                         value={value}
                         onChange={(selectedSkills) => onChange(selectedSkills)}

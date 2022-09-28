@@ -14,6 +14,7 @@ import {
   Col,
   PreviewAltCard,
   BlockContent,
+  RSelect,
 } from "../../../components/Component";
 import DatePicker from "react-datepicker";
 import {
@@ -41,11 +42,12 @@ import AddEventModal from "../../../components/modals/CommonModal/CommonModal";
 import AddEvent from "./ModalLayouts/AddEvent";
 
 const InterviewerCalender = ({ match, ...props }) => {
-  const { selectedInterviewers, setCalendarModal } = props;
+  const { selectedInterviewers } = props;
 
   const { contextData } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState([]);
+  const [isFilterEvent, setIsFilterEvent] = useState(null);
   const [data] = contextData;
   const [eventModal, setEventModal] = useState(false);
   const [interviewerData, setInterviewerData] = useState([]);
@@ -54,13 +56,14 @@ const InterviewerCalender = ({ match, ...props }) => {
   const toggleFilterDropdown = () => setDropdownOpen((prevState) => !prevState);
   const [interviewersList, setInterviewersList] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-  const [emailId, setEmailId] = useState("");
+  const [emailId, setEmailId] = useState();
+  const [emailOptions, setEmailOptions] = useState([]);
   const history = useHistory();
   const [dates, setDates] = useState({
-    startDate: dayjs().startOf("day").$d,
-    startTime: dayjs().startOf("day").$d,
-    endTime: dayjs().endOf("day").$d,
-    endDate: dayjs().endOf("day").$d,
+    startDate: dayjs().startOf("week").$d,
+    startTime: dayjs().startOf("week").$d,
+    endTime: dayjs().endOf("week").$d,
+    endDate: dayjs().endOf("week").$d,
   });
 
   useEffect(() => {
@@ -101,24 +104,6 @@ const InterviewerCalender = ({ match, ...props }) => {
       }
     }
     return null;
-
-    // {
-    //   _id: "59cd855a-c691-4aa7-8ddf-6d57ee08f86a",
-    //   business_unit: "Enterprise and Data Services",
-    //   department: "Enterprise Engineering",
-    //   email: "abhinav.gogoi@clairvoyantsoft.com",
-    //   employee_no: "P010444",
-    //   experience: 3,
-    //   isInterviewer: true,
-    //   job_title: "Software Engineer",
-    //   location: "Pune",
-    //   name: "Abhinov Gogoi 222",
-    //   phone: "+91 1234567890",
-    //   skills: ["Java"],
-    //   updatedDate: "2022-09-11T18:14:38.757+0000",
-    //   updatedDateMs: 1662920078757,
-    //   checked: false,
-    // }
   }, [match?.params?.id, data]);
 
   useEffect(() => {
@@ -171,10 +156,10 @@ const InterviewerCalender = ({ match, ...props }) => {
               )}-${returnDate(event.end, "h:mm A")}`;
               return event;
             });
-
             eventListArray = [...eventListArray, ...eventArray];
             return eventListArray;
           });
+          setEmailId([]);
           setEvents(eventListArray);
         } else {
           if (response.data.MESSAGE.includes(COPY.EMAIL_ID_NOT_FOUND)) {
@@ -199,6 +184,17 @@ const InterviewerCalender = ({ match, ...props }) => {
     setEventModal(!eventModal);
   };
 
+  const handleFilterEmails = (e) => {
+    if (!e.target.value) {
+      setEmailOptions([]);
+      return;
+    }
+    setEmailOptions(
+      mailIdOptions.filter((mailId) =>
+        mailId.label.toUpperCase().includes(e.target.value.toUpperCase())
+      )
+    );
+  };
   useEffect(() => {
     if (interviewersEmail?.length) {
       fetchEvents();
@@ -219,11 +215,14 @@ const InterviewerCalender = ({ match, ...props }) => {
   };
 
   const addEmailId = () => {
-    const emailObject = {
-      email: emailId,
-      className: colorOptions[interviewersEmail.length],
-    };
-    setInterviewersEmail([...interviewersEmail, emailObject]);
+    let colorOptionIndex = interviewersEmail.length;
+
+    const emailArray = emailId?.map((email) => ({
+      email: email.value,
+      className: colorOptions[colorOptionIndex++],
+    }));
+
+    setInterviewersEmail([...interviewersEmail, ...emailArray]);
   };
 
   const removeEmailId = (emailId) => {
@@ -235,6 +234,19 @@ const InterviewerCalender = ({ match, ...props }) => {
     }
     setInterviewersEmail(filteredEmailList);
   };
+
+  const filterInterviewerCreatedSlots = (e) => {
+    setIsFilterEvent(e.currentTarget.checked);
+  };
+
+  const filteredEvents = useMemo(() => {
+    if (isFilterEvent) {
+      return events?.filter((event) =>
+        event.title.toLowerCase().includes(COPY.EVENT_IDENTIFIER)
+      );
+    }
+    return null;
+  }, [events, isFilterEvent]);
 
   const showEmailIds = () => {
     if (!interviewersEmail.length) {
@@ -277,65 +289,46 @@ const InterviewerCalender = ({ match, ...props }) => {
     <React.Fragment>
       <Head title="Interviewer Calender"></Head>
 
-      {interviewersEmail.length && (
-        <a
-          href="#close"
-          onClick={(ev) => {
-            ev.preventDefault();
-            setCalendarModal(false);
-          }}
-          className="close"
-        >
-          <Icon name="cross-sm"></Icon>
-        </a>
-      )}
       {(interviewerData || interviewersEmail) && (
         <Content>
-          {interviewerData && (
-            <BlockHead size="sm">
-              <BlockBetween>
-                <BlockHeadContent>
-                  <BlockTitle tag="h3" page>
-                    Interviewer /{" "}
-                    <strong className="text-primary small">
-                      {interviewerData?.name}
-                    </strong>
-                  </BlockTitle>
-                </BlockHeadContent>
+          <BlockHead size="sm">
+            <BlockBetween>
+              <BlockHeadContent>
+                <BlockTitle tag="h3" page>
+                  Interviewer /{" "}
+                  <strong className="text-primary small">
+                    {interviewerData?.name}
+                  </strong>
+                </BlockTitle>
+              </BlockHeadContent>
 
-                <BlockHeadContent>
-                  <Button
-                    color="light"
-                    outline
-                    className="bg-white d-none d-sm-inline-flex"
-                    onClick={() => history.goBack()}
-                  >
-                    <Icon name="arrow-left"></Icon>
-                    <span>Back</span>
-                  </Button>
-                  <a
-                    href="#back"
-                    onClick={(ev) => {
-                      ev.preventDefault();
-                      history.goBack();
-                    }}
-                    className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"
-                  >
-                    <Icon name="arrow-left"></Icon>
-                  </a>
-                </BlockHeadContent>
-              </BlockBetween>
-            </BlockHead>
-          )}
+              <BlockHeadContent>
+                <Button
+                  color="light"
+                  outline
+                  className="bg-white d-none d-sm-inline-flex"
+                  onClick={() => history.goBack()}
+                >
+                  <Icon name="arrow-left"></Icon>
+                  <span>Back</span>
+                </Button>
+                <a
+                  href="#back"
+                  onClick={(ev) => {
+                    ev.preventDefault();
+                    history.goBack();
+                  }}
+                  className="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"
+                >
+                  <Icon name="arrow-left"></Icon>
+                </a>
+              </BlockHeadContent>
+            </BlockBetween>
+          </BlockHead>
 
           {/* {showCalender} */}
           <BlockHead size="sm">
             <BlockBetween>
-              {false && (
-                <BlockHeadContent>
-                  <BlockTitle page>Calendar</BlockTitle>
-                </BlockHeadContent>
-              )}
               <BlockHeadContent>
                 <BlockBetween>
                   <BlockHeadContent>
@@ -344,16 +337,24 @@ const InterviewerCalender = ({ match, ...props }) => {
                   <span className="btn-toolbar-sep"></span>
 
                   <BlockHeadContent>
-                    <FormGroup>
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder="email Id"
-                        name="mailIds"
-                        onChange={(e) => setEmailId(e.target.value)}
+                    <FormGroup className="emailText">
+                      <RSelect
+                        isMulti
+                        handleFilter={handleFilterEmails}
+                        placeholder="enter emailId"
+                        name={COPY.EMAIL}
+                        dataTestId={COPY.EMAIL}
+                        closeMenuOnSelect={false}
+                        options={emailOptions}
+                        value={emailId}
+                        onChange={(selectedEmail) => {
+                          setEmailId(selectedEmail);
+                        }}
                       />
                     </FormGroup>
                   </BlockHeadContent>
+                  <span className="btn-toolbar-sep"></span>
+
                   <BlockHeadContent>
                     <Button
                       color="light"
@@ -503,6 +504,29 @@ const InterviewerCalender = ({ match, ...props }) => {
               </BlockHeadContent>
             </BlockBetween>
           </BlockHead>
+          <BlockHead size="sm">
+            <BlockBetween>
+              <BlockHeadContent>
+                <div className="custom-control custom-control-sm custom-checkbox notext">
+                  <input
+                    type="checkbox"
+                    className="custom-control-input form-control"
+                    onChange={(e) => filterInterviewerCreatedSlots(e)}
+                    id="uid"
+                  />
+                  <label className="custom-control-label" htmlFor="uid">
+                    Show only interviewer slot's
+                  </label>
+                </div>
+              </BlockHeadContent>
+
+              <BlockHeadContent>
+                <BlockBetween>
+                  <BlockHeadContent></BlockHeadContent>
+                </BlockBetween>
+              </BlockHeadContent>
+            </BlockBetween>
+          </BlockHead>
 
           {loading ? (
             <div className="d-flex justify-content-center align-items-center vh-100">
@@ -512,7 +536,7 @@ const InterviewerCalender = ({ match, ...props }) => {
             <Block>
               <PreviewAltCard>
                 <CalenderApp
-                  events={events}
+                  events={!filteredEvents ? events : filteredEvents}
                   onDelete={deleteEvent}
                   onEdit={editEvent}
                 />
@@ -529,10 +553,6 @@ const InterviewerCalender = ({ match, ...props }) => {
         modalSize="lg"
         content={
           <AddEvent
-            // onFormCancel={onFormCancel}
-            // addInterviewEvent={addInterviewEvent}
-            // setEventData={setEventData}
-            // eventData={eventData}
             setEventModal={setEventModal}
             mailIdOptions={mailIdOptions}
           />

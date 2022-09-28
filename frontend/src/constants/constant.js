@@ -6,6 +6,7 @@ export const URL_ENDPOINTS = {
   GET_INTERVIEWER_EVENTS: "calendar/events",
   GET_INTERVIEWER_FREE_SLOTS: "calendar/filter",
   CREATE_EVENT: "calendar/createEvent",
+  GET_LISTING: "listing",
 };
 
 export const METHODS = {
@@ -16,6 +17,11 @@ export const METHODS = {
 export const RESPONSE_MESSAGE = {
   SUCCESS: "Success",
   ERROR: "Error",
+};
+
+export const LIST_NAMES = {
+  SKILLS: "SKILLS",
+  LOCATION: "LOCATION",
 };
 
 export const COPY = {
@@ -70,6 +76,7 @@ export const COPY = {
   PLACEHOLDER_LOCATION: "Enter Location",
   PLACEHOLDER_EXPERIENCE: "Enter Experience",
   PLACEHOLDER_SKILLS: "Enter Skills",
+  EVENT_IDENTIFIER: "iplanner",
 };
 
 export const TEST_ID = {
