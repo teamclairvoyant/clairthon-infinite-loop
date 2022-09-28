@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { FormGroup } from "reactstrap";
 import { COPY } from "../../../../../constants/constant";
 import { RSelect, Row, Col } from "../../../../../components/Component";
-import { filterExperience, filterLocation, filterSkills } from "../../UserData";
+import { filterExperience } from "../../../../../common/listing/ListingData";
 import { ErrorMessage } from "../../../../../components/error-message/ErrorMessage";
 import DatePicker from "react-datepicker";
 import { getDateNTime } from "../../../../../utils/Utils";
-
+import { useListContext } from "../../../../../context/listContext";
 const FilterInterviewer = (props) => {
   const { filter, addFilter, applyFilter, resetFilter } = props;
-
+  const { skillOptions, locationOptions } = useListContext();
   const [error, setError] = useState({
     filterEmpty: false,
     errorMessage: "",
@@ -26,8 +26,6 @@ const FilterInterviewer = (props) => {
       endTime,
     } = filter;
 
-    console.log(new Date(startTime) > new Date(endTime));
-    console.log({ filter });
     if (startDate || endDate) {
       if (!(endDate & startDate)) {
         setError({
@@ -85,7 +83,7 @@ const FilterInterviewer = (props) => {
               <RSelect
                 isMulti
                 closeMenuOnSelect={false}
-                options={filterLocation}
+                options={locationOptions}
                 defaultValue={filter.location}
                 onChange={(selectedLocation) =>
                   addFilter({
@@ -197,7 +195,7 @@ const FilterInterviewer = (props) => {
                 isMulti
                 closeMenuOnSelect={false}
                 defaultValue={filter.skills}
-                options={filterSkills}
+                options={skillOptions}
                 onChange={(selectedSkills) =>
                   addFilter({
                     ...filter,

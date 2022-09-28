@@ -3,9 +3,11 @@ import { render } from "@testing-library/react";
 import { fireEvent, screen } from "@testing-library/dom";
 import AddInterviewer from "./AddInterviewer";
 import { COPY, TEST_ID } from "../../../../constants/constant";
-// import selectEvent from "react-select-event";
-// import userEvent from "@testing-library/user-event";
-import { filterExperience, filterLocation, filterSkills } from "../UserData";
+import {
+  filterExperience,
+  filterLocation,
+  filterSkills,
+} from "../../../../common/listing/ListingData";
 
 const onFormCancel = jest.fn();
 const interviewerValidationError = "";

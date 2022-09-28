@@ -2,7 +2,7 @@ import React, { Suspense, useLayoutEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import { UserContextProvider } from "../pages/pre-built/interview-manage/UserContext";
 import { RedirectAs404 } from "../utils/Utils";
-
+import { ListProvider } from "../context/listContext";
 import Homepage from "../pages/Homepage";
 
 import Terms from "../pages/others/Terms";
@@ -26,7 +26,9 @@ const Pages = () => {
           path={`${process.env.PUBLIC_URL}/interview-list`}
           render={() => (
             <UserContextProvider>
-              <InterviewList />
+              <ListProvider>
+                <InterviewList />
+              </ListProvider>
             </UserContextProvider>
           )}
         ></Route>
@@ -35,7 +37,9 @@ const Pages = () => {
           path={`${process.env.PUBLIC_URL}/interviewer-calendar/:id`}
           render={(props) => (
             <UserContextProvider>
-              <InterviewerCalender {...props} />
+              <ListProvider>
+                <InterviewerCalender {...props} />
+              </ListProvider>
             </UserContextProvider>
           )}
         ></Route>

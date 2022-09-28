@@ -27,12 +27,11 @@ import {
   TooltipComponent,
   RSelect,
 } from "../../../components/Component";
-import { filterSkills, filterLocation, filterExperience } from "./UserData";
+import { filterExperience } from "../../../common/listing/ListingData";
 import {
   bulkActionOptions,
   findUpper,
-  getDate,
-  getTime,
+  getDateNTime,
 } from "../../../utils/Utils";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -54,7 +53,7 @@ import FilterInterviewer from "./components/FilterInterviewer/FilterInterviewer"
 // import { mockInterviewer } from "./components/MockData/mockInterviewer";
 import InterviewerCalender from "./InterviewerCalender";
 import { ErrorMessage } from "../../../components/error-message/ErrorMessage";
-
+import { useListContext } from "../../../context/listContext";
 const initFormData = {
   name: "",
   employee_no: "",
@@ -66,6 +65,7 @@ const initFormData = {
 };
 const InterviewList = () => {
   const { contextData } = useContext(UserContext);
+  const { skillOptions, locationOptions } = useListContext();
   const [data, setData] = contextData;
 
   const [sm, updateSm] = useState(false);
@@ -183,8 +183,8 @@ const InterviewList = () => {
       endTime,
     } = filter;
 
-    const startDateTime = getDate(startDate) + getTime(startTime);
-    const endDateTime = getDate(endDate) + getTime(endTime);
+    const startDateTime = getDateNTime(startDate, startTime);
+    const endDateTime = getDateNTime(endDate, endTime);
 
     const filterOptions = {
       ...(skills.length && { skills: skills.map((skill) => skill.value) }),
@@ -299,15 +299,15 @@ const InterviewList = () => {
           employee_no: item.employee_no,
           email: item.email,
           experience: filterExperience.find(
-            (location) => location.value === item.experience
+            (experience) => experience.value === item.experience
           ),
-          location: filterLocation.find(
+          location: locationOptions.find(
             (location) => location.value === item.location
           ),
           phone: item.phone,
           skills: item.skills
             ? item.skills.map((skill) =>
-                filterSkills.find((fSkill) => fSkill.value === skill)
+                skillOptions.find((fSkill) => fSkill.value === skill)
               )
             : [],
         });
@@ -886,7 +886,7 @@ const InterviewList = () => {
               formData={formData}
               register={register}
               errors={errors}
-              filterSkills={filterSkills}
+              filterSkills={skillOptions}
               control={control}
               interviewerValidationError={
                 interviewerError.editInterviewerMessage

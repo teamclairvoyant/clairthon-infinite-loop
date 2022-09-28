@@ -4,7 +4,10 @@ import { Icon, Col, Button, RSelect } from "../../../../components/Component";
 import { FormGroup, Form } from "reactstrap";
 import { COPY } from "../../../../constants/constant";
 import { Controller, useForm } from "react-hook-form";
-import { filterExperience, filterLocation } from "../UserData";
+import {
+  filterExperience,
+  filterLocation,
+} from "../../../../common/listing/ListingData";
 import { ErrorMessage } from "../../../../components/error-message/ErrorMessage";
 
 const errorMessageStyle = {
@@ -24,7 +27,6 @@ const EditInterviewer = (props) => {
   });
 
   const handleUpdateButton = (interviewerData) => {
-    console.log({ interviewerData });
     const { skills, location } = interviewerData;
 
     if (!skills.length) {

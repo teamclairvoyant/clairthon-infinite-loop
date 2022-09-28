@@ -5,6 +5,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import bootstrapPlugin from "@fullcalendar/bootstrap";
 import DatePicker from "react-datepicker";
+import "./Calender.scss";
 import {
   Popover,
   PopoverHeader,
@@ -29,10 +30,11 @@ const EventView = (event) => {
         id={publicId}
         onMouseEnter={() => setMouseEnter(true)}
         onMouseLeave={() => setMouseEnter(false)}
+        className="eventHeading"
       >
-        {title}
+        <span className="eventTitle">{title}</span>
       </div>{" "}
-      <Popover placement="bottom" isOpen={mouseEnter} target={publicId}>
+      <Popover placement="left-top" isOpen={mouseEnter} target={publicId}>
         <PopoverHeader>{title}</PopoverHeader>
         <PopoverBody>{extendedProps.startDate}</PopoverBody>
       </Popover>
@@ -41,7 +43,7 @@ const EventView = (event) => {
 };
 const CalenderApp = ({ events, onDelete, onEdit }) => {
   const [modalState, updateModal] = useState(false);
-  const [mockEvents, updateEvents] = useState(events);
+  const [calenderEvents, updateEvents] = useState(events);
   const [event, updateEvent] = useState({});
   const [theme, settheme] = useState();
   const [edit, updateEditModal] = useState(false);
@@ -93,12 +95,12 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
     <React.Fragment>
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, listPlugin, bootstrapPlugin]}
-        events={mockEvents}
+        events={calenderEvents}
         eventClick={(info) => handleEventClick(info)}
-        initialView="dayGridMonth"
+        initialView="timeGridWeek"
         headerToolbar={{
           left: "title prev,next",
-          center: null,
+          center: "",
           right: "today dayGridMonth,timeGridWeek,timeGridDay,listWeek",
         }}
         themeSystem="bootstrap"
