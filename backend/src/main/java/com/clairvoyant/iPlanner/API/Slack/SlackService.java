@@ -43,15 +43,10 @@ public class SlackService {
     public ChatPostMessageResponse interviewNotification(
             String email,
             String name,
+            String description,
             String time,
             String meetLink,
             String calendarEventLink) {
-
-        String description = "This person has 4 years of Fullstack dev experience.\nPrepare your selected questions from the QUESTION BANK APP";
-        name = "Abhinov";
-        time = new Timestamp(System.currentTimeMillis()).toString();
-        meetLink = "https://meet.google.com/piu-xemz-vfy";
-        calendarEventLink = "https://calendar.google.com/calendar/u/0/r/eventedit/XzZ0bG5hcXJsZTVwNmNwYjRkaG1qNHBocGVoazcycjNoNjlrbWNzM2VjOHFtZXByamVkamo0ZTlpY2xoamFvOW1lZG4zNnMzaGQwb21xc2JtZDVsajRjajk2a3I2dXNyY2RwaG4yb2piZDVvbWUgYWJoaW5vdi5pbkBt?tab=rc";
 
         List<LayoutBlock> message = new ArrayList<>();
         message.add(HeaderBlock

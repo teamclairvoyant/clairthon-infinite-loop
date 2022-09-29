@@ -101,6 +101,11 @@ public class CalendarHelper {
         event.setGuestsCanModify(true);
         event.setGuestsCanInviteOthers(true);
 
-        return calendarClient.events().insert("primary", event).setConferenceDataVersion(1).execute();
+        return calendarClient
+                .events()
+                .insert("primary", event)
+                .setSendUpdates("all")
+                .setConferenceDataVersion(1)
+                .execute();
     }
 }

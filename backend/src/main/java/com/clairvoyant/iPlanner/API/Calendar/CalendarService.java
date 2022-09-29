@@ -1,5 +1,6 @@
 package com.clairvoyant.iPlanner.API.Calendar;
 
+import com.clairvoyant.iPlanner.API.Slack.SlackService;
 import com.clairvoyant.iPlanner.Exceptions.RequestValidationException;
 import com.clairvoyant.iPlanner.Shared.DTO.ReactCalendarEvent;
 import com.clairvoyant.iPlanner.Shared.MainMongoDao;
@@ -65,7 +66,6 @@ public class CalendarService {
             } else {
                 reactCalendarEvent.setTitle(google_event.getSummary());
             }
-            // todo :: event start time for a recurring event is shown as the created datetime fix this
             reactCalendarEvent.setStart(google_event.getStart().getDateTime().toString());
             reactCalendarEvent.setEnd(google_event.getEnd().getDateTime().toString());
             reactCalendarEvent.setClassName("fc-event-primary");
@@ -159,6 +159,22 @@ public class CalendarService {
 
         Event event = CalendarHelper.createEvent(event_title, startTime, endTime, description, attendees);
         logger.info("Created event ::::::::::::::  " + event.toString());
+
+        // send Slack notifications
+        new Thread(() -> {
+            String message = "An interview has been scheduled !!";
+            attendees.forEach(email -> {
+                SlackService.getInstance().interviewNotification(
+                        email,
+                        "",
+                        description,
+                        event.getStart().getDateTime().toString(),
+                        event.getHangoutLink(),
+                        event.getHtmlLink()
+                );
+            });
+        }).start();
+
         try {
             // save the event to mongo to generate dashboard reporting
             MainMongoDao.getInstance().upsertDocument(new Document(event).append(Literal._id, event.getId()), MongoDBConnectionInfo.events_col);
@@ -166,6 +182,7 @@ public class CalendarService {
         } catch (MongoException me) {
             logger.error("Failed to save event to MongoDb ::::::::::::::  " + event.getId());
         }
+
         return event;
     }
 

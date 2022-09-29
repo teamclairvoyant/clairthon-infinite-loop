@@ -26,7 +26,7 @@ public class SlackHelper {
     // todo :: token should not expire allow Auto rotation of BOT_TOKEN
     //  opt in for 'Advanced token security via token rotation'
     //  Warning before doing this configure redirect urls properly because we cannot opt out once opt in
-    public static final String BOT_TOKEN = "xoxb-1597172380741-4095699097526-1EUvgKFg3008Qtcco3SkIJAH";
+    public static final String BOT_TOKEN = "xoxb-1597172380741-4095699097526-eLBhJUyx8NTGGkctBMu1Wmyq";
     public static final String APP_TOKEN = "xapp-1-A042TL8GSHL-4102555065781-dfde9ea9a073d46993c5163f6eadd06587d33f657e82eb674b1680591fd59b65";
 
     /**

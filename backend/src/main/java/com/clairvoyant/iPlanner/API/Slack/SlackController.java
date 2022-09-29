@@ -92,7 +92,7 @@ public class SlackController {
              * send the message
              */
             return_map.put(Literal.STATUS, Literal.SUCCESS);
-            return_map.put(Literal.MESSAGE, SlackService.getInstance().interviewNotification(email, null, null, null, null));
+            return_map.put(Literal.MESSAGE, SlackService.getInstance().interviewNotification(email, null,  null, null, null, null));
             return return_map;
         } catch (Exception e) {
             return_map.put(Literal.STATUS, Literal.ERROR);
