@@ -17,7 +17,6 @@ export const request = ({ ...options }) => {
   const onError = (error) => {
     return error;
   };
-  console.log({ options });
 
   return client(options).then(onSuccess).catch(onError);
 };

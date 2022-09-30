@@ -8,7 +8,8 @@ import {
   filterLocation,
   filterSkills,
 } from "../../../../common/listing/ListingData";
-
+import { ListContext } from "../../../../context/listContext";
+import { listing } from "../../../../common/MockData/mockTestData";
 const onFormCancel = jest.fn();
 const interviewerValidationError = "";
 const addInterviewers = jest.fn();
@@ -19,11 +20,13 @@ describe("AddInterviewerModal", () => {
 
   test("it renders the add interviewer modal", () => {
     const { container } = render(
-      <AddInterviewer
-        onFormCancel={onFormCancel}
-        interviewerValidationError={interviewerValidationError}
-        addInterviewers={addInterviewers}
-      />
+      <ListContext.Provider value={listing}>
+        <AddInterviewer
+          onFormCancel={onFormCancel}
+          interviewerValidationError={interviewerValidationError}
+          addInterviewers={addInterviewers}
+        />
+      </ListContext.Provider>
     );
 
     expect(container).toBeDefined();
@@ -31,11 +34,13 @@ describe("AddInterviewerModal", () => {
 
   test("it test the input box value", async () => {
     const { container } = render(
-      <AddInterviewer
-        onFormCancel={onFormCancel}
-        interviewerValidationError={interviewerValidationError}
-        addInterviewers={addInterviewers}
-      />
+      <ListContext.Provider value={listing}>
+        <AddInterviewer
+          onFormCancel={onFormCancel}
+          interviewerValidationError={interviewerValidationError}
+          addInterviewers={addInterviewers}
+        />
+      </ListContext.Provider>
     );
     expect(container).toBeDefined();
 
@@ -81,11 +86,13 @@ describe("AddInterviewerModal", () => {
 
   test("it test the error message for field empty", async () => {
     const { container } = render(
-      <AddInterviewer
-        onFormCancel={onFormCancel}
-        interviewerValidationError={interviewerValidationError}
-        addInterviewers={addInterviewers}
-      />
+      <ListContext.Provider value={listing}>
+        <AddInterviewer
+          onFormCancel={onFormCancel}
+          interviewerValidationError={interviewerValidationError}
+          addInterviewers={addInterviewers}
+        />
+      </ListContext.Provider>
     );
     expect(container).toBeDefined();
 
@@ -99,11 +106,13 @@ describe("AddInterviewerModal", () => {
 
   test("it test the cancel button", async () => {
     const { container } = render(
-      <AddInterviewer
-        onFormCancel={onFormCancel}
-        interviewerValidationError={interviewerValidationError}
-        addInterviewers={addInterviewers}
-      />
+      <ListContext.Provider value={listing}>
+        <AddInterviewer
+          onFormCancel={onFormCancel}
+          interviewerValidationError={interviewerValidationError}
+          addInterviewers={addInterviewers}
+        />
+      </ListContext.Provider>
     );
     expect(container).toBeDefined();
 
@@ -113,11 +122,13 @@ describe("AddInterviewerModal", () => {
 
   test("it test the cancel anchor tag", async () => {
     const { container } = render(
-      <AddInterviewer
-        onFormCancel={onFormCancel}
-        interviewerValidationError={interviewerValidationError}
-        addInterviewers={addInterviewers}
-      />
+      <ListContext.Provider value={listing}>
+        <AddInterviewer
+          onFormCancel={onFormCancel}
+          interviewerValidationError={interviewerValidationError}
+          addInterviewers={addInterviewers}
+        />
+      </ListContext.Provider>
     );
     expect(container).toBeDefined();
 

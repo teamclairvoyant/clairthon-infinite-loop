@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import Content from "../../../layout/content/Content";
 import Head from "../../../layout/head/Head";
 import {
@@ -25,11 +25,11 @@ import {
   DataTableRow,
   DataTableItem,
   TooltipComponent,
-  RSelect,
+  // RSelect,
 } from "../../../components/Component";
 import { filterExperience } from "../../../common/listing/ListingData";
 import {
-  bulkActionOptions,
+  // bulkActionOptions,
   findUpper,
   getDateNTime,
 } from "../../../utils/Utils";
@@ -85,7 +85,7 @@ const InterviewList = () => {
   const [selectInterviewerMessage, setSelectInterviewerMessage] = useState("");
   const [editId, setEditedId] = useState();
   const [formData, setFormData] = useState(initFormData);
-  const [actionText, setActionText] = useState("");
+  // const [actionText, setActionText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemPerPage, setItemPerPage] = useState(10);
   const [sort, setSortState] = useState("");
@@ -114,7 +114,6 @@ const InterviewList = () => {
     }
   };
   const fetchInterviewers = (filterOptions = null) => {
-    // setData(mockInterviewer);
     setLoading(true);
 
     const requestOptions = {
@@ -126,7 +125,6 @@ const InterviewList = () => {
     };
 
     const responseData = request(requestOptions);
-
     responseData
       .then((response) => {
         if (response.data.STATUS === RESPONSE_MESSAGE.SUCCESS) {
@@ -215,27 +213,20 @@ const InterviewList = () => {
     fetchInterviewers();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Changing state value when searching name
-  useEffect(() => {
-    if (data.length) {
-      if (onSearchText !== "") {
-        const filteredObject = data.filter((item) => {
-          return (
-            item.name.toLowerCase().includes(onSearchText.toLowerCase()) ||
-            item.email.toLowerCase().includes(onSearchText.toLowerCase())
-          );
-        });
-        setData([...filteredObject]);
-      } else {
-        setData([...data]);
-      }
-    }
-  }, [onSearchText, setData]);
+  const interviewersList = useMemo(() => {
+    if (!onSearchText) return data;
+    return data.filter((item) => {
+      return (
+        item.name.toLowerCase().includes(onSearchText.toLowerCase()) ||
+        item.email.toLowerCase().includes(onSearchText.toLowerCase())
+      );
+    });
+  }, [data, onSearchText]);
 
   // function to set the action to be taken in table header
-  const onActionText = (e) => {
-    setActionText(e.value);
-  };
+  // const onActionText = (e) => {
+  //   setActionText(e.value);
+  // };
 
   // onChange function for searching name
   const onFilterChange = (e) => {
@@ -336,20 +327,20 @@ const InterviewList = () => {
   };
 
   // function which fires on applying selected action
-  const onBulkActionClick = (e) => {
-    if (!selectedInterviewers.length) {
-      setSelectInterviewerMessage(COPY.SELECT_INTERVIEWER_MESSAGE);
-      return;
-    }
-    if (actionText === "calendar") {
-      setCalendarModal(true);
-      setSelectInterviewerMessage("");
-    } else if (actionText === "delete") {
-      let newData;
-      newData = data.filter((item) => item.checked !== true);
-      setData([...newData]);
-    }
-  };
+  // const onBulkActionClick = (e) => {
+  //   if (!selectedInterviewers.length) {
+  //     setSelectInterviewerMessage(COPY.SELECT_INTERVIEWER_MESSAGE);
+  //     return;
+  //   }
+  //   if (actionText === "calendar") {
+  //     setCalendarModal(true);
+  //     setSelectInterviewerMessage("");
+  //   } else if (actionText === "delete") {
+  //     let newData;
+  //     newData = data.filter((item) => item.checked !== true);
+  //     setData([...newData]);
+  //   }
+  // };
 
   // function to toggle the search option
   const toggle = () => setonSearch(!onSearch);
@@ -357,7 +348,11 @@ const InterviewList = () => {
   // Get current list, pagination
   const indexOfLastItem = currentPage * itemPerPage;
   const indexOfFirstItem = indexOfLastItem - itemPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = interviewersList.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+  // console.log({curr})
   // Change Page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -428,7 +423,7 @@ const InterviewList = () => {
             <div className="card-inner position-relative card-tools-toggle">
               <div className="card-title-group">
                 <div className="card-tools">
-                  <div className="form-inline flex-nowrap gx-3">
+                  {/* <div className="form-inline flex-nowrap gx-3">
                     <div className="form-wrap">
                       <RSelect
                         options={bulkActionOptions}
@@ -461,7 +456,7 @@ const InterviewList = () => {
                         </Button>
                       </span>
                     </div>
-                  </div>
+                  </div> */}
                   <ErrorMessage content={selectInterviewerMessage} />
                 </div>
                 <div className="card-tools mr-n1">
@@ -843,7 +838,7 @@ const InterviewList = () => {
               {currentItems.length > 0 ? (
                 <PaginationComponent
                   itemPerPage={itemPerPage}
-                  totalItems={data.length}
+                  totalItems={interviewersList.length}
                   paginate={paginate}
                   currentPage={currentPage}
                 />

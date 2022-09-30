@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import {
   mailIdOptions,
   dateOptions,
-} from "../components/MockData/mockTestData";
+} from "../../../../common/MockData/mockTestData";
 
 const { date, dateHourLater } = dateOptions;
 const setEventModal = jest.fn();

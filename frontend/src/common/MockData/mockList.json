@@ -1,0 +1,54 @@
+{
+  "data": {
+    "STATUS": "Success",
+    "DATA": [
+      {
+        "_id": "740c9e39-6a82-4a25-827e-e9976ca90d2a",
+        "items": [
+          "Software Engineer",
+          "Software Engineer II",
+          "QA Engineer",
+          "HR"
+        ],
+        "type": "JOB_TITLE",
+        "updatedDate": "2022-09-11T17:59:41.650+0000",
+        "updatedDateMs": 1662919181650
+      },
+      {
+        "_id": "2b574691-eac4-4e9e-a5eb-4697708543de",
+        "items": ["Enterprise Engineering", "Business Development"],
+        "type": "DEPARTMENT",
+        "updatedDate": "2022-09-11T17:59:41.819+0000",
+        "updatedDateMs": 1662919181819
+      },
+      {
+        "_id": "cf1b9fe3-8089-4ca9-afbd-f37f99936a1d",
+        "items": ["Enterprise and Data Services", "Sales"],
+        "type": "BUSINESS_UNIT",
+        "updatedDate": "2022-09-11T17:59:41.979+0000",
+        "updatedDateMs": 1662919181979
+      },
+      {
+        "_id": "1f156974-7b88-4e7f-ae65-112f073b0205",
+        "items": ["Java", "Angular", "ReactJS", "Big Data", "Python", "AWS"],
+        "type": "SKILLS",
+        "updatedDate": "2022-09-15T13:19:47.491+0000",
+        "updatedDateMs": 1663247987491
+      },
+      {
+        "_id": "58101156-4173-4e92-a4cb-e0befdd42251",
+        "items": ["Pune", "Hyderabad", "Canada", "USA"],
+        "type": "LOCATION",
+        "updatedDate": "2022-09-26T14:22:47.109+0000",
+        "updatedDateMs": 1664202167109
+      },
+      {
+        "_id": "75f6466f-b272-4878-9724-ecbd8c88eeec",
+        "items": ["Learning", "iPLanner", "Kogni"],
+        "type": "PROJECT",
+        "updatedDate": "2022-09-17T11:23:23.744+0000",
+        "updatedDateMs": 1663413803744
+      }
+    ]
+  }
+}
