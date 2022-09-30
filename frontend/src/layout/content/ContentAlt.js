@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable react/prop-types */
+import React from 'react';
 
 const ContentAlt = ({ ...props }) => {
   return (
@@ -6,7 +7,7 @@ const ContentAlt = ({ ...props }) => {
       <div className="nk-content-inner">
         <div className="nk-content-body">
           {!props.page ? props.children : null}
-          {props.page === "component" ? (
+          {props.page === 'component' ? (
             <div className="components-preview wide-md mx-auto">{props.children}</div>
           ) : null}
         </div>

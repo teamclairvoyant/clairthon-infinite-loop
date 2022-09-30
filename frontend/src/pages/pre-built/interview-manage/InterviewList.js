@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
-import Content from "../../../layout/content/Content";
-import Head from "../../../layout/head/Head";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import Content from '../../../layout/content/Content';
+import Head from '../../../layout/head/Head';
 import {
   DropdownMenu,
   DropdownToggle,
   UncontrolledDropdown,
   DropdownItem,
-  Spinner,
-} from "reactstrap";
+  Spinner
+} from 'reactstrap';
 import {
   Block,
   BlockBetween,
@@ -24,44 +24,39 @@ import {
   DataTableHead,
   DataTableRow,
   DataTableItem,
-  TooltipComponent,
-  RSelect,
-} from "../../../components/Component";
-import { filterExperience } from "../../../common/listing/ListingData";
-import {
-  bulkActionOptions,
-  findUpper,
-  getDateNTime,
-} from "../../../utils/Utils";
-import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { UserContext } from "./UserContext";
-import { request } from "../../../utils/axiosUtils";
+  TooltipComponent
+} from '../../../components/Component';
+import { filterExperience } from '../../../common/listing/ListingData';
+import { findUpper, getDateNTime } from '../../../utils/Utils';
+import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { UserContext } from './UserContext';
+import { request } from '../../../utils/axiosUtils';
 import {
   URL_ENDPOINTS,
   COPY,
   METHODS,
   RESPONSE_MESSAGE,
-} from "../../../constants/constant";
-import formatString from "../../../common/formatting/formatString";
-import InterviewListModal from "../../../components/modals/CommonModal/CommonModal";
-import AddInterviewer from "./ModalLayouts/AddInterviewer";
-import EditInterviewer from "./ModalLayouts/EditInterviewer";
-import { ToastContainer } from "react-toastify";
-import { successToast } from "../../../components/toastr/Tostr";
-import FilterInterviewer from "./components/FilterInterviewer/FilterInterviewer";
-// import { mockInterviewer } from "./components/MockData/mockInterviewer";
-import InterviewerCalender from "./InterviewerCalender";
-import { ErrorMessage } from "../../../components/error-message/ErrorMessage";
-import { useListContext } from "../../../context/listContext";
+  CATCH_MESSAGE
+} from '../../../constants/constant';
+import formatString from '../../../common/formatting/formatString';
+import InterviewListModal from '../../../components/modals/CommonModal/CommonModal';
+import AddInterviewer from './ModalLayouts/AddInterviewer';
+import EditInterviewer from './ModalLayouts/EditInterviewer';
+import { ToastContainer } from 'react-toastify';
+import { errorToast, successToast } from '../../../components/toastr/Tostr';
+import FilterInterviewer from './components/FilterInterviewer/FilterInterviewer';
+import InterviewerCalender from './InterviewerCalender';
+import { ErrorMessage } from '../../../components/error-message/ErrorMessage';
+import { useListContext } from '../../../context/listContext';
 const initFormData = {
-  name: "",
-  employee_no: "",
-  email: "",
+  name: '',
+  employee_no: '',
+  email: '',
   skills: [],
-  phone: "",
+  phone: '',
   experience: 0,
-  location: "",
+  location: ''
 };
 const InterviewList = () => {
   const { contextData } = useContext(UserContext);
@@ -71,32 +66,31 @@ const InterviewList = () => {
   const [sm, updateSm] = useState(false);
   const [tablesm, updateTableSm] = useState(false);
   const [onSearch, setonSearch] = useState(true);
-  const [onSearchText, setSearchText] = useState("");
+  const [onSearchText, setSearchText] = useState('');
   const [modal, setModal] = useState({
     edit: false,
-    add: false,
+    add: false
   });
 
   const [interviewerError, setInterviewerError] = useState({
-    addInterviewerMessage: "",
-    editInterviewerMessage: "",
+    addInterviewerMessage: '',
+    editInterviewerMessage: ''
   });
   const [calendarModal, setCalendarModal] = useState(false);
-  const [selectInterviewerMessage, setSelectInterviewerMessage] = useState("");
+  const [selectInterviewerMessage, setSelectInterviewerMessage] = useState('');
   const [editId, setEditedId] = useState();
   const [formData, setFormData] = useState(initFormData);
-  const [actionText, setActionText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemPerPage, setItemPerPage] = useState(10);
-  const [sort, setSortState] = useState("");
+  const [sort, setSortState] = useState('');
   const [filter, addFilter] = useState({
     location: [],
     skills: [],
     experience: 0,
-    startDate: "",
-    startTime: "",
-    endTime: "",
-    endDate: "",
+    startDate: '',
+    startTime: '',
+    endTime: '',
+    endDate: ''
   });
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -105,28 +99,24 @@ const InterviewList = () => {
   // Sorting data
   const sortFunc = (params) => {
     let defaultData = data;
-    if (params === "asc") {
+    if (params === 'asc') {
       let sortedData = defaultData.sort((a, b) => a.name.localeCompare(b.name));
       setData([...sortedData]);
-    } else if (params === "dsc") {
+    } else if (params === 'dsc') {
       let sortedData = defaultData.sort((a, b) => b.name.localeCompare(a.name));
       setData([...sortedData]);
     }
   };
   const fetchInterviewers = (filterOptions = null) => {
-    // setData(mockInterviewer);
     setLoading(true);
 
     const requestOptions = {
-      url: filterOptions
-        ? URL_ENDPOINTS.INTERVIEWER_SEARCH
-        : URL_ENDPOINTS.INTERVIEWER,
+      url: filterOptions ? URL_ENDPOINTS.INTERVIEWER_SEARCH : URL_ENDPOINTS.INTERVIEWER,
       method: filterOptions ? METHODS.POST : METHODS.GET,
-      ...(filterOptions && { data: filterOptions }),
+      ...(filterOptions && { data: filterOptions })
     };
 
     const responseData = request(requestOptions);
-
     responseData
       .then((response) => {
         if (response.data.STATUS === RESPONSE_MESSAGE.SUCCESS) {
@@ -139,24 +129,25 @@ const InterviewList = () => {
 
           setData(interviewerData);
         } else {
+          errorToast(response.data.MESSAGE);
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        errorToast(err);
+      });
   };
 
   const addInterviewers = (interviewerData) => {
     const responseData = request({
       url: URL_ENDPOINTS.INTERVIEWER,
       method: METHODS.POST,
-      data: interviewerData,
+      data: interviewerData
     });
 
     responseData
       .then((response) => {
         if (response.data.STATUS === RESPONSE_MESSAGE.SUCCESS) {
-          successToast(
-            editId ? COPY.INTERVIEWER_UPDATED : COPY.INTERVIEWER_ADDED
-          );
+          successToast(editId ? COPY.INTERVIEWER_UPDATED : COPY.INTERVIEWER_ADDED);
           setModal({ edit: false }, { add: false });
 
           resetForm();
@@ -164,24 +155,18 @@ const InterviewList = () => {
           fetchInterviewers();
         } else {
           setInterviewerError({
-            addInterviewerMessage: !editId ? response.data.MESSAGE : "",
-            editInterviewerMessage: editId ? response.data.MESSAGE : "",
+            addInterviewerMessage: !editId ? response.data.MESSAGE : '',
+            editInterviewerMessage: editId ? response.data.MESSAGE : ''
           });
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        errorToast(err);
+      });
   };
 
   const applyFilter = () => {
-    const {
-      skills,
-      location,
-      experience,
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-    } = filter;
+    const { skills, location, experience, startDate, endDate, startTime, endTime } = filter;
 
     const startDateTime = getDateNTime(startDate, startTime);
     const endDateTime = getDateNTime(endDate, endTime);
@@ -189,11 +174,11 @@ const InterviewList = () => {
     const filterOptions = {
       ...(skills.length && { skills: skills.map((skill) => skill.value) }),
       ...(location.length && {
-        location: location.map((location) => location.value),
+        location: location.map((location) => location.value)
       }),
       ...(experience.value && { experience: experience.value }),
       ...(startDateTime && { start_time: startDateTime }),
-      ...(endDateTime && { end_time: endDateTime }),
+      ...(endDateTime && { end_time: endDateTime })
     };
 
     fetchInterviewers(filterOptions);
@@ -205,7 +190,7 @@ const InterviewList = () => {
     addFilter({
       experience: 0,
       skills: [],
-      location: [],
+      location: []
     });
     fetchInterviewers();
     toggleFilterDropdown();
@@ -213,29 +198,22 @@ const InterviewList = () => {
 
   useEffect(() => {
     fetchInterviewers();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Changing state value when searching name
-  useEffect(() => {
-    if (data.length) {
-      if (onSearchText !== "") {
-        const filteredObject = data.filter((item) => {
-          return (
-            item.name.toLowerCase().includes(onSearchText.toLowerCase()) ||
-            item.email.toLowerCase().includes(onSearchText.toLowerCase())
-          );
-        });
-        setData([...filteredObject]);
-      } else {
-        setData([...data]);
-      }
-    }
-  }, [onSearchText, setData]);
+  const interviewersList = useMemo(() => {
+    if (!onSearchText) return data;
+    return data.filter((item) => {
+      return (
+        item.name.toLowerCase().includes(onSearchText.toLowerCase()) ||
+        item.email.toLowerCase().includes(onSearchText.toLowerCase())
+      );
+    });
+  }, [data, onSearchText]);
 
   // function to set the action to be taken in table header
-  const onActionText = (e) => {
-    setActionText(e.value);
-  };
+  // const onActionText = (e) => {
+  //   setActionText(e.value);
+  // };
 
   // onChange function for searching name
   const onFilterChange = (e) => {
@@ -249,11 +227,9 @@ const InterviewList = () => {
     interviewerData[index].checked = e.currentTarget.checked;
 
     if (e.currentTarget.checked) {
-      setSelectInterviewerMessage("");
+      setSelectInterviewerMessage('');
     }
-    let selectedInterviewerIndex = selectedInterviewers.findIndex(
-      (item) => item._id === id
-    );
+    let selectedInterviewerIndex = selectedInterviewers.findIndex((item) => item._id === id);
     setData([...interviewerData]);
 
     if (selectedInterviewerIndex > -1) {
@@ -284,7 +260,7 @@ const InterviewList = () => {
       skills: skills.map((skill) => skill.value),
       experience: experience.value,
       isInterviewer: true,
-      id: editId,
+      id: editId
     };
 
     addInterviewers(interviewerData);
@@ -298,18 +274,12 @@ const InterviewList = () => {
           name: item.name,
           employee_no: item.employee_no,
           email: item.email,
-          experience: filterExperience.find(
-            (experience) => experience.value === item.experience
-          ),
-          location: locationOptions.find(
-            (location) => location.value === item.location
-          ),
+          experience: filterExperience.find((experience) => experience.value === item.experience),
+          location: locationOptions.find((location) => location.value === item.location),
           phone: item.phone,
           skills: item.skills
-            ? item.skills.map((skill) =>
-                skillOptions.find((fSkill) => fSkill.value === skill)
-              )
-            : [],
+            ? item.skills.map((skill) => skillOptions.find((fSkill) => fSkill.value === skill))
+            : []
         });
         setModal({ edit: true }, { add: false });
         setEditedId(id);
@@ -318,11 +288,27 @@ const InterviewList = () => {
   };
 
   // function to change to suspend property for an item
-  const suspendUser = (id) => {
-    let newData = data;
-    let index = newData.findIndex((item) => item._id === id);
-    newData[index].status = "Suspend";
-    setData([...newData]);
+  const removeInterviewer = (id) => {
+    const responseData = request({
+      url: URL_ENDPOINTS.INTERVIEWER,
+      method: METHODS.DELETE,
+      params: {
+        id: id
+      }
+    });
+
+    responseData
+      .then((response) => {
+        if (response.data.STATUS === RESPONSE_MESSAGE.SUCCESS) {
+          successToast(COPY.INTERVIEWER_ADDED);
+          fetchInterviewers();
+        } else {
+          errorToast(CATCH_MESSAGE.ERROR);
+        }
+      })
+      .catch((err) => {
+        err && errorToast(CATCH_MESSAGE.ERROR);
+      });
   };
 
   // function to change the check property of an item
@@ -336,20 +322,20 @@ const InterviewList = () => {
   };
 
   // function which fires on applying selected action
-  const onBulkActionClick = (e) => {
-    if (!selectedInterviewers.length) {
-      setSelectInterviewerMessage(COPY.SELECT_INTERVIEWER_MESSAGE);
-      return;
-    }
-    if (actionText === "calendar") {
-      setCalendarModal(true);
-      setSelectInterviewerMessage("");
-    } else if (actionText === "delete") {
-      let newData;
-      newData = data.filter((item) => item.checked !== true);
-      setData([...newData]);
-    }
-  };
+  // const onBulkActionClick = (e) => {
+  //   if (!selectedInterviewers.length) {
+  //     setSelectInterviewerMessage(COPY.SELECT_INTERVIEWER_MESSAGE);
+  //     return;
+  //   }
+  //   if (actionText === "calendar") {
+  //     setCalendarModal(true);
+  //     setSelectInterviewerMessage("");
+  //   } else if (actionText === "delete") {
+  //     let newData;
+  //     newData = data.filter((item) => item.checked !== true);
+  //     setData([...newData]);
+  //   }
+  // };
 
   // function to toggle the search option
   const toggle = () => setonSearch(!onSearch);
@@ -357,7 +343,7 @@ const InterviewList = () => {
   // Get current list, pagination
   const indexOfLastItem = currentPage * itemPerPage;
   const indexOfFirstItem = indexOfLastItem - itemPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = interviewersList.slice(indexOfFirstItem, indexOfLastItem);
   // Change Page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -389,17 +375,11 @@ const InterviewList = () => {
             <BlockHeadContent>
               <div className="toggle-wrap nk-block-tools-toggle">
                 <Button
-                  className={`btn-icon btn-trigger toggle-expand mr-n1 ${
-                    sm ? "active" : ""
-                  }`}
-                  onClick={() => updateSm(!sm)}
-                >
+                  className={`btn-icon btn-trigger toggle-expand mr-n1 ${sm ? 'active' : ''}`}
+                  onClick={() => updateSm(!sm)}>
                   <Icon name="menu-alt-r"></Icon>
                 </Button>
-                <div
-                  className="toggle-expand-content"
-                  style={{ display: sm ? "block" : "none" }}
-                >
+                <div className="toggle-expand-content" style={{ display: sm ? 'block' : 'none' }}>
                   <ul className="nk-block-tools g-3">
                     <li>
                       <Button color="light" outline className="btn-white">
@@ -411,8 +391,7 @@ const InterviewList = () => {
                       <Button
                         color="primary"
                         className="btn-icon"
-                        onClick={() => setModal({ add: true })}
-                      >
+                        onClick={() => setModal({ add: true })}>
                         <Icon name="plus"></Icon>
                       </Button>
                     </li>
@@ -428,40 +407,6 @@ const InterviewList = () => {
             <div className="card-inner position-relative card-tools-toggle">
               <div className="card-title-group">
                 <div className="card-tools">
-                  <div className="form-inline flex-nowrap gx-3">
-                    <div className="form-wrap">
-                      <RSelect
-                        options={bulkActionOptions}
-                        className="w-130px"
-                        placeholder="Bulk Action"
-                        onChange={(e) => onActionText(e)}
-                      />
-                    </div>
-                    <div className="btn-wrap">
-                      <span className="d-none d-md-block">
-                        <Button
-                          disabled={actionText !== "" ? false : true}
-                          color="light"
-                          outline
-                          className="btn-dim"
-                          onClick={(e) => onBulkActionClick(e)}
-                        >
-                          Apply
-                        </Button>
-                      </span>
-                      <span className="d-md-none">
-                        <Button
-                          color="light"
-                          outline
-                          disabled={actionText !== "" ? false : true}
-                          className="btn-dim btn-icon"
-                          onClick={(e) => onBulkActionClick(e)}
-                        >
-                          <Icon name="arrow-right"></Icon>
-                        </Button>
-                      </span>
-                    </div>
-                  </div>
                   <ErrorMessage content={selectInterviewerMessage} />
                 </div>
                 <div className="card-tools mr-n1">
@@ -473,8 +418,7 @@ const InterviewList = () => {
                           ev.preventDefault();
                           toggle();
                         }}
-                        className="btn btn-icon search-toggle toggle-search"
-                      >
+                        className="btn btn-icon search-toggle toggle-search">
                         <Icon name="search"></Icon>
                       </a>
                     </li>
@@ -482,44 +426,33 @@ const InterviewList = () => {
                     <li>
                       <div className="toggle-wrap">
                         <Button
-                          className={`btn-icon btn-trigger toggle ${
-                            tablesm ? "active" : ""
-                          }`}
-                          onClick={() => updateTableSm(true)}
-                        >
+                          className={`btn-icon btn-trigger toggle ${tablesm ? 'active' : ''}`}
+                          onClick={() => updateTableSm(true)}>
                           <Icon name="menu-right"></Icon>
                         </Button>
-                        <div
-                          className={`toggle-content ${
-                            tablesm ? "content-active" : ""
-                          }`}
-                        >
+                        <div className={`toggle-content ${tablesm ? 'content-active' : ''}`}>
                           <ul className="btn-toolbar gx-1">
                             <li className="toggle-close">
                               <Button
                                 className="btn-icon btn-trigger toggle"
-                                onClick={() => updateTableSm(false)}
-                              >
+                                onClick={() => updateTableSm(false)}>
                                 <Icon name="arrow-left"></Icon>
                               </Button>
                             </li>
                             <li>
                               <UncontrolledDropdown
                                 isOpen={dropdownOpen}
-                                toggle={toggleFilterDropdown}
-                              >
+                                toggle={toggleFilterDropdown}>
                                 <DropdownToggle
                                   tag="a"
-                                  className="btn btn-trigger btn-icon dropdown-toggle"
-                                >
+                                  className="btn btn-trigger btn-icon dropdown-toggle">
                                   <div className="dot dot-primary"></div>
                                   <Icon name="filter-alt"></Icon>
                                 </DropdownToggle>
                                 <DropdownMenu
                                   right
                                   className="filter-wg dropdown-menu-xl"
-                                  style={{ overflow: "visible" }}
-                                >
+                                  style={{ overflow: 'visible' }}>
                                   <FilterInterviewer
                                     filter={filter}
                                     addFilter={addFilter}
@@ -533,47 +466,33 @@ const InterviewList = () => {
                               <UncontrolledDropdown>
                                 <DropdownToggle
                                   color="tranparent"
-                                  className="btn btn-trigger btn-icon dropdown-toggle"
-                                >
+                                  className="btn btn-trigger btn-icon dropdown-toggle">
                                   <Icon name="setting"></Icon>
                                 </DropdownToggle>
-                                <DropdownMenu
-                                  right
-                                  className="dropdown-menu-xs"
-                                >
+                                <DropdownMenu right className="dropdown-menu-xs">
                                   <ul className="link-check">
                                     <li>
                                       <span>Show</span>
                                     </li>
-                                    <li
-                                      className={
-                                        itemPerPage === 10 ? "active" : ""
-                                      }
-                                    >
+                                    <li className={itemPerPage === 10 ? 'active' : ''}>
                                       <DropdownItem
                                         tag="a"
                                         href="#dropdownitem"
                                         onClick={(ev) => {
                                           ev.preventDefault();
                                           setItemPerPage(10);
-                                        }}
-                                      >
+                                        }}>
                                         10
                                       </DropdownItem>
                                     </li>
-                                    <li
-                                      className={
-                                        itemPerPage === 15 ? "active" : ""
-                                      }
-                                    >
+                                    <li className={itemPerPage === 15 ? 'active' : ''}>
                                       <DropdownItem
                                         tag="a"
                                         href="#dropdownitem"
                                         onClick={(ev) => {
                                           ev.preventDefault();
                                           setItemPerPage(15);
-                                        }}
-                                      >
+                                        }}>
                                         15
                                       </DropdownItem>
                                     </li>
@@ -582,33 +501,27 @@ const InterviewList = () => {
                                     <li>
                                       <span>Order</span>
                                     </li>
-                                    <li
-                                      className={sort === "dsc" ? "active" : ""}
-                                    >
+                                    <li className={sort === 'dsc' ? 'active' : ''}>
                                       <DropdownItem
                                         tag="a"
                                         href="#dropdownitem"
                                         onClick={(ev) => {
                                           ev.preventDefault();
-                                          setSortState("dsc");
-                                          sortFunc("dsc");
-                                        }}
-                                      >
+                                          setSortState('dsc');
+                                          sortFunc('dsc');
+                                        }}>
                                         DESC
                                       </DropdownItem>
                                     </li>
-                                    <li
-                                      className={sort === "asc" ? "active" : ""}
-                                    >
+                                    <li className={sort === 'asc' ? 'active' : ''}>
                                       <DropdownItem
                                         tag="a"
                                         href="#dropdownitem"
                                         onClick={(ev) => {
                                           ev.preventDefault();
-                                          setSortState("asc");
-                                          sortFunc("asc");
-                                        }}
-                                      >
+                                          setSortState('asc');
+                                          sortFunc('asc');
+                                        }}>
                                         ASC
                                       </DropdownItem>
                                     </li>
@@ -623,18 +536,15 @@ const InterviewList = () => {
                   </ul>
                 </div>
               </div>
-              <div
-                className={`card-search search-wrap ${!onSearch && "active"}`}
-              >
+              <div className={`card-search search-wrap ${!onSearch && 'active'}`}>
                 <div className="card-body">
                   <div className="search-content">
                     <Button
                       className="search-back btn-icon toggle-search active"
                       onClick={() => {
-                        setSearchText("");
+                        setSearchText('');
                         toggle();
-                      }}
-                    >
+                      }}>
                       <Icon name="arrow-left"></Icon>
                     </Button>
                     <input
@@ -661,10 +571,7 @@ const InterviewList = () => {
                       onChange={(e) => selectorCheck(e)}
                       id="uid"
                     />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="uid"
-                    ></label>
+                    <label className="custom-control-label" htmlFor="uid"></label>
                   </div>
                 </DataTableRow>
                 <DataTableRow>
@@ -698,38 +605,33 @@ const InterviewList = () => {
                               type="checkbox"
                               className="custom-control-input form-control"
                               defaultChecked={item.checked}
-                              id={item._id + "uid1"}
+                              id={item._id + 'uid1'}
                               key={Math.random()}
                               onChange={(e) => onSelectChange(e, item._id)}
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor={item._id + "uid1"}
-                            ></label>
+                              htmlFor={item._id + 'uid1'}></label>
                           </div>
                         </DataTableRow>
                         <DataTableRow>
-                          <Link
-                            to={`${process.env.PUBLIC_URL}/interviewer-calendar/${item._id}`}
-                          >
+                          <Link to={`${process.env.PUBLIC_URL}/interviewer-calendar/${item._id}`}>
                             <div className="user-card">
                               <UserAvatar
                                 theme={item.avatarBg}
                                 text={findUpper(item.name)}
-                                image={item.image}
-                              ></UserAvatar>
+                                image={item.image}></UserAvatar>
                               <div className="user-info">
                                 <span className="tb-lead">
-                                  {item.name}{" "}
+                                  {item.name}{' '}
                                   <span
                                     className={`dot dot-${
-                                      item.status === "Active"
-                                        ? "success"
-                                        : item.status === "Pending"
-                                        ? "warning"
-                                        : "danger"
-                                    } d-md-none ml-1`}
-                                  ></span>
+                                      item.status === 'Active'
+                                        ? 'success'
+                                        : item.status === 'Pending'
+                                        ? 'warning'
+                                        : 'danger'
+                                    } d-md-none ml-1`}></span>
                                 </span>
                                 <span>{item.email}</span>
                               </div>
@@ -746,9 +648,7 @@ const InterviewList = () => {
                           <span>{item.phone}</span>
                         </DataTableRow>
                         <DataTableRow size="lg">
-                          <span>
-                            {item.skills ? item.skills.join(", ") : null}
-                          </span>
+                          <span>{item.skills ? item.skills.join(', ') : null}</span>
                         </DataTableRow>
                         <DataTableRow size="lg">
                           <span>{item.experience}</span>
@@ -757,27 +657,25 @@ const InterviewList = () => {
                           <ul className="nk-tb-actions gx-1">
                             <li
                               className="nk-tb-action-hidden"
-                              onClick={() => onEditClick(item._id)}
-                            >
+                              onClick={() => onEditClick(item._id)}>
                               <TooltipComponent
                                 tag="a"
                                 containerClassName="btn btn-trigger btn-icon"
-                                id={"edit" + item._id}
+                                id={'edit' + item._id}
                                 icon="edit-alt-fill"
                                 direction="top"
                                 text="Edit"
                               />
                             </li>
-                            {item.status !== "Suspend" && (
+                            {item.status !== 'Suspend' && (
                               <React.Fragment>
                                 <li
                                   className="nk-tb-action-hidden"
-                                  onClick={() => suspendUser(item._id)}
-                                >
+                                  onClick={() => removeInterviewer(item._id)}>
                                   <TooltipComponent
                                     tag="a"
                                     containerClassName="btn btn-trigger btn-icon"
-                                    id={"remove" + item._id}
+                                    id={'remove' + item._id}
                                     icon="user-cross-fill"
                                     direction="top"
                                     text="Remove"
@@ -789,8 +687,7 @@ const InterviewList = () => {
                               <UncontrolledDropdown>
                                 <DropdownToggle
                                   tag="a"
-                                  className="dropdown-toggle btn btn-icon btn-trigger"
-                                >
+                                  className="dropdown-toggle btn btn-icon btn-trigger">
                                   <Icon name="more-h"></Icon>
                                 </DropdownToggle>
                                 <DropdownMenu right>
@@ -801,29 +698,23 @@ const InterviewList = () => {
                                         href="#edit"
                                         onClick={(ev) => {
                                           ev.preventDefault();
-                                        }}
-                                      >
+                                        }}>
                                         <Icon name="edit"></Icon>
                                         <span>{COPY.EDIT}</span>
                                       </DropdownItem>
                                     </li>
-                                    {item.status !== "Suspend" && (
+                                    {item.status !== 'Suspend' && (
                                       <React.Fragment>
                                         <li className="divider"></li>
-                                        <li
-                                          onClick={() => suspendUser(item._id)}
-                                        >
+                                        <li onClick={() => removeInterviewer(item._id)}>
                                           <DropdownItem
                                             tag="a"
                                             href="#suspend"
                                             onClick={(ev) => {
                                               ev.preventDefault();
-                                            }}
-                                          >
+                                            }}>
                                             <Icon name="na"></Icon>
-                                            <span>
-                                              {COPY.REMOVE_INTERVIEWER}
-                                            </span>
+                                            <span>{COPY.REMOVE_INTERVIEWER}</span>
                                           </DropdownItem>
                                         </li>
                                       </React.Fragment>
@@ -843,7 +734,7 @@ const InterviewList = () => {
               {currentItems.length > 0 ? (
                 <PaginationComponent
                   itemPerPage={itemPerPage}
-                  totalItems={data.length}
+                  totalItems={interviewersList.length}
                   paginate={paginate}
                   currentPage={currentPage}
                 />
@@ -866,9 +757,7 @@ const InterviewList = () => {
               onFormCancel={onFormCancel}
               // onFormSubmit={onFormSubmit}
               addInterviewers={addInterviewers}
-              interviewerValidationError={
-                interviewerError.addInterviewerMessage
-              }
+              interviewerValidationError={interviewerError.addInterviewerMessage}
             />
           }
         />
@@ -888,9 +777,7 @@ const InterviewList = () => {
               errors={errors}
               filterSkills={skillOptions}
               control={control}
-              interviewerValidationError={
-                interviewerError.editInterviewerMessage
-              }
+              interviewerValidationError={interviewerError.editInterviewerMessage}
             />
           }
         />
@@ -900,13 +787,7 @@ const InterviewList = () => {
           toggle={() => setCalendarModal(false)}
           classNameModal="modal-dialog-centered"
           modalSize="lg"
-          content={
-            <InterviewerCalender
-              setCalendarModal={setCalendarModal}
-              closeCalendarModal={setCalendarModal}
-              selectedInterviewers={selectedInterviewers}
-            />
-          }
+          content={<InterviewerCalender selectedInterviewers={selectedInterviewers} />}
         />
       </Content>
     </React.Fragment>

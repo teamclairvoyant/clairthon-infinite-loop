@@ -1,0 +1,7 @@
+**/node_modules/*
+**/out/*
+**/.next/*
+**/build/*
+**/build-analytics/*
+**/coverage/*
+**/cypress/*

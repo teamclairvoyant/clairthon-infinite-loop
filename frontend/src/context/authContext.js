@@ -1,15 +1,16 @@
-import { createContext, useContext, useMemo } from "react";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import { createContext, useContext, useMemo } from 'react';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import PropTypes from 'prop-types';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useLocalStorage("user", null);
-  const [accessToken, setAccessToken] = useLocalStorage("accessToken", null);
+  const [user, setUser] = useLocalStorage('user', null);
+  const [accessToken, setAccessToken] = useLocalStorage('accessToken', null);
 
   // call this function when you want to authenticate the user
   const login = async ({ data, history }) => {
     setUser(data);
-    history.push("/");
+    history.push('/interview-list');
   };
 
   const storeToken = async (data) => {
@@ -21,7 +22,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setAccessToken(null);
 
-    history.push("/auth-login");
+    history.push('/auth-login');
   };
 
   const value = useMemo(
@@ -30,7 +31,7 @@ export const AuthProvider = ({ children }) => {
       login,
       logout,
       storeToken,
-      accessToken,
+      accessToken
     }),
     [user, accessToken]
   );
@@ -39,4 +40,8 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => {
   return useContext(AuthContext);
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.any
 };

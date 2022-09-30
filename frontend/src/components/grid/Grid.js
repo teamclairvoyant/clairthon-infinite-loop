@@ -1,5 +1,6 @@
-import React from "react";
-import classnames from "classnames";
+/* eslint-disable react/prop-types */
+import React from 'react';
+import classnames from 'classnames';
 
 export const Col = ({ sm, lg, md, xxl, size, className, ...props }) => {
   var classNames = classnames({
@@ -8,14 +9,14 @@ export const Col = ({ sm, lg, md, xxl, size, className, ...props }) => {
     [`col-md-${md}`]: md,
     [`col-xxl-${xxl}`]: xxl,
     [`col-${size}`]: size,
-    [`${className}`]: className,
+    [`${className}`]: className
   });
   return <div className={classNames}>{props.children}</div>;
 };
 export const Row = ({ className, ...props }) => {
   const rowClass = classnames({
     row: true,
-    [`${className}`]: className,
+    [`${className}`]: className
   });
   return <div className={rowClass}>{props.children}</div>;
 };

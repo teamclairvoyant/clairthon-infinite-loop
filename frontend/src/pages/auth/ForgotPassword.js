@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 // import Logo from "../../images/logo.jpg";
 // import LogoDark from "../../images/logo.jpg";
-import PageContainer from "../../layout/page-container/PageContainer";
-import Head from "../../layout/head/Head";
-import AuthFooter from "./AuthFooter";
+import PageContainer from '../../layout/page-container/PageContainer';
+import Head from '../../layout/head/Head';
+import AuthFooter from './AuthFooter';
 import {
   Block,
   BlockContent,
@@ -11,10 +11,10 @@ import {
   BlockHead,
   BlockTitle,
   Button,
-  PreviewCard,
-} from "../../components/Component";
-import { FormGroup } from "reactstrap";
-import { Link } from "react-router-dom";
+  PreviewCard
+} from '../../components/Component';
+import { FormGroup } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 const ForgotPassword = () => {
   return (
@@ -42,8 +42,8 @@ const ForgotPassword = () => {
                 <BlockTitle tag="h5">Reset password</BlockTitle>
                 <BlockDes>
                   <p>
-                    If you forgot your password, well, then we’ll email you
-                    instructions to reset your password.
+                    If you forgot your password, well, then we’ll email you instructions to reset
+                    your password.
                   </p>
                 </BlockDes>
               </BlockContent>
@@ -67,8 +67,7 @@ const ForgotPassword = () => {
                   color="primary"
                   size="lg"
                   className="btn-block"
-                  onClick={(ev) => ev.preventDefault()}
-                >
+                  onClick={(ev) => ev.preventDefault()}>
                   Send Reset Link
                 </Button>
               </FormGroup>

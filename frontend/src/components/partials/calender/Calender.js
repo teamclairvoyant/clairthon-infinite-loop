@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import listPlugin from "@fullcalendar/list";
-import bootstrapPlugin from "@fullcalendar/bootstrap";
-import DatePicker from "react-datepicker";
-import "./Calender.scss";
+/* eslint-disable react/prop-types */
+import React, { useEffect, useState } from 'react';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
+import bootstrapPlugin from '@fullcalendar/bootstrap';
+import DatePicker from 'react-datepicker';
+import './Calender.scss';
 import {
   Popover,
   PopoverHeader,
@@ -14,13 +15,13 @@ import {
   Modal,
   ModalBody,
   FormGroup,
-  Button,
-} from "reactstrap";
-import { useForm } from "react-hook-form";
-import { Col, Row, RSelect } from "../../Component";
-import { setDateForPicker } from "../../../utils/Utils";
-import { eventOptions, returnDate } from "./CalenderData";
-import dayjs from "dayjs";
+  Button
+} from 'reactstrap';
+import { useForm } from 'react-hook-form';
+import { Col, Row, RSelect } from '../../Component';
+import { setDateForPicker } from '../../../utils/Utils';
+import { eventOptions, returnDate } from './CalenderData';
+import dayjs from 'dayjs';
 const EventView = (event) => {
   const [mouseEnter, setMouseEnter] = useState(false);
   const { title, extendedProps, publicId } = event.event.event._def;
@@ -30,10 +31,9 @@ const EventView = (event) => {
         id={publicId}
         onMouseEnter={() => setMouseEnter(true)}
         onMouseLeave={() => setMouseEnter(false)}
-        className="eventHeading"
-      >
+        className="eventHeading">
         <span className="eventTitle">{title}</span>
-      </div>{" "}
+      </div>{' '}
       <Popover placement="left-top" isOpen={mouseEnter} target={publicId}>
         <PopoverHeader>{title}</PopoverHeader>
         <PopoverBody>{extendedProps.startDate}</PopoverBody>
@@ -41,17 +41,17 @@ const EventView = (event) => {
     </React.Fragment>
   );
 };
-const CalenderApp = ({ events, onDelete, onEdit }) => {
+const CalenderApp = ({ events, onEdit }) => {
   const [modalState, updateModal] = useState(false);
   const [calenderEvents, updateEvents] = useState(events);
   const [event, updateEvent] = useState({});
   const [theme, settheme] = useState();
   const [edit, updateEditModal] = useState(false);
   const [dates, setDates] = useState({
-    startDate: dayjs().startOf("day").$d,
-    startTime: dayjs().startOf("day").$d,
-    endTime: dayjs().endOf("day").$d,
-    endDate: dayjs().endOf("day").$d,
+    startDate: dayjs().startOf('day').$d,
+    startTime: dayjs().startOf('day').$d,
+    endTime: dayjs().endOf('day').$d,
+    endDate: dayjs().endOf('day').$d
   });
 
   useEffect(() => {
@@ -69,10 +69,10 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
       title: formData.title,
       start: event.start,
       end: event.end,
-      description: formData.description,
+      description: formData.description
     };
     onEdit(newEvent);
-    settheme("");
+    settheme('');
     toggleEdit();
   };
 
@@ -99,9 +99,9 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
         eventClick={(info) => handleEventClick(info)}
         initialView="timeGridWeek"
         headerToolbar={{
-          left: "title prev,next",
-          center: "",
-          right: "today dayGridMonth,timeGridWeek,timeGridDay,listWeek",
+          left: 'title prev,next',
+          center: '',
+          right: 'today dayGridMonth,timeGridWeek,timeGridDay,listWeek'
         }}
         themeSystem="bootstrap"
         height={600}
@@ -121,14 +121,12 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
             <Col sm="6">
               <h6 className="overline-title">Start Time</h6>
               <p id="preview-event-start">
-                {event && returnDate(event.start, "MMM D, YYYY h:mm A")}
+                {event && returnDate(event.start, 'MMM D, YYYY h:mm A')}
               </p>
             </Col>
             <Col sm="6" id="preview-event-end-check">
               <h6 className="overline-title">End Time</h6>
-              <p id="preview-event-end">
-                {event && returnDate(event.end, "MMM D, YYYY h:mm A")}
-              </p>
+              <p id="preview-event-end">{event && returnDate(event.end, 'MMM D, YYYY h:mm A')}</p>
             </Col>
             <Col sm="10" id="preview-event-description-check">
               <h6 className="overline-title">Description</h6>
@@ -142,14 +140,13 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
                   color="primary"
                   onClick={() => {
                     toggle();
-                    toggleEdit();
-                  }}
-                >
-                  Edit Event
+                    onEdit(event);
+                  }}>
+                  Schedule Event
                 </Button>
               </li>
             )}
-            {onDelete && (
+            {/* {onDelete && (
               <li>
                 <Button
                   color="danger"
@@ -157,22 +154,18 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
                   onClick={() => {
                     toggle();
                     onDelete(event && event.id);
-                  }}
-                >
+                  }}>
                   Delete
                 </Button>
               </li>
-            )}
+            )} */}
           </ul>
         </ModalBody>
       </Modal>
       <Modal isOpen={edit} toggle={toggleEdit} className="modal-md">
         <ModalHeader toggle={toggleEdit}>Edit Event</ModalHeader>
         <ModalBody>
-          <form
-            className="form-validate is-alter"
-            onSubmit={handleSubmit(handleFormSubmit)}
-          >
+          <form className="form-validate is-alter" onSubmit={handleSubmit(handleFormSubmit)}>
             <Row className="gx-4 gy-3">
               <Col size="12">
                 <FormGroup>
@@ -188,9 +181,7 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
                       ref={register({ required: true })}
                       defaultValue={event.title}
                     />
-                    {errors.title && (
-                      <p className="invalid">This field is required</p>
-                    )}
+                    {errors.title && <p className="invalid">This field is required</p>}
                   </div>
                 </FormGroup>
               </Col>
@@ -205,7 +196,7 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
                           onChange={(date) =>
                             updateEvent({
                               ...event,
-                              start: setDateForPicker(date),
+                              start: setDateForPicker(date)
                             })
                           }
                           className="form-control date-picker"
@@ -216,9 +207,7 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
                       <div className="form-control-wrap has-timepicker">
                         <DatePicker
                           selected={dates.startTime}
-                          onChange={(date) =>
-                            setDates({ ...dates, startTime: date })
-                          }
+                          onChange={(date) => setDates({ ...dates, startTime: date })}
                           showTimeSelect
                           showTimeSelectOnly
                           timeIntervals={15}
@@ -242,7 +231,7 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
                           onChange={(date) =>
                             updateEvent({
                               ...event,
-                              end: setDateForPicker(date),
+                              end: setDateForPicker(date)
                             })
                           }
                           className="form-control date-picker"
@@ -253,9 +242,7 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
                       <div className="form-control-wrap has-timepicker">
                         <DatePicker
                           selected={dates.endTime}
-                          onChange={(date) =>
-                            setDates({ ...dates, endTime: date })
-                          }
+                          onChange={(date) => setDates({ ...dates, endTime: date })}
                           showTimeSelect
                           showTimeSelectOnly
                           timeIntervals={15}
@@ -279,11 +266,8 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
                       id="event-description"
                       name="description"
                       ref={register({ required: true })}
-                      defaultValue={event.description}
-                    ></textarea>
-                    {errors.description && (
-                      <p className="invalid">This field is required</p>
-                    )}
+                      defaultValue={event.description}></textarea>
+                    {errors.description && <p className="invalid">This field is required</p>}
                   </div>
                 </FormGroup>
               </Col>
@@ -308,11 +292,7 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
                     </Button>
                   </li>
                   <li>
-                    <Button
-                      color="danger"
-                      className="btn-dim"
-                      onClick={toggleEdit}
-                    >
+                    <Button color="danger" className="btn-dim" onClick={toggleEdit}>
                       Discard
                     </Button>
                   </li>

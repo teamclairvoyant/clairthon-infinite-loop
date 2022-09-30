@@ -1,16 +1,16 @@
-import React from "react";
-import { render } from "@testing-library/react";
-import { fireEvent, screen } from "@testing-library/dom";
-import Pagination from "./Pagination";
-import { TEST_ID } from "../../constants/constant";
+import React from 'react';
+import { render } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/dom';
+import Pagination from './Pagination';
+import { TEST_ID } from '../../constants/constant';
 
 const itemPerPage = 10;
 const totalItems = 10;
 const currentPage = 10;
 const paginate = jest.fn();
 
-describe("Pagination", () => {
-  test("it renders the Pagination", () => {
+describe('Pagination', () => {
+  test('it renders the Pagination', () => {
     const { container } = render(
       <Pagination
         itemPerPage={itemPerPage}
@@ -23,7 +23,7 @@ describe("Pagination", () => {
     expect(container).toBeDefined();
   });
 
-  test("it test the next page click", () => {
+  test('it test the next page click', () => {
     const { container } = render(
       <Pagination
         itemPerPage={itemPerPage}
@@ -39,7 +39,7 @@ describe("Pagination", () => {
     fireEvent.click(nextPageClick);
   });
 
-  test("it test the prev page click", () => {
+  test('it test the prev page click', () => {
     const { container } = render(
       <Pagination
         itemPerPage={itemPerPage}
@@ -55,7 +55,7 @@ describe("Pagination", () => {
     fireEvent.click(prevPageClick);
   });
 
-  test("it test the item page click", () => {
+  test('it test the item page click', () => {
     const { container } = render(
       <Pagination
         itemPerPage={itemPerPage}

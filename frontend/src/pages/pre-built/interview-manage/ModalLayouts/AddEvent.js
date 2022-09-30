@@ -1,35 +1,50 @@
-import React, { useState } from "react";
-import { Icon, Col, Button, RSelect } from "../../../../components/Component";
-import { Controller, useForm } from "react-hook-form";
+/* eslint-disable react/prop-types */
+import React, { useEffect, useState } from 'react';
+import { Icon, Col, Button, RSelect } from '../../../../components/Component';
+import { Controller, useForm } from 'react-hook-form';
 
-import { FormGroup, Form, Row, Spinner } from "reactstrap";
+import { FormGroup, Form, Row, Spinner } from 'reactstrap';
 import {
+  CATCH_MESSAGE,
   COPY,
   METHODS,
   RESPONSE_MESSAGE,
   TEST_ID,
-  URL_ENDPOINTS,
-} from "../../../../constants/constant";
-import DatePicker from "react-datepicker";
-import { ErrorMessage } from "../../../../components/error-message/ErrorMessage";
-import { getDateNTime } from "../../../../utils/Utils";
-import { successToast } from "../../../../components/toastr/Tostr";
-import { request } from "../../../../utils/axiosUtils";
-import { ToastContainer } from "react-toastify";
+  URL_ENDPOINTS
+} from '../../../../constants/constant';
+import DatePicker from 'react-datepicker';
+import { ErrorMessage } from '../../../../components/error-message/ErrorMessage';
+import { getDateNTime } from '../../../../utils/Utils';
+import { errorToast, successToast } from '../../../../components/toastr/Tostr';
+import { request } from '../../../../utils/axiosUtils';
+import { ToastContainer } from 'react-toastify';
 
 const initEventData = {
-  title: "",
-  description: "",
-  date: "",
-  startTime: "",
-  endTime: "",
-  attendees: [],
+  title: '',
+  description: '',
+  date: '',
+  startTime: '',
+  endTime: '',
+  attendees: []
 };
 const AddEvent = (props) => {
-  const { setEventModal, mailIdOptions } = props;
+  const { setEventModal, mailIdOptions, selectedEvent } = props;
   const { control } = useForm();
 
   const [eventData, setEventData] = useState(initEventData);
+
+  useEffect(() => {
+    if (selectedEvent) {
+      setEventData({
+        ...eventData,
+        title: selectedEvent.title,
+        date: new Date(selectedEvent.start),
+        startTime: new Date(selectedEvent.start),
+        endTime: new Date(selectedEvent.end)
+      });
+    }
+  }, []);
+
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({
     title: false,
@@ -37,7 +52,7 @@ const AddEvent = (props) => {
     attendees: false,
     date: false,
     startDateGreater: false,
-    errorMessage: "",
+    errorMessage: ''
   });
   const [emailOptions, setEmailOptions] = useState([]);
 
@@ -54,22 +69,14 @@ const AddEvent = (props) => {
   };
 
   const handleError = () => {
-    const { title, description, date, startTime, endTime, attendees } =
-      eventData;
-    if (
-      !title ||
-      !description ||
-      !date ||
-      !startTime ||
-      !endTime ||
-      !attendees.length
-    ) {
+    const { title, description, date, startTime, endTime, attendees } = eventData;
+    if (!title || !description || !date || !startTime || !endTime || !attendees.length) {
       setErrors({
         ...errors,
         ...(!title && { title: true }),
         ...(!description && { description: true }),
         ...((!date || !startTime || !endTime) && { date: true }),
-        ...(!attendees.length && { attendees: true }),
+        ...(!attendees.length && { attendees: true })
       });
 
       return true;
@@ -80,7 +87,7 @@ const AddEvent = (props) => {
     if (new Date(startDateTime) >= new Date(endDateTime)) {
       setErrors({
         ...errors,
-        startDateGreater: true,
+        startDateGreater: true
       });
       return true;
     }
@@ -108,8 +115,7 @@ const AddEvent = (props) => {
   // submit function to add a new item
   const addInterviewEvent = (eventData) => {
     setLoading(true);
-    const { title, description, date, startTime, endTime, attendees } =
-      eventData;
+    const { title, description, date, startTime, endTime, attendees } = eventData;
 
     const requestOptions = {
       url: URL_ENDPOINTS.CREATE_EVENT,
@@ -119,8 +125,8 @@ const AddEvent = (props) => {
         description,
         attendees,
         start_time: getDateNTime(date, startTime),
-        end_time: getDateNTime(date, endTime),
-      },
+        end_time: getDateNTime(date, endTime)
+      }
     };
 
     const responseData = request(requestOptions);
@@ -130,21 +136,25 @@ const AddEvent = (props) => {
         if (response.data.STATUS === RESPONSE_MESSAGE.SUCCESS) {
           setLoading(false);
           successToast(COPY.INTERVIEW_SCHEDULE_SUCCESSFULLY);
+          setEventData(initEventData);
         } else {
+          errorToast(CATCH_MESSAGE.ERROR);
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        err && errorToast(CATCH_MESSAGE.ERROR);
+      });
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setErrors({
       ...errors,
-      [name]: false,
+      [name]: false
     });
     setEventData({
       ...eventData,
-      [name]: value,
+      [name]: value
     });
   };
 
@@ -160,8 +170,7 @@ const AddEvent = (props) => {
           onFormCancel();
         }}
         className="close"
-        data-testid={TEST_ID.COMMON.ON_FORM_CANCEL_ANCHOR}
-      >
+        data-testid={TEST_ID.COMMON.ON_FORM_CANCEL_ANCHOR}>
         <Icon name="cross-sm"></Icon>
       </a>
       <div className="p-2">
@@ -181,15 +190,12 @@ const AddEvent = (props) => {
                     className="form-control"
                     type="text"
                     name="title"
+                    value={eventData.title}
                     data-testid={COPY.TITLE}
                     onChange={handleInputChange}
                     placeholder="Enter title"
                   />
-                  {errors.title && (
-                    <span className="invalid">
-                      {COPY.REQUIRED_ERROR_MESSAGE}
-                    </span>
-                  )}
+                  {errors.title && <span className="invalid">{COPY.REQUIRED_ERROR_MESSAGE}</span>}
                 </FormGroup>
               </Col>
               <Col size="6">
@@ -202,7 +208,7 @@ const AddEvent = (props) => {
                       dateFormat="dd-MM-yyyy"
                       placeholderText="Enter Date"
                       name="date"
-                      onChange={(date) => handleDateChange(date, "date")}
+                      onChange={(date) => handleDateChange(date, 'date')}
                       className="form-control date-picker"
                     />
                   </div>
@@ -227,9 +233,7 @@ const AddEvent = (props) => {
                       <div className="form-control-wrap has-timepicker">
                         <DatePicker
                           selected={eventData.startTime}
-                          onChange={(date) =>
-                            setEventData({ ...eventData, startTime: date })
-                          }
+                          onChange={(date) => setEventData({ ...eventData, startTime: date })}
                           showTimeSelect
                           placeholderText="Start Time"
                           showTimeSelectOnly
@@ -245,9 +249,7 @@ const AddEvent = (props) => {
                       <div className="form-control-wrap has-timepicker">
                         <DatePicker
                           selected={eventData.endTime}
-                          onChange={(date) =>
-                            setEventData({ ...eventData, endTime: date })
-                          }
+                          onChange={(date) => setEventData({ ...eventData, endTime: date })}
                           data-testid={COPY.END_TIME}
                           showTimeSelect
                           placeholderText="End Time"
@@ -273,9 +275,7 @@ const AddEvent = (props) => {
                     onChange={handleInputChange}
                     placeholder="Enter Description"
                   />
-                  {errors.description && (
-                    <span className="invalid">This field is required</span>
-                  )}
+                  {errors.description && <span className="invalid">This field is required</span>}
                 </FormGroup>
               </Col>
               <Col md="12">
@@ -300,17 +300,13 @@ const AddEvent = (props) => {
                             onChange(selectedAttendees);
                             setEventData({
                               ...eventData,
-                              attendees: selectedAttendees.map(
-                                (attendees) => attendees.value
-                              ),
+                              attendees: selectedAttendees.map((attendees) => attendees.value)
                             });
                           }}
                         />
                       )}
                     />
-                    {errors.attendees && (
-                      <ErrorMessage content={COPY.REQUIRED_ERROR_MESSAGE} />
-                    )}
+                    {errors.attendees && <ErrorMessage content={COPY.REQUIRED_ERROR_MESSAGE} />}
                   </div>
                 </FormGroup>
               </Col>
@@ -326,8 +322,7 @@ const AddEvent = (props) => {
                         ev.preventDefault();
 
                         submitEvent();
-                      }}
-                    >
+                      }}>
                       {COPY.ADD_EVENT}
                     </Button>
                   </li>
@@ -339,8 +334,7 @@ const AddEvent = (props) => {
                         onFormCancel();
                       }}
                       className="link link-light"
-                      data-testid={TEST_ID.COMMON.ON_FORM_CANCEL}
-                    >
+                      data-testid={TEST_ID.COMMON.ON_FORM_CANCEL}>
                       {COPY.CANCEL}
                     </a>
                   </li>

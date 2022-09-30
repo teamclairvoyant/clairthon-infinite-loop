@@ -1,11 +1,11 @@
-import Button from "./button/Button";
-import Icon from "./icon/Icon";
-import TooltipComponent from "./tooltip/Tooltip";
-import Table from "./table/Table";
-import UserAvatar from "./user/UserAvatar";
-import PaginationComponent from "../components/pagination/Pagination";
+import Button from './button/Button';
+import Icon from './icon/Icon';
+import TooltipComponent from './tooltip/Tooltip';
+import Table from './table/Table';
+import UserAvatar from './user/UserAvatar';
+import PaginationComponent from '../components/pagination/Pagination';
 // import DataTablePagination from "./pagination/DataTablePagination";
-import RSelect from "./select/ReactSelect";
+import RSelect from './select/ReactSelect';
 import {
   Block,
   BlockHead,
@@ -14,25 +14,25 @@ import {
   BlockTitle,
   BlockDes,
   BlockBetween,
-  BackTo,
-} from "./block/Block";
+  BackTo
+} from './block/Block';
 // import { LinkList, LinkItem } from "./links/Links";
-import { Row, Col } from "./grid/Grid";
+import { Row, Col } from './grid/Grid';
 import {
   PreviewCard,
-  PreviewAltCard,
+  PreviewAltCard
   // PreviewTable,
   // CodeBlock,
-} from "./preview/Preview";
+} from './preview/Preview';
 
 import {
   DataTable,
   DataTableBody,
   DataTableHead,
   DataTableRow,
-  DataTableItem,
+  DataTableItem
   // DataTableTitle,
-} from "../components/table/DataTable";
+} from '../components/table/DataTable';
 
 export {
   // LinkItem,
@@ -90,6 +90,6 @@ export {
   DataTable,
   // DataTableTitle,
   PreviewAltCard,
-  RSelect,
+  RSelect
   // Progress,
 };

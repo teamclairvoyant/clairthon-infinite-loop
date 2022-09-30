@@ -1,5 +1,6 @@
-import React from "react";
-import Select from "react-select";
+/* eslint-disable react/prop-types */
+import React from 'react';
+import Select from 'react-select';
 
 const RSelect = ({ ...props }) => {
   const { handleFilter } = props;
@@ -7,12 +8,9 @@ const RSelect = ({ ...props }) => {
     <div
       className="form-control-select"
       onKeyUp={(e) => handleFilter?.(e)}
-      data-testid={props.dataTestId}
-    >
+      data-testid={props.dataTestId}>
       <Select
-        className={`react-select-container ${
-          props.className ? props.className : ""
-        }`}
+        className={`react-select-container ${props.className ? props.className : ''}`}
         classNamePrefix="react-select"
         {...props}
       />
