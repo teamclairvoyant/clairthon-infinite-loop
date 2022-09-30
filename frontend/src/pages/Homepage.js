@@ -1,22 +1,7 @@
 import React, { useState } from 'react';
 import Head from '../layout/head/Head';
 import Content from '../layout/content/Content';
-// import SaleRevenue from "../components/partials/default/sale-revenue/SaleRevenue";
-// import ActiveSubscription from "../components/partials/default/active-subscription/ActiveSubscription";
-// import AvgSubscription from "../components/partials/default/avg-subscription/AvgSubscription";
-// import SalesOverview from "../components/partials/default/sales-overview/SalesOverview";
-// import TransactionTable from "../components/partials/default/transaction/Transaction";
-// import RecentActivity from "../components/partials/default/recent-activity/Activity";
-// import NewsUsers from "../components/partials/default/new-users/User";
-// import Support from "../components/partials/default/support-request/Support";
-// import Notifications from "../components/partials/default/notification/Notification";
-import {
-  DropdownToggle,
-  DropdownMenu,
-  // Card,
-  UncontrolledDropdown,
-  DropdownItem
-} from 'reactstrap';
+import { DropdownToggle, DropdownMenu, UncontrolledDropdown, DropdownItem } from 'reactstrap';
 import {
   Block,
   BlockDes,
@@ -101,12 +86,6 @@ const Homepage = () => {
                         </DropdownMenu>
                       </UncontrolledDropdown>
                     </li>
-                    {/* <li className="nk-block-tools-opt">
-                      <Button color="primary">
-                        <Icon name="reports" />
-                        <span>Reports</span>
-                      </Button>
-                    </li> */}
                   </ul>
                 </div>
               </div>
@@ -116,63 +95,6 @@ const Homepage = () => {
         <Block>
           <h1>Coming Soon...</h1>
         </Block>
-        {/* <Block>
-          <Row className="g-gs">
-            <Col xxl="6">
-              <Row className="g-gs">
-                <Col lg="6" xxl="12">
-                  <PreviewCard>
-                    <SaleRevenue />
-                  </PreviewCard>
-                </Col>
-                <Col lg="6" xxl="12">
-                  <Row className="g-gs">
-                    <Col sm="6" lg="12" xxl="6">
-                      <PreviewAltCard>
-                        <ActiveSubscription />
-                      </PreviewAltCard>
-                    </Col>
-                    <Col sm="6" lg="12" xxl="6">
-                      <PreviewAltCard>
-                        <AvgSubscription />
-                      </PreviewAltCard>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            </Col>
-            <Col xxl="6">
-              <PreviewAltCard className="h-100">
-                <SalesOverview />
-              </PreviewAltCard>
-            </Col>
-            <Col xxl="8">
-              <Card className="card-bordered card-full">
-                <TransactionTable />
-              </Card>
-            </Col>
-            <Col xxl="4" md="6">
-              <Card className="card-bordered card-full">
-                <RecentActivity />
-              </Card>
-            </Col>
-            <Col xxl="4" md="6">
-              <Card className="card-bordered card-full">
-                <NewsUsers />
-              </Card>
-            </Col>
-            <Col lg="6" xxl="4">
-              <Card className="card-bordered h-100">
-                <Support />
-              </Card>
-            </Col>
-            <Col lg="6" xxl="4">
-              <Card className="card-bordered h-100">
-                <Notifications />
-              </Card>
-            </Col>
-          </Row>
-        </Block> */}
       </Content>
     </React.Fragment>
   );

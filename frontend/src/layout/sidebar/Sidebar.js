@@ -61,7 +61,7 @@ const Sidebar = ({ fixed, theme, className, sidebarToggle, mobileView }) => {
 export default Sidebar;
 
 Sidebar.propTypes = {
-  sidebarToggle: PropTypes.bool,
+  sidebarToggle: PropTypes.func,
   fixed: PropTypes.bool,
   mobileView: PropTypes.bool,
   theme: PropTypes.string,

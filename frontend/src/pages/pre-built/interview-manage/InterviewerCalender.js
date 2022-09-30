@@ -46,6 +46,7 @@ const InterviewerCalender = ({ match, ...props }) => {
   const [events, setEvents] = useState([]);
   const [isFilterEvent, setIsFilterEvent] = useState(null);
   const [data] = contextData;
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [eventModal, setEventModal] = useState(false);
   const [interviewerData, setInterviewerData] = useState([]);
   const [interviewersEmail, setInterviewersEmail] = useState([]);
@@ -67,6 +68,7 @@ const InterviewerCalender = ({ match, ...props }) => {
     if (match?.params?.id) {
       const id = match.params.id;
       if (data.length) {
+        console.log({ data });
         setInterviewerData([
           data.find((item) => {
             return item._id === id;
@@ -105,9 +107,9 @@ const InterviewerCalender = ({ match, ...props }) => {
     }
     return null;
   }, [match?.params?.id, data]);
-
+  console.log({ interviewerData });
   useEffect(() => {
-    const emailIds = selectedInterviewers
+    const emailIds = selectedInterviewers.length
       ? selectedInterviewers?.map((interviewer, i) => ({
           email: interviewer.email,
           className: colorOptions[i]
@@ -201,17 +203,15 @@ const InterviewerCalender = ({ match, ...props }) => {
     }
   }, [interviewersEmail]);
 
-  const editEvent = (formData) => {
-    let newEvents = events;
-    const index = newEvents.findIndex((item) => item.id === formData.id);
-    events[index] = formData;
-    setEvents([...events]);
+  const editEvent = (event) => {
+    setEventModal(true);
+    setSelectedEvent(event);
   };
 
-  const deleteEvent = (id) => {
-    let filteredEvents = events.filter((item) => item.id !== id);
-    setEvents(filteredEvents);
-  };
+  // const deleteEvent = (id) => {
+  //   let filteredEvents = events.filter((item) => item.id !== id);
+  //   setEvents(filteredEvents);
+  // };
 
   const addEmailId = () => {
     let colorOptionIndex = interviewersEmail.length;
@@ -246,6 +246,7 @@ const InterviewerCalender = ({ match, ...props }) => {
   }, [events, isFilterEvent]);
 
   const showEmailIds = () => {
+    console.log({ interviewersEmail });
     if (!interviewersEmail.length) {
       return null;
     }
@@ -506,7 +507,7 @@ const InterviewerCalender = ({ match, ...props }) => {
               <PreviewAltCard>
                 <CalenderApp
                   events={!filteredEvents ? events : filteredEvents}
-                  onDelete={deleteEvent}
+                  // onDelete={deleteEvent}
                   onEdit={editEvent}
                 />
               </PreviewAltCard>
@@ -520,7 +521,13 @@ const InterviewerCalender = ({ match, ...props }) => {
         toggle={() => setEventModal(false)}
         classNameModal="modal-dialog-centered"
         modalSize="lg"
-        content={<AddEvent setEventModal={setEventModal} mailIdOptions={mailIdOptions} />}
+        content={
+          <AddEvent
+            selectedEvent={selectedEvent}
+            setEventModal={setEventModal}
+            mailIdOptions={mailIdOptions}
+          />
+        }
       />
     </React.Fragment>
   );
@@ -532,6 +539,6 @@ InterviewerCalender.defaultProps = {
 };
 
 InterviewerCalender.propTypes = {
-  match: PropTypes.object,
-  selectedInterviewers: PropTypes.array
+  match: PropTypes.any,
+  selectedInterviewers: PropTypes.any
 };

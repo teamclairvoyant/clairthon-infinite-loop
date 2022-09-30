@@ -6,7 +6,6 @@ import { TEST_ID } from '../../constants/constant';
 
 const PaginationComponent = ({ itemPerPage, totalItems, paginate, currentPage }) => {
   const pageNumbers = [];
-  console.log({ itemPerPage, totalItems, paginate, currentPage });
   for (let i = 1; i <= Math.ceil(totalItems / itemPerPage); i++) {
     pageNumbers.push(i);
   }

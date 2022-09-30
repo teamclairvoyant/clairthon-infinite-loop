@@ -228,13 +228,13 @@ MenuHeading.propTypes = {
 
 MenuSub.propTypes = {
   sub: PropTypes.array,
-  sidebarToggle: PropTypes.bool,
+  sidebarToggle: PropTypes.func,
   mobileView: PropTypes.bool,
   style: PropTypes.string
 };
 
 Menu.propTypes = {
-  sidebarToggle: PropTypes.bool,
+  sidebarToggle: PropTypes.func,
   mobileView: PropTypes.bool
 };
 
@@ -242,9 +242,9 @@ MenuItem.propTypes = {
   icon: PropTypes.string,
   link: PropTypes.string,
   text: PropTypes.string,
-  sub: PropTypes.string,
+  sub: PropTypes.array,
   newTab: PropTypes.any,
-  sidebarToggle: PropTypes.bool,
+  sidebarToggle: PropTypes.func,
   mobileView: PropTypes.bool,
   badge: PropTypes.any
 };

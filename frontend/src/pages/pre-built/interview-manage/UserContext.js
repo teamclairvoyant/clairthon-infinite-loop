@@ -14,5 +14,5 @@ export const UserContextProvider = (props) => {
 };
 
 UserContextProvider.propTypes = {
-  children: PropTypes.elementType
+  children: PropTypes.any
 };

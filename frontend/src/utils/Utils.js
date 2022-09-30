@@ -23,8 +23,8 @@ export const checkForm = (formData) => {
   return errorState;
 };
 
-export const mapOptions = (optionValue) => {
-  return optionValue.map((item) => ({ value: item, label: item }));
+export const mapOptions = (optionValue, type) => {
+  return optionValue.map((item) => ({ value: item, label: item, type: type }));
 };
 
 //Function that returns the first or first two letters from a name

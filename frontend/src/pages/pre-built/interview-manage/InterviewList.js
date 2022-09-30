@@ -32,7 +32,13 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { UserContext } from './UserContext';
 import { request } from '../../../utils/axiosUtils';
-import { URL_ENDPOINTS, COPY, METHODS, RESPONSE_MESSAGE } from '../../../constants/constant';
+import {
+  URL_ENDPOINTS,
+  COPY,
+  METHODS,
+  RESPONSE_MESSAGE,
+  CATCH_MESSAGE
+} from '../../../constants/constant';
 import formatString from '../../../common/formatting/formatString';
 import InterviewListModal from '../../../components/modals/CommonModal/CommonModal';
 import AddInterviewer from './ModalLayouts/AddInterviewer';
@@ -282,11 +288,27 @@ const InterviewList = () => {
   };
 
   // function to change to suspend property for an item
-  const suspendUser = (id) => {
-    let newData = data;
-    let index = newData.findIndex((item) => item._id === id);
-    newData[index].status = 'Suspend';
-    setData([...newData]);
+  const removeInterviewer = (id) => {
+    const responseData = request({
+      url: URL_ENDPOINTS.INTERVIEWER,
+      method: METHODS.DELETE,
+      params: {
+        id: id
+      }
+    });
+
+    responseData
+      .then((response) => {
+        if (response.data.STATUS === RESPONSE_MESSAGE.SUCCESS) {
+          successToast(COPY.INTERVIEWER_ADDED);
+          fetchInterviewers();
+        } else {
+          errorToast(CATCH_MESSAGE.ERROR);
+        }
+      })
+      .catch((err) => {
+        err && errorToast(CATCH_MESSAGE.ERROR);
+      });
   };
 
   // function to change the check property of an item
@@ -322,7 +344,6 @@ const InterviewList = () => {
   const indexOfLastItem = currentPage * itemPerPage;
   const indexOfFirstItem = indexOfLastItem - itemPerPage;
   const currentItems = interviewersList.slice(indexOfFirstItem, indexOfLastItem);
-  // console.log({curr})
   // Change Page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -386,40 +407,6 @@ const InterviewList = () => {
             <div className="card-inner position-relative card-tools-toggle">
               <div className="card-title-group">
                 <div className="card-tools">
-                  {/* <div className="form-inline flex-nowrap gx-3">
-                    <div className="form-wrap">
-                      <RSelect
-                        options={bulkActionOptions}
-                        className="w-130px"
-                        placeholder="Bulk Action"
-                        onChange={(e) => onActionText(e)}
-                      />
-                    </div>
-                    <div className="btn-wrap">
-                      <span className="d-none d-md-block">
-                        <Button
-                          disabled={actionText !== "" ? false : true}
-                          color="light"
-                          outline
-                          className="btn-dim"
-                          onClick={(e) => onBulkActionClick(e)}
-                        >
-                          Apply
-                        </Button>
-                      </span>
-                      <span className="d-md-none">
-                        <Button
-                          color="light"
-                          outline
-                          disabled={actionText !== "" ? false : true}
-                          className="btn-dim btn-icon"
-                          onClick={(e) => onBulkActionClick(e)}
-                        >
-                          <Icon name="arrow-right"></Icon>
-                        </Button>
-                      </span>
-                    </div>
-                  </div> */}
                   <ErrorMessage content={selectInterviewerMessage} />
                 </div>
                 <div className="card-tools mr-n1">
@@ -684,7 +671,7 @@ const InterviewList = () => {
                               <React.Fragment>
                                 <li
                                   className="nk-tb-action-hidden"
-                                  onClick={() => suspendUser(item._id)}>
+                                  onClick={() => removeInterviewer(item._id)}>
                                   <TooltipComponent
                                     tag="a"
                                     containerClassName="btn btn-trigger btn-icon"
@@ -719,7 +706,7 @@ const InterviewList = () => {
                                     {item.status !== 'Suspend' && (
                                       <React.Fragment>
                                         <li className="divider"></li>
-                                        <li onClick={() => suspendUser(item._id)}>
+                                        <li onClick={() => removeInterviewer(item._id)}>
                                           <DropdownItem
                                             tag="a"
                                             href="#suspend"

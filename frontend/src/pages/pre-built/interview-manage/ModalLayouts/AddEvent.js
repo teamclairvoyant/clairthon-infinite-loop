@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon, Col, Button, RSelect } from '../../../../components/Component';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -28,10 +28,23 @@ const initEventData = {
   attendees: []
 };
 const AddEvent = (props) => {
-  const { setEventModal, mailIdOptions } = props;
+  const { setEventModal, mailIdOptions, selectedEvent } = props;
   const { control } = useForm();
 
   const [eventData, setEventData] = useState(initEventData);
+
+  useEffect(() => {
+    if (selectedEvent) {
+      setEventData({
+        ...eventData,
+        title: selectedEvent.title,
+        date: new Date(selectedEvent.start),
+        startTime: new Date(selectedEvent.start),
+        endTime: new Date(selectedEvent.end)
+      });
+    }
+  }, []);
+
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({
     title: false,
@@ -123,6 +136,7 @@ const AddEvent = (props) => {
         if (response.data.STATUS === RESPONSE_MESSAGE.SUCCESS) {
           setLoading(false);
           successToast(COPY.INTERVIEW_SCHEDULE_SUCCESSFULLY);
+          setEventData(initEventData);
         } else {
           errorToast(CATCH_MESSAGE.ERROR);
         }
@@ -176,6 +190,7 @@ const AddEvent = (props) => {
                     className="form-control"
                     type="text"
                     name="title"
+                    value={eventData.title}
                     data-testid={COPY.TITLE}
                     onChange={handleInputChange}
                     placeholder="Enter title"

@@ -29,10 +29,10 @@ export const ListProvider = ({ children }) => {
         if (response.data.STATUS === RESPONSE_MESSAGE.SUCCESS) {
           response.data.DATA.forEach((lists) => {
             if (lists.type === LIST_NAMES.SKILLS) {
-              setSkillOptions(mapOptions(lists.items));
+              setSkillOptions(mapOptions(lists.items, lists.type));
             }
             if (lists.type === LIST_NAMES.LOCATION) {
-              setLocationOptions(mapOptions(lists.items));
+              setLocationOptions(mapOptions(lists.items, lists.type));
             }
           });
         } else {

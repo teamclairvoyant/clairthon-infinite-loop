@@ -6,12 +6,18 @@ export const URL_ENDPOINTS = {
   GET_INTERVIEWER_EVENTS: 'calendar/events',
   GET_INTERVIEWER_FREE_SLOTS: 'calendar/filter',
   CREATE_EVENT: 'calendar/createEvent',
-  GET_LISTING: 'listing'
+  GET_LISTING: 'listing',
+  ADD_LISTING: 'listing'
 };
 
+export const LIST_TYPE = [
+  { label: 'Skills', value: 'SKILLS' },
+  { label: 'Location', value: 'LOCATION' }
+];
 export const METHODS = {
   GET: 'GET',
-  POST: 'POST'
+  POST: 'POST',
+  DELETE: 'DELETE'
 };
 
 export const RESPONSE_MESSAGE = {
@@ -29,6 +35,7 @@ export const CATCH_MESSAGE = {
 };
 export const COPY = {
   INTERVIEWER_LIST: 'Interviewer Lists',
+  LIST: 'Lists',
   TOTAL_INTERVIEWER: 'You have total {0} interviewers',
   UPDATE_INTERVIEWER: 'Update Interviewer',
   CANCEL: 'Cancel',
@@ -39,13 +46,16 @@ export const COPY = {
   EMPLOYEE_NO: 'Employee No',
   SKILLS: 'Skills',
   ADD_INTERVIEWER: 'Add Interviewer',
+  ADD_LIST: 'Add List',
   NO_DATA_FOUND: 'No data found',
   EDIT: 'Edit',
   REMOVE_INTERVIEWER: 'Remove Interviewer',
   WELCOME_MESSAGE: 'Welcome to Interview Slot Planner',
   FILTER_INTERVIEWERS: 'Filter Interviewers',
   LOCATION: 'Location',
+  TYPE: 'Type',
   INTERVIEWER_ADDED: 'Interviewer added Successfully !',
+  INTERVIEWER_DELETED: 'Interviewer deleted Successfully !',
   INTERVIEWER_UPDATED: 'Interviewer updated Successfully !',
   APPLY_FILTER: 'Apply Filter',
   RESET_FILTER: 'Reset Filter',
@@ -76,6 +86,7 @@ export const COPY = {
   PLACEHOLDER_EMAIL: 'Enter Email',
   PLACEHOLDER_PHONE: 'Enter Phone',
   PLACEHOLDER_LOCATION: 'Enter Location',
+  PLACEHOLDER_TYPE: 'Enter Type',
   PLACEHOLDER_EXPERIENCE: 'Enter Experience',
   PLACEHOLDER_SKILLS: 'Enter Skills',
   EVENT_IDENTIFIER: 'iplanner'

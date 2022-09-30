@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   // call this function when you want to authenticate the user
   const login = async ({ data, history }) => {
     setUser(data);
-    history.push('/');
+    history.push('/interview-list');
   };
 
   const storeToken = async (data) => {
@@ -43,5 +43,5 @@ export const useAuth = () => {
 };
 
 AuthProvider.propTypes = {
-  children: PropTypes.elementType
+  children: PropTypes.any
 };

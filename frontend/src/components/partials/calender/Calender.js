@@ -41,7 +41,7 @@ const EventView = (event) => {
     </React.Fragment>
   );
 };
-const CalenderApp = ({ events, onDelete, onEdit }) => {
+const CalenderApp = ({ events, onEdit }) => {
   const [modalState, updateModal] = useState(false);
   const [calenderEvents, updateEvents] = useState(events);
   const [event, updateEvent] = useState({});
@@ -140,13 +140,13 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
                   color="primary"
                   onClick={() => {
                     toggle();
-                    toggleEdit();
+                    onEdit(event);
                   }}>
-                  Edit Event
+                  Schedule Event
                 </Button>
               </li>
             )}
-            {onDelete && (
+            {/* {onDelete && (
               <li>
                 <Button
                   color="danger"
@@ -158,7 +158,7 @@ const CalenderApp = ({ events, onDelete, onEdit }) => {
                   Delete
                 </Button>
               </li>
-            )}
+            )} */}
           </ul>
         </ModalBody>
       </Modal>
