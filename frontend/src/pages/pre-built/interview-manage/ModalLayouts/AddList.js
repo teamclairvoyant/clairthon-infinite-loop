@@ -124,7 +124,7 @@ export const AddList = ({ onFormCancel }) => {
                     size="md"
                     type="submit"
                     data-testid={TEST_ID.COMMON.SUMBIT_BUTTON}>
-                    {COPY.ADD_INTERVIEWER}
+                    {COPY.ADD_LIST}
                   </Button>
                 </li>
                 <li>
