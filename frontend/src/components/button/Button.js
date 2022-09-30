@@ -1,5 +1,6 @@
-import React from "react";
-import classNames from "classnames";
+/* eslint-disable react/prop-types */
+import React from 'react';
+import classNames from 'classnames';
 
 const Button = ({ color, size, className, outline, disabled, ...props }) => {
   const buttonClass = classNames({
@@ -8,7 +9,7 @@ const Button = ({ color, size, className, outline, disabled, ...props }) => {
     [`btn-outline-${color}`]: outline,
     [`btn-${size}`]: size,
     disabled: disabled,
-    [`${className}`]: className,
+    [`${className}`]: className
   });
   return (
     <button className={buttonClass} {...props}>

@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -13,8 +13,7 @@ const Footer = () => {
                 <Link
                   // to={`${process.env.PUBLIC_URL}/pages/terms-policy`}
                   to={`${process.env.PUBLIC_URL}/`}
-                  className="nav-link"
-                >
+                  className="nav-link">
                   Terms
                 </Link>
               </li>
@@ -22,8 +21,7 @@ const Footer = () => {
                 <Link
                   to={`${process.env.PUBLIC_URL}/`}
                   // to={`${process.env.PUBLIC_URL}/pages/faq`}
-                  className="nav-link"
-                >
+                  className="nav-link">
                   Privacy
                 </Link>
               </li>
@@ -31,8 +29,7 @@ const Footer = () => {
                 <Link
                   // to={`${process.env.PUBLIC_URL}/pages/terms-policy`}
                   to={`${process.env.PUBLIC_URL}/`}
-                  className="nav-link"
-                >
+                  className="nav-link">
                   Help
                 </Link>
               </li>

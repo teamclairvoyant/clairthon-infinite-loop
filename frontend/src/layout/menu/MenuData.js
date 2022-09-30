@@ -1,8 +1,8 @@
 const menu = [
   {
-    icon: "grid-add-fill-c",
-    text: "Default Dashboard",
-    link: "/",
+    icon: 'grid-add-fill-c',
+    text: 'Default Dashboard',
+    link: '/'
   },
   // {
   //   icon: "bitcoin-cash",
@@ -20,18 +20,18 @@ const menu = [
   //   link: "/invest",
   // },
   {
-    heading: "Interviewer Section",
+    heading: 'Interviewer Section'
   },
   {
-    icon: "users",
-    text: "Manage Interviews",
+    icon: 'users',
+    text: 'Manage Interviews',
     active: false,
     subMenu: [
       {
-        icon: "user-list-fill",
-        text: "Interviewer List",
-        link: "/interview-list",
-      },
+        icon: 'user-list-fill',
+        text: 'Interviewer List',
+        link: '/interview-list'
+      }
       // {
       //   text: "User List - Compact",
       //   link: "/user-list-compact",
@@ -48,8 +48,8 @@ const menu = [
       //   text: "User Contact - Card",
       //   link: "/user-contact-card",
       // },
-    ],
-  },
+    ]
+  }
   // {
   //   icon: "tile-thumb",
   //   text: "Projects",

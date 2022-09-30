@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+/* eslint-disable react/prop-types */
+import React, { useState } from 'react';
 // import Logo from "../../images/logo.jpg";
 // import LogoDark from "../../images/logo.jpg";
-import PageContainer from "../../layout/page-container/PageContainer";
-import Head from "../../layout/head/Head";
-import AuthFooter from "./AuthFooter";
+import PageContainer from '../../layout/page-container/PageContainer';
+import Head from '../../layout/head/Head';
+import AuthFooter from './AuthFooter';
 import {
   Block,
   BlockContent,
@@ -12,11 +13,11 @@ import {
   BlockTitle,
   Button,
   Icon,
-  PreviewCard,
-} from "../../components/Component";
-import { Spinner, FormGroup } from "reactstrap";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+  PreviewCard
+} from '../../components/Component';
+import { Spinner, FormGroup } from 'reactstrap';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 const Register = ({ history }) => {
   const [passState, setPassState] = useState(false);
@@ -25,10 +26,7 @@ const Register = ({ history }) => {
 
   const handleFormSubmit = () => {
     setLoading(true);
-    setTimeout(
-      () => history.push(`${process.env.PUBLIC_URL}/auth-success`),
-      2000
-    );
+    setTimeout(() => history.push(`${process.env.PUBLIC_URL}/auth-success`), 2000);
   };
   return (
     <React.Fragment>
@@ -58,10 +56,7 @@ const Register = ({ history }) => {
                 </BlockDes>
               </BlockContent>
             </BlockHead>
-            <form
-              className="is-alter"
-              onSubmit={handleSubmit(handleFormSubmit)}
-            >
+            <form className="is-alter" onSubmit={handleSubmit(handleFormSubmit)}>
               <FormGroup>
                 <label className="form-label" htmlFor="name">
                   Name
@@ -75,9 +70,7 @@ const Register = ({ history }) => {
                     ref={register({ required: true })}
                     className="form-control-lg form-control"
                   />
-                  {errors.name && (
-                    <p className="invalid">This field is required</p>
-                  )}
+                  {errors.name && <p className="invalid">This field is required</p>}
                 </div>
               </FormGroup>
               <FormGroup>
@@ -96,9 +89,7 @@ const Register = ({ history }) => {
                     className="form-control-lg form-control"
                     placeholder="Enter your email address or username"
                   />
-                  {errors.email && (
-                    <p className="invalid">This field is required</p>
-                  )}
+                  {errors.email && <p className="invalid">This field is required</p>}
                 </div>
               </FormGroup>
               <FormGroup>
@@ -115,45 +106,34 @@ const Register = ({ history }) => {
                       setPassState(!passState);
                     }}
                     className={`form-icon lg form-icon-right passcode-switch ${
-                      passState ? "is-hidden" : "is-shown"
-                    }`}
-                  >
+                      passState ? 'is-hidden' : 'is-shown'
+                    }`}>
                     <Icon name="eye" className="passcode-icon icon-show"></Icon>
 
-                    <Icon
-                      name="eye-off"
-                      className="passcode-icon icon-hide"
-                    ></Icon>
+                    <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                   </a>
                   <input
-                    type={passState ? "text" : "password"}
+                    type={passState ? 'text' : 'password'}
                     id="password"
                     name="passcode"
-                    ref={register({ required: "This field is required" })}
+                    ref={register({ required: 'This field is required' })}
                     placeholder="Enter your passcode"
                     className={`form-control-lg form-control ${
-                      passState ? "is-hidden" : "is-shown"
+                      passState ? 'is-hidden' : 'is-shown'
                     }`}
                   />
-                  {errors.passcode && (
-                    <span className="invalid">{errors.passcode.message}</span>
-                  )}
+                  {errors.passcode && <span className="invalid">{errors.passcode.message}</span>}
                 </div>
               </FormGroup>
               <FormGroup>
-                <Button
-                  type="submit"
-                  color="primary"
-                  size="lg"
-                  className="btn-block"
-                >
-                  {loading ? <Spinner size="sm" color="light" /> : "Register"}
+                <Button type="submit" color="primary" size="lg" className="btn-block">
+                  {loading ? <Spinner size="sm" color="light" /> : 'Register'}
                 </Button>
               </FormGroup>
             </form>
             <div className="form-note-s2 text-center pt-4">
-              {" "}
-              Already have an account?{" "}
+              {' '}
+              Already have an account?{' '}
               <Link to={`${process.env.PUBLIC_URL}/auth-login`}>
                 <strong>Sign in instead</strong>
               </Link>
@@ -170,8 +150,7 @@ const Register = ({ history }) => {
                   href="#socials"
                   onClick={(ev) => {
                     ev.preventDefault();
-                  }}
-                >
+                  }}>
                   Facebook
                 </a>
               </li>
@@ -181,8 +160,7 @@ const Register = ({ history }) => {
                   href="#socials"
                   onClick={(ev) => {
                     ev.preventDefault();
-                  }}
-                >
+                  }}>
                   Google
                 </a>
               </li>

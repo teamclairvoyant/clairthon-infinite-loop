@@ -1,20 +1,20 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
-import Pages from "../route/Index";
-import Sidebar from "./sidebar/Sidebar";
-import Head from "./head/Head";
-import Header from "./header/Header";
-import Footer from "./footer/Footer";
-import classNames from "classnames";
+import React, { useEffect, useState, useLayoutEffect } from 'react';
+import Pages from '../route/Index';
+import Sidebar from './sidebar/Sidebar';
+import Head from './head/Head';
+import Header from './header/Header';
+import Footer from './footer/Footer';
+import classNames from 'classnames';
 
 const Layout = () => {
   //Sidebar
   const [mobileView, setMobileView] = useState();
   const [visibility, setVisibility] = useState(false);
   const [themeState] = useState({
-    main: "default",
-    sidebar: "dark",
-    header: "white",
-    skin: "light",
+    main: 'default',
+    sidebar: 'dark',
+    header: 'white',
+    skin: 'light'
   });
 
   useEffect(() => {
@@ -24,12 +24,12 @@ const Layout = () => {
   // Stops scrolling on overlay
   useLayoutEffect(() => {
     if (visibility) {
-      document.body.style.overflow = "hidden";
-      document.body.style.height = "100%";
+      document.body.style.overflow = 'hidden';
+      document.body.style.height = '100%';
     }
     if (!visibility) {
-      document.body.style.overflow = "auto";
-      document.body.style.height = "auto";
+      document.body.style.overflow = 'auto';
+      document.body.style.height = 'auto';
     }
   }, [visibility]);
 
@@ -45,7 +45,7 @@ const Layout = () => {
 
   useEffect(() => {
     document.body.className = `nk-body bg-lighter npc-default has-sidebar no-touch nk-nio-theme ${
-      themeState.skin === "dark" ? "dark-mode" : ""
+      themeState.skin === 'dark' ? 'dark-mode' : ''
     }`;
   }, [themeState.skin]);
 
@@ -58,12 +58,12 @@ const Layout = () => {
       setVisibility(false);
     }
   };
-  window.addEventListener("load", viewChange);
-  window.addEventListener("resize", viewChange);
+  window.addEventListener('load', viewChange);
+  window.addEventListener('resize', viewChange);
 
   const sidebarClass = classNames({
-    "nk-sidebar-mobile": mobileView,
-    "nk-sidebar-active": visibility && mobileView,
+    'nk-sidebar-mobile': mobileView,
+    'nk-sidebar-active': visibility && mobileView
   });
 
   return (
@@ -78,9 +78,16 @@ const Layout = () => {
             theme={themeState.sidebar}
             className={sidebarClass}
           />
-          {visibility && mobileView && <div className="nk-sidebar-overlay" onClick={toggleSidebar}></div>}
+          {visibility && mobileView && (
+            <div className="nk-sidebar-overlay" onClick={toggleSidebar}></div>
+          )}
           <div className="nk-wrap">
-            <Header sidebarToggle={toggleSidebar} setVisibility={setVisibility} fixed theme={themeState.header} />
+            <Header
+              sidebarToggle={toggleSidebar}
+              setVisibility={setVisibility}
+              fixed
+              theme={themeState.header}
+            />
             <Pages />
             <Footer />
           </div>

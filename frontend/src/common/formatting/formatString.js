@@ -10,10 +10,7 @@
 export default function formatString(str, ...params) {
   let formattedString = str;
   params?.forEach((value, index) => {
-    formattedString = formattedString.replace(
-      new RegExp(`\\{${index}\\}`, "gu"),
-      String(value)
-    );
+    formattedString = formattedString.replace(new RegExp(`\\{${index}\\}`, 'gu'), String(value));
   });
   return formattedString;
 }

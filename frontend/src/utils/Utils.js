@@ -1,13 +1,14 @@
-import { Redirect } from "react-router-dom";
+/* eslint-disable react/prop-types */
+import { Redirect } from 'react-router-dom';
 
 //url for production
-export var url = "";
-if (process.env.NODE_ENV === "development") {
-  url = "";
+export var url = '';
+if (process.env.NODE_ENV === 'development') {
+  url = '';
 } else {
-  url = window.location.host.split("/")[1];
+  url = window.location.host.split('/')[1];
   if (url) {
-    url = `/${window.location.host.split("/")[1]}`;
+    url = `/${window.location.host.split('/')[1]}`;
   } else url = process.env.PUBLIC_URL; /// ADD YOUR CPANEL SUB-URL
 }
 
@@ -15,8 +16,8 @@ if (process.env.NODE_ENV === "development") {
 export const checkForm = (formData) => {
   let errorState = {};
   Object.keys(formData).forEach((item) => {
-    if (formData[item] === null || formData[item] === "") {
-      errorState[item] = "This field is required";
+    if (formData[item] === null || formData[item] === '') {
+      errorState[item] = 'This field is required';
     }
   });
   return errorState;
@@ -31,10 +32,7 @@ export const findUpper = (string) => {
   let extractedString = [];
 
   for (var i = 0; i < string.length; i++) {
-    if (
-      string.charAt(i) === string.charAt(i).toUpperCase() &&
-      string.charAt(i) !== " "
-    ) {
+    if (string.charAt(i) === string.charAt(i).toUpperCase() && string.charAt(i) !== ' ') {
       extractedString.push(string.charAt(i));
     }
   }
@@ -58,19 +56,19 @@ export const getDateStructured = (date) => {
   let d = date.getDate();
   let m = date.getMonth();
   let y = date.getFullYear();
-  let final = monthNames[m] + " " + d + ", " + y;
+  let final = monthNames[m] + ' ' + d + ', ' + y;
   return final;
 };
 
 // Function to structure date ex: YYYY-MM-DD
 export const setDateForPicker = (rdate) => {
   let d = rdate.getDate();
-  d < 10 && (d = "0" + d);
+  d < 10 && (d = '0' + d);
   let m = rdate.getMonth() + 1;
-  m < 10 && (m = "0" + m);
+  m < 10 && (m = '0' + m);
   let y = rdate.getFullYear();
 
-  rdate = y + "-" + m + "-" + d;
+  rdate = y + '-' + m + '-' + d;
   return rdate;
 };
 
@@ -78,12 +76,12 @@ export const setDateForPicker = (rdate) => {
 export const getDate = (rdate) => {
   if (!rdate) return null;
   let d = rdate.getDate();
-  d < 10 && (d = "0" + d);
+  d < 10 && (d = '0' + d);
   let m = rdate.getMonth() + 1;
-  m < 10 && (m = "0" + m);
+  m < 10 && (m = '0' + m);
   let y = rdate.getFullYear();
 
-  rdate = y + "-" + m + "-" + d;
+  rdate = y + '-' + m + '-' + d;
   return rdate;
 };
 
@@ -94,12 +92,12 @@ export const getDateNTime = (date, time) => {
 
 // Function to structure time ex: YYYY-MM-DD
 export const getTime = (rdate) => {
-  if (!rdate) return "T00:00:00+5:30";
+  if (!rdate) return 'T00:00:00+5:30';
   let h = rdate.getHours();
-  h < 10 && (h = "0" + h);
+  h < 10 && (h = '0' + h);
   let m = rdate.getMinutes();
-  m < 10 && (m = "0" + m);
-  rdate = "T" + h + ":" + m + ":00+05:30";
+  m < 10 && (m = '0' + m);
+  rdate = 'T' + h + ':' + m + ':00+05:30';
   return rdate;
 };
 
@@ -116,17 +114,17 @@ export const dateFormatterAlt = (date, reverse) => {
   let d = date.getDate();
   let m = date.getMonth();
   let y = date.getFullYear();
-  reverse ? (date = m + "-" + d + "-" + y) : (date = y + "-" + d + "-" + m);
+  reverse ? (date = m + '-' + d + '-' + y) : (date = y + '-' + d + '-' + m);
   return date;
 };
 
 //Date formatter function
-export const dateFormatter = (date, reverse, string) => {
-  var dateformat = date.split("-");
+export const dateFormatter = (date, reverse) => {
+  var dateformat = date.split('-');
   //var date = dateformat[1]+"-"+dateformat[2]+"-"+dateformat[0];
   reverse
-    ? (date = dateformat[2] + "-" + dateformat[0] + "-" + dateformat[1])
-    : (date = dateformat[1] + "-" + dateformat[2] + "-" + dateformat[0]);
+    ? (date = dateformat[2] + '-' + dateformat[0] + '-' + dateformat[1])
+    : (date = dateformat[1] + '-' + dateformat[2] + '-' + dateformat[0]);
 
   return date;
 };
@@ -138,11 +136,11 @@ export const todaysDate = new Date();
 export const currentTime = () => {
   var hours = todaysDate.getHours();
   var minutes = todaysDate.getMinutes();
-  var ampm = hours >= 12 ? "PM" : "AM";
+  var ampm = hours >= 12 ? 'PM' : 'AM';
   hours = hours % 12;
   hours = hours ? hours : 12; // the hour '0' should be '12'
-  minutes = minutes < 10 ? "0" + minutes : minutes;
-  var strTime = hours + ":" + minutes + " " + ampm;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
   return strTime;
 };
 
@@ -155,7 +153,7 @@ export const calcPercentage = (str1, str2) => {
 
 export const truncate = (str, n) => {
   return str.length > n
-    ? str.substr(0, n - 1) + " " + truncate(str.substr(n - 1, str.length), n)
+    ? str.substr(0, n - 1) + ' ' + truncate(str.substr(n - 1, str.length), n)
     : str;
 };
 
@@ -165,13 +163,13 @@ export const RedirectAs404 = ({ location }) => (
 
 // returns upload url
 export const getUploadParams = () => {
-  return { url: "https://httpbin.org/post" };
+  return { url: 'https://httpbin.org/post' };
 };
 
 export const bulkActionOptions = [
-  { value: "slot", label: "Search Slot" },
-  { value: "calendar", label: "View Calendar" },
-  { value: "remove", label: "Remove Interviewer" },
+  { value: 'slot', label: 'Search Slot' },
+  { value: 'calendar', label: 'View Calendar' },
+  { value: 'remove', label: 'Remove Interviewer' }
 ];
 
 // Converts KB to MB
@@ -181,16 +179,16 @@ export const bytesToMegaBytes = (bytes) => {
 };
 
 export const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
 ];

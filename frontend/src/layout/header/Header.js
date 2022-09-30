@@ -1,17 +1,18 @@
-import React from "react";
-import classNames from "classnames";
-import Toggle from "../sidebar/Toggle";
-import Logo from "../logo/Logo";
-import News from "../news/News";
-import User from "./dropdown/user/User";
+/* eslint-disable react/prop-types */
+import React from 'react';
+import classNames from 'classnames';
+import Toggle from '../sidebar/Toggle';
+import Logo from '../logo/Logo';
+import News from '../news/News';
+import User from './dropdown/user/User';
 
 const Header = ({ fixed, theme, className, setVisibility, ...props }) => {
   const headerClass = classNames({
-    "nk-header": true,
-    "nk-header-fixed": fixed,
-    [`is-light`]: theme === "white",
-    [`is-${theme}`]: theme !== "white" && theme !== "light",
-    [`${className}`]: className,
+    'nk-header': true,
+    'nk-header-fixed': fixed,
+    [`is-light`]: theme === 'white',
+    [`is-${theme}`]: theme !== 'white' && theme !== 'light',
+    [`${className}`]: className
   });
   return (
     <div className={headerClass}>
@@ -32,10 +33,7 @@ const Header = ({ fixed, theme, className, setVisibility, ...props }) => {
           </div>
           <div className="nk-header-tools">
             <ul className="nk-quick-nav">
-              <li
-                className="user-dropdown"
-                onClick={() => setVisibility(false)}
-              >
+              <li className="user-dropdown" onClick={() => setVisibility(false)}>
                 <User />
               </li>
               {/* <li className="notification-dropdown mr-n1"  onClick={() => setVisibility(false)}>

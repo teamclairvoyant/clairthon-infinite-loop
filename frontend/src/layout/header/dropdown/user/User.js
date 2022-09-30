@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import UserAvatar from "../../../../components/user/UserAvatar";
-import { DropdownToggle, DropdownMenu, Dropdown } from "reactstrap";
-import { Icon } from "../../../../components/Component";
-import { LinkList } from "../../../../components/links/Links";
-import { useHistory } from "react-router";
-import { useAuth } from "../../../../context/authContext";
+import React, { useState } from 'react';
+import UserAvatar from '../../../../components/user/UserAvatar';
+import { DropdownToggle, DropdownMenu, Dropdown } from 'reactstrap';
+import { Icon } from '../../../../components/Component';
+import { LinkList } from '../../../../components/links/Links';
+import { useHistory } from 'react-router';
+import { useAuth } from '../../../../context/authContext';
 const User = () => {
   const [open, setOpen] = useState(false);
   const toggle = () => setOpen((prevState) => !prevState);
@@ -21,15 +21,12 @@ const User = () => {
         className="dropdown-toggle"
         onClick={(ev) => {
           ev.preventDefault();
-        }}
-      >
+        }}>
         <div className="user-toggle">
           <UserAvatar icon="user-alt" className="sm" />
           <div className="user-info d-none d-md-block">
             <div className="user-status"></div>
-            <div className="user-name dropdown-indicator">
-              {user?.login_user}
-            </div>
+            <div className="user-name dropdown-indicator">{user?.login_user}</div>
           </div>
         </div>
       </DropdownToggle>

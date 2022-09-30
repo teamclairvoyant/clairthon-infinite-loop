@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import Head from "../layout/head/Head";
-import Content from "../layout/content/Content";
+import React, { useState } from 'react';
+import Head from '../layout/head/Head';
+import Content from '../layout/content/Content';
 // import SaleRevenue from "../components/partials/default/sale-revenue/SaleRevenue";
 // import ActiveSubscription from "../components/partials/default/active-subscription/ActiveSubscription";
 // import AvgSubscription from "../components/partials/default/avg-subscription/AvgSubscription";
@@ -15,8 +15,8 @@ import {
   DropdownMenu,
   // Card,
   UncontrolledDropdown,
-  DropdownItem,
-} from "reactstrap";
+  DropdownItem
+} from 'reactstrap';
 import {
   Block,
   BlockDes,
@@ -25,9 +25,9 @@ import {
   BlockTitle,
   Icon,
   Button,
-  BlockBetween,
-} from "../components/Component";
-import { COPY } from "../constants/constant";
+  BlockBetween
+} from '../components/Component';
+import { COPY } from '../constants/constant';
 
 const Homepage = () => {
   const [sm, updateSm] = useState(false);
@@ -48,31 +48,20 @@ const Homepage = () => {
             <BlockHeadContent>
               <div className="toggle-wrap nk-block-tools-toggle">
                 <Button
-                  className={`btn-icon btn-trigger toggle-expand mr-n1 ${
-                    sm ? "active" : ""
-                  }`}
-                  onClick={() => updateSm(!sm)}
-                >
+                  className={`btn-icon btn-trigger toggle-expand mr-n1 ${sm ? 'active' : ''}`}
+                  onClick={() => updateSm(!sm)}>
                   <Icon name="more-v" />
                 </Button>
-                <div
-                  className="toggle-expand-content"
-                  style={{ display: sm ? "block" : "none" }}
-                >
+                <div className="toggle-expand-content" style={{ display: sm ? 'block' : 'none' }}>
                   <ul className="nk-block-tools g-3">
                     <li>
                       <UncontrolledDropdown>
                         <DropdownToggle
                           tag="a"
-                          className="dropdown-toggle btn btn-white btn-dim btn-outline-light"
-                        >
-                          <Icon
-                            className="d-none d-sm-inline"
-                            name="calender-date"
-                          />
+                          className="dropdown-toggle btn btn-white btn-dim btn-outline-light">
+                          <Icon className="d-none d-sm-inline" name="calender-date" />
                           <span>
-                            <span className="d-none d-md-inline">Last</span> 30
-                            Days
+                            <span className="d-none d-md-inline">Last</span> 30 Days
                           </span>
                           <Icon className="dd-indc" name="chevron-right" />
                         </DropdownToggle>
@@ -84,8 +73,7 @@ const Homepage = () => {
                                 onClick={(ev) => {
                                   ev.preventDefault();
                                 }}
-                                href="#!"
-                              >
+                                href="#!">
                                 <span>Last 30 days</span>
                               </DropdownItem>
                             </li>
@@ -95,8 +83,7 @@ const Homepage = () => {
                                 onClick={(ev) => {
                                   ev.preventDefault();
                                 }}
-                                href="#dropdownitem"
-                              >
+                                href="#dropdownitem">
                                 <span>Last 6 months</span>
                               </DropdownItem>
                             </li>
@@ -106,8 +93,7 @@ const Homepage = () => {
                                 onClick={(ev) => {
                                   ev.preventDefault();
                                 }}
-                                href="#dropdownitem"
-                              >
+                                href="#dropdownitem">
                                 <span>Last 3 weeks</span>
                               </DropdownItem>
                             </li>

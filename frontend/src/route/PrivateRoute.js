@@ -1,6 +1,7 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import { useAuth } from "../context/authContext";
+/* eslint-disable react/prop-types */
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import { useAuth } from '../context/authContext';
 
 const PrivateRoute = ({ exact, component: Component, ...rest }) => {
   const { accessToken } = useAuth();
@@ -15,8 +16,7 @@ const PrivateRoute = ({ exact, component: Component, ...rest }) => {
         ) : (
           <Redirect to={`${process.env.PUBLIC_URL}/auth-login`}></Redirect>
         )
-      }
-    ></Route>
+      }></Route>
   );
 };
 

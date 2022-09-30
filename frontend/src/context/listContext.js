@@ -1,12 +1,15 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+/* eslint-disable react/prop-types */
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { errorToast } from '../components/toastr/Tostr';
 import {
+  CATCH_MESSAGE,
   LIST_NAMES,
   METHODS,
   RESPONSE_MESSAGE,
-  URL_ENDPOINTS,
-} from "../constants/constant";
-import { request } from "../utils/axiosUtils";
-import { mapOptions } from "../utils/Utils";
+  URL_ENDPOINTS
+} from '../constants/constant';
+import { request } from '../utils/axiosUtils';
+import { mapOptions } from '../utils/Utils';
 export const ListContext = createContext(null);
 
 export const ListProvider = ({ children }) => {
@@ -16,7 +19,7 @@ export const ListProvider = ({ children }) => {
   useEffect(() => {
     const requestOptions = {
       url: URL_ENDPOINTS.GET_LISTING,
-      method: METHODS.GET,
+      method: METHODS.GET
     };
 
     const responseData = request(requestOptions);
@@ -33,21 +36,22 @@ export const ListProvider = ({ children }) => {
             }
           });
         } else {
+          errorToast(CATCH_MESSAGE.ERROR);
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        err && errorToast(CATCH_MESSAGE.ERROR);
+      });
   }, []);
   const listing = useMemo(
     () => ({
       skillOptions,
-      locationOptions,
+      locationOptions
     }),
     [skillOptions, locationOptions]
   );
 
-  return (
-    <ListContext.Provider value={listing}>{children}</ListContext.Provider>
-  );
+  return <ListContext.Provider value={listing}>{children}</ListContext.Provider>;
 };
 
 export const useListContext = () => {

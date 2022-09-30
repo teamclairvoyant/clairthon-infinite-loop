@@ -1,16 +1,11 @@
-import React from "react";
-import EnglishFlag from "../../images/flags/english.png";
-import SpanishFlag from "../../images/flags/spanish.png";
-import FrenchFlag from "../../images/flags/french.png";
-import TurkeyFlag from "../../images/flags/turkey.png";
-import { Row, Col } from "../../components/Component";
-import {
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  UncontrolledDropdown,
-} from "reactstrap";
-import { Link } from "react-router-dom";
+import React from 'react';
+import EnglishFlag from '../../images/flags/english.png';
+import SpanishFlag from '../../images/flags/spanish.png';
+import FrenchFlag from '../../images/flags/french.png';
+import TurkeyFlag from '../../images/flags/turkey.png';
+import { Row, Col } from '../../components/Component';
+import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 const AuthFooter = () => {
   return (
@@ -23,8 +18,7 @@ const AuthFooter = () => {
                 <Link
                   className="nav-link"
                   target="_blank"
-                  to={`${process.env.PUBLIC_URL}/auths/terms`}
-                >
+                  to={`${process.env.PUBLIC_URL}/auths/terms`}>
                   Terms &amp; Condition
                 </Link>
               </li>
@@ -32,8 +26,7 @@ const AuthFooter = () => {
                 <Link
                   className="nav-link"
                   target="_blank"
-                  to={`${process.env.PUBLIC_URL}/auths/terms`}
-                >
+                  to={`${process.env.PUBLIC_URL}/auths/terms`}>
                   Privacy Policy
                 </Link>
               </li>
@@ -41,8 +34,7 @@ const AuthFooter = () => {
                 <Link
                   className="nav-link"
                   target="_blank"
-                  to={`${process.env.PUBLIC_URL}/auths/faq`}
-                >
+                  to={`${process.env.PUBLIC_URL}/auths/faq`}>
                   Help
                 </Link>
               </li>
@@ -50,8 +42,7 @@ const AuthFooter = () => {
                 <UncontrolledDropdown direction="up">
                   <DropdownToggle
                     color="transparent"
-                    className="dropdown-toggle dropdown-indicator has-indicator nav-link"
-                  >
+                    className="dropdown-toggle dropdown-indicator has-indicator nav-link">
                     <span>English</span>
                   </DropdownToggle>
                   <DropdownMenu right className="dropdown-menu-sm">
@@ -63,13 +54,8 @@ const AuthFooter = () => {
                           onClick={(ev) => {
                             ev.preventDefault();
                           }}
-                          className="language-item"
-                        >
-                          <img
-                            src={EnglishFlag}
-                            alt=""
-                            className="language-flag"
-                          />
+                          className="language-item">
+                          <img src={EnglishFlag} alt="" className="language-flag" />
                           <span className="language-name">English</span>
                         </DropdownItem>
                       </li>
@@ -80,13 +66,8 @@ const AuthFooter = () => {
                           onClick={(ev) => {
                             ev.preventDefault();
                           }}
-                          className="language-item"
-                        >
-                          <img
-                            src={SpanishFlag}
-                            alt=""
-                            className="language-flag"
-                          />
+                          className="language-item">
+                          <img src={SpanishFlag} alt="" className="language-flag" />
                           <span className="language-name">Español</span>
                         </DropdownItem>
                       </li>
@@ -97,13 +78,8 @@ const AuthFooter = () => {
                           onClick={(ev) => {
                             ev.preventDefault();
                           }}
-                          className="language-item"
-                        >
-                          <img
-                            src={FrenchFlag}
-                            alt=""
-                            className="language-flag"
-                          />
+                          className="language-item">
+                          <img src={FrenchFlag} alt="" className="language-flag" />
                           <span className="language-name">Français</span>
                         </DropdownItem>
                       </li>
@@ -114,13 +90,8 @@ const AuthFooter = () => {
                           onClick={(ev) => {
                             ev.preventDefault();
                           }}
-                          className="language-item"
-                        >
-                          <img
-                            src={TurkeyFlag}
-                            alt=""
-                            className="language-flag"
-                          />
+                          className="language-item">
+                          <img src={TurkeyFlag} alt="" className="language-flag" />
                           <span className="language-name">Türkçe</span>
                         </DropdownItem>
                       </li>

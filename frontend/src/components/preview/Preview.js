@@ -1,26 +1,23 @@
-import React from "react";
+/* eslint-disable react/prop-types */
+import React from 'react';
 // import SyntaxHighlighter from "react-syntax-highlighter";
-import { Card } from "reactstrap";
+import { Card } from 'reactstrap';
 // import { a11yLight } from "react-syntax-highlighter/dist/esm/styles/hljs";
 // import { OverlineTitle } from "../text/Text";
 // import { CopyToClipboard } from "react-copy-to-clipboard";
 
 export const PreviewCard = ({ className, bodyClass, ...props }) => {
   return (
-    <Card className={`card-preview ${className ? className : ""}`}>
-      <div className={`card-inner ${bodyClass ? bodyClass : ""}`}>
-        {props.children}
-      </div>
+    <Card className={`card-preview ${className ? className : ''}`}>
+      <div className={`card-inner ${bodyClass ? bodyClass : ''}`}>{props.children}</div>
     </Card>
   );
 };
 
 export const PreviewAltCard = ({ className, bodyClass, ...props }) => {
   return (
-    <Card className={`card-bordered ${className ? className : ""}`}>
-      <div className={`card-inner ${bodyClass ? bodyClass : ""}`}>
-        {props.children}
-      </div>
+    <Card className={`card-bordered ${className ? className : ''}`}>
+      <div className={`card-inner ${bodyClass ? bodyClass : ''}`}>{props.children}</div>
     </Card>
   );
 };

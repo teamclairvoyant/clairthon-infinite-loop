@@ -1,14 +1,10 @@
-import React from "react";
-import Icon from "../icon/Icon";
-import { Pagination, PaginationLink, PaginationItem } from "reactstrap";
-import { TEST_ID } from "../../constants/constant";
+/* eslint-disable react/prop-types */
+import React from 'react';
+import Icon from '../icon/Icon';
+import { Pagination, PaginationLink, PaginationItem } from 'reactstrap';
+import { TEST_ID } from '../../constants/constant';
 
-const PaginationComponent = ({
-  itemPerPage,
-  totalItems,
-  paginate,
-  currentPage,
-}) => {
+const PaginationComponent = ({ itemPerPage, totalItems, paginate, currentPage }) => {
   const pageNumbers = [];
   console.log({ itemPerPage, totalItems, paginate, currentPage });
   for (let i = 1; i <= Math.ceil(totalItems / itemPerPage); i++) {
@@ -33,18 +29,14 @@ const PaginationComponent = ({
             prevPage();
           }}
           data-testid={TEST_ID.PAGINATION.PREV_PAGE}
-          href="#prev"
-        >
+          href="#prev">
           <Icon name="chevrons-left" />
           <span>Prev</span>
         </PaginationLink>
       </PaginationItem>
       {pageNumbers.map((item) => {
         return (
-          <PaginationItem
-            className={currentPage === item ? "active" : ""}
-            key={item}
-          >
+          <PaginationItem className={currentPage === item ? 'active' : ''} key={item}>
             <PaginationLink
               tag="a"
               href="#pageitem"
@@ -52,17 +44,14 @@ const PaginationComponent = ({
                 ev.preventDefault();
                 paginate(item);
               }}
-              data-testid={TEST_ID.PAGINATION.ITEM_PAGE}
-            >
+              data-testid={TEST_ID.PAGINATION.ITEM_PAGE}>
               {item}
             </PaginationLink>
           </PaginationItem>
         );
       })}
 
-      <PaginationItem
-        disabled={pageNumbers[pageNumbers.length - 1] === currentPage}
-      >
+      <PaginationItem disabled={pageNumbers[pageNumbers.length - 1] === currentPage}>
         <PaginationLink
           className="page-link-next"
           onClick={(ev) => {
@@ -70,8 +59,7 @@ const PaginationComponent = ({
             nextPage();
           }}
           href="#next"
-          data-testid={TEST_ID.PAGINATION.NEXT_PAGE}
-        >
+          data-testid={TEST_ID.PAGINATION.NEXT_PAGE}>
           <span>Next</span>
           <Icon name="chevrons-right" />
         </PaginationLink>

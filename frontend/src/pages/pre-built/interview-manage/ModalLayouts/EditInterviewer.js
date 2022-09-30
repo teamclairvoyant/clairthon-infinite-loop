@@ -1,19 +1,17 @@
-import React, { useState } from "react";
-import { Icon, Col, Button, RSelect } from "../../../../components/Component";
+/* eslint-disable react/prop-types */
+import React, { useState } from 'react';
+import { Icon, Col, Button, RSelect } from '../../../../components/Component';
 
-import { FormGroup, Form } from "reactstrap";
-import { COPY } from "../../../../constants/constant";
-import { Controller, useForm } from "react-hook-form";
-import {
-  filterExperience,
-  filterLocation,
-} from "../../../../common/listing/ListingData";
-import { ErrorMessage } from "../../../../components/error-message/ErrorMessage";
+import { FormGroup, Form } from 'reactstrap';
+import { COPY } from '../../../../constants/constant';
+import { Controller, useForm } from 'react-hook-form';
+import { filterExperience, filterLocation } from '../../../../common/listing/ListingData';
+import { ErrorMessage } from '../../../../components/error-message/ErrorMessage';
 
 const errorMessageStyle = {
-  color: "#e85347",
-  fontSize: "11px",
-  fontStyle: "italic",
+  color: '#e85347',
+  fontSize: '11px',
+  fontStyle: 'italic'
 };
 
 const EditInterviewer = (props) => {
@@ -23,7 +21,7 @@ const EditInterviewer = (props) => {
   const [error, setError] = useState({
     isSkillEmpty: false,
     isLocationEmpty: false,
-    errorMessage: "This field is required!",
+    errorMessage: 'This field is required!'
   });
 
   const handleUpdateButton = (interviewerData) => {
@@ -32,7 +30,7 @@ const EditInterviewer = (props) => {
     if (!skills.length) {
       setError({
         ...error,
-        isSkillEmpty: true,
+        isSkillEmpty: true
       });
 
       return;
@@ -41,7 +39,7 @@ const EditInterviewer = (props) => {
     if (!location.value) {
       setError({
         ...error,
-        isLocationEmpty: true,
+        isLocationEmpty: true
       });
 
       return;
@@ -57,17 +55,13 @@ const EditInterviewer = (props) => {
           ev.preventDefault();
           onFormCancel();
         }}
-        className="close"
-      >
+        className="close">
         <Icon name="cross-sm"></Icon>
       </a>
       <div className="p-2">
         <h5 className="title">{COPY.UPDATE_USER}</h5>
         <div className="mt-4">
-          <Form
-            className="row gy-4"
-            onSubmit={handleSubmit(handleUpdateButton)}
-          >
+          <Form className="row gy-4" onSubmit={handleSubmit(handleUpdateButton)}>
             <Col md="6">
               <FormGroup>
                 <label className="form-label">{COPY.NAME}</label>
@@ -77,11 +71,9 @@ const EditInterviewer = (props) => {
                   name="name"
                   defaultValue={formData.name}
                   placeholder="Enter name"
-                  ref={register({ required: "This field is required" })}
+                  ref={register({ required: 'This field is required' })}
                 />
-                {errors.name && (
-                  <span className="invalid">{errors.name.message}</span>
-                )}
+                {errors.name && <span className="invalid">{errors.name.message}</span>}
               </FormGroup>
             </Col>
             <Col md="6">
@@ -94,7 +86,7 @@ const EditInterviewer = (props) => {
                   defaultValue={formData.employee_no}
                   placeholder="Enter Employee No"
                   ref={register({
-                    required: "This field is required",
+                    required: 'This field is required'
                   })}
                 />
                 {errors.employee_no && (
@@ -112,16 +104,14 @@ const EditInterviewer = (props) => {
                   defaultValue={formData.email}
                   placeholder="Enter email"
                   ref={register({
-                    required: "This field is required",
+                    required: 'This field is required',
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: "invalid email address",
-                    },
+                      message: 'invalid email address'
+                    }
                   })}
                 />
-                {errors.email && (
-                  <span className="invalid">{errors.email.message}</span>
-                )}
+                {errors.email && <span className="invalid">{errors.email.message}</span>}
               </FormGroup>
             </Col>
             <Col md="6">
@@ -132,11 +122,9 @@ const EditInterviewer = (props) => {
                   type="text"
                   name="phone"
                   defaultValue={formData.phone}
-                  ref={register({ required: "This field is required" })}
+                  ref={register({ required: 'This field is required' })}
                 />
-                {errors.phone && (
-                  <span className="invalid">{errors.phone.message}</span>
-                )}
+                {errors.phone && <span className="invalid">{errors.phone.message}</span>}
               </FormGroup>
             </Col>
             <Col md="6">
@@ -152,18 +140,13 @@ const EditInterviewer = (props) => {
                         inputRef={ref}
                         options={filterLocation}
                         value={value}
-                        onChange={(selectedLocation) =>
-                          onChange(selectedLocation)
-                        }
+                        onChange={(selectedLocation) => onChange(selectedLocation)}
                       />
                     )}
                   />
                 </div>
                 {error.isLocationEmpty && (
-                  <ErrorMessage
-                    content={error.errorMessage}
-                    style={errorMessageStyle}
-                  />
+                  <ErrorMessage content={error.errorMessage} style={errorMessageStyle} />
                 )}
               </FormGroup>
             </Col>
@@ -181,9 +164,7 @@ const EditInterviewer = (props) => {
                         inputRef={ref}
                         options={filterExperience}
                         value={value}
-                        onChange={(selectedExperience) =>
-                          onChange(selectedExperience)
-                        }
+                        onChange={(selectedExperience) => onChange(selectedExperience)}
                       />
                     )}
                   />
@@ -208,7 +189,7 @@ const EditInterviewer = (props) => {
                         onChange={(selectedSkills) => {
                           setError({
                             ...error,
-                            isSkillEmpty: selectedSkills.length === 0,
+                            isSkillEmpty: selectedSkills.length === 0
                           });
                           onChange(selectedSkills);
                         }}
@@ -217,10 +198,7 @@ const EditInterviewer = (props) => {
                   />
                 </div>
                 {error.isSkillEmpty && (
-                  <ErrorMessage
-                    content={error.errorMessage}
-                    style={errorMessageStyle}
-                  />
+                  <ErrorMessage content={error.errorMessage} style={errorMessageStyle} />
                 )}
               </FormGroup>
             </Col>
@@ -239,8 +217,7 @@ const EditInterviewer = (props) => {
                       ev.preventDefault();
                       onFormCancel();
                     }}
-                    className="link link-light"
-                  >
+                    className="link link-light">
                     {COPY.CANCEL}
                   </a>
                 </li>

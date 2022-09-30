@@ -1,37 +1,30 @@
-import React, { useState } from "react";
-import { FormGroup } from "reactstrap";
-import { COPY } from "../../../../../constants/constant";
-import { RSelect, Row, Col } from "../../../../../components/Component";
-import { filterExperience } from "../../../../../common/listing/ListingData";
-import { ErrorMessage } from "../../../../../components/error-message/ErrorMessage";
-import DatePicker from "react-datepicker";
-import { getDateNTime } from "../../../../../utils/Utils";
-import { useListContext } from "../../../../../context/listContext";
+/* eslint-disable react/prop-types */
+import React, { useState } from 'react';
+import { FormGroup } from 'reactstrap';
+import { COPY } from '../../../../../constants/constant';
+import { RSelect, Row, Col } from '../../../../../components/Component';
+import { filterExperience } from '../../../../../common/listing/ListingData';
+import { ErrorMessage } from '../../../../../components/error-message/ErrorMessage';
+import DatePicker from 'react-datepicker';
+import { getDateNTime } from '../../../../../utils/Utils';
+import { useListContext } from '../../../../../context/listContext';
 const FilterInterviewer = (props) => {
   const { filter, addFilter, applyFilter, resetFilter } = props;
   const { skillOptions, locationOptions } = useListContext();
   const [error, setError] = useState({
     filterEmpty: false,
-    errorMessage: "",
+    errorMessage: ''
   });
 
   const filterHandler = () => {
-    const {
-      location,
-      skills,
-      experience,
-      endDate,
-      startTime,
-      startDate,
-      endTime,
-    } = filter;
+    const { location, skills, experience, endDate, startTime, startDate, endTime } = filter;
 
     if (startDate || endDate) {
       if (!(endDate & startDate)) {
         setError({
           ...error,
           filterEmpty: true,
-          errorMessage: COPY.SINGLE_DATE_ERROR,
+          errorMessage: COPY.SINGLE_DATE_ERROR
         });
         return;
       }
@@ -42,24 +35,17 @@ const FilterInterviewer = (props) => {
         setError({
           ...error,
           filterEmpty: true,
-          errorMessage: COPY.FROM_DATE_GREATER_ERROR,
+          errorMessage: COPY.FROM_DATE_GREATER_ERROR
         });
         return;
       }
     }
 
-    if (
-      !(
-        location.length ||
-        skills.length ||
-        experience.value ||
-        startDate & endDate
-      )
-    ) {
+    if (!(location.length || skills.length || experience.value || startDate & endDate)) {
       setError({
         ...error,
         filterEmpty: true,
-        errorMessage: COPY.REQUIRED_FIELD_FILTER_ERROR,
+        errorMessage: COPY.REQUIRED_FIELD_FILTER_ERROR
       });
       return;
     }
@@ -69,17 +55,13 @@ const FilterInterviewer = (props) => {
   return (
     <React.Fragment>
       <div className="dropdown-head">
-        <span className="sub-title dropdown-title">
-          {COPY.FILTER_INTERVIEWERS}
-        </span>
+        <span className="sub-title dropdown-title">{COPY.FILTER_INTERVIEWERS}</span>
       </div>
       <div className="dropdown-body dropdown-body-rg">
         <Row className="gx-6 gy-3">
           <Col size="6">
             <FormGroup>
-              <label className="overline-title overline-title-alt">
-                {COPY.LOCATION}
-              </label>
+              <label className="overline-title overline-title-alt">{COPY.LOCATION}</label>
               <RSelect
                 isMulti
                 closeMenuOnSelect={false}
@@ -88,7 +70,7 @@ const FilterInterviewer = (props) => {
                 onChange={(selectedLocation) =>
                   addFilter({
                     ...filter,
-                    location: selectedLocation,
+                    location: selectedLocation
                   })
                 }
               />
@@ -97,16 +79,14 @@ const FilterInterviewer = (props) => {
 
           <Col size="6">
             <FormGroup>
-              <label className="overline-title overline-title-alt">
-                {COPY.EXPERIENCE}
-              </label>
+              <label className="overline-title overline-title-alt">{COPY.EXPERIENCE}</label>
               <RSelect
                 options={filterExperience}
                 defaultValue={filter.experience}
                 onChange={(selectedExperience) =>
                   addFilter({
                     ...filter,
-                    experience: selectedExperience,
+                    experience: selectedExperience
                   })
                 }
               />
@@ -122,9 +102,7 @@ const FilterInterviewer = (props) => {
                       selected={filter.startDate}
                       dateFormat="dd-MM-yyyy"
                       placeholderText="Enter Time"
-                      onChange={(date) =>
-                        addFilter({ ...filter, startDate: date })
-                      }
+                      onChange={(date) => addFilter({ ...filter, startDate: date })}
                       className="form-control date-picker"
                     />
                   </div>
@@ -133,9 +111,7 @@ const FilterInterviewer = (props) => {
                   <div className="form-control-wrap has-timepicker">
                     <DatePicker
                       selected={filter.startTime}
-                      onChange={(date) =>
-                        addFilter({ ...filter, startTime: date })
-                      }
+                      onChange={(date) => addFilter({ ...filter, startTime: date })}
                       showTimeSelect
                       placeholderText="Enter Date"
                       showTimeSelectOnly
@@ -159,9 +135,7 @@ const FilterInterviewer = (props) => {
                       selected={filter.endDate}
                       placeholderText="Enter Date"
                       dateFormat="dd-MM-yyyy"
-                      onChange={(date) =>
-                        addFilter({ ...filter, endDate: date })
-                      }
+                      onChange={(date) => addFilter({ ...filter, endDate: date })}
                       className="form-control date-picker"
                     />
                   </div>
@@ -170,9 +144,7 @@ const FilterInterviewer = (props) => {
                   <div className="form-control-wrap has-timepicker">
                     <DatePicker
                       selected={filter.endTime}
-                      onChange={(date) =>
-                        addFilter({ ...filter, endTime: date })
-                      }
+                      onChange={(date) => addFilter({ ...filter, endTime: date })}
                       showTimeSelect
                       placeholderText="Enter Time"
                       showTimeSelectOnly
@@ -188,9 +160,7 @@ const FilterInterviewer = (props) => {
           </Col>
           <Col size="12">
             <FormGroup>
-              <label className="overline-title overline-title-alt">
-                {COPY.SKILLS}
-              </label>
+              <label className="overline-title overline-title-alt">{COPY.SKILLS}</label>
               <RSelect
                 isMulti
                 closeMenuOnSelect={false}
@@ -199,7 +169,7 @@ const FilterInterviewer = (props) => {
                 onChange={(selectedSkills) =>
                   addFilter({
                     ...filter,
-                    skills: selectedSkills,
+                    skills: selectedSkills
                   })
                 }
               />
@@ -208,7 +178,7 @@ const FilterInterviewer = (props) => {
           {error.filterEmpty && (
             <ErrorMessage
               content={error.errorMessage}
-              style={{ color: "red", marginLeft: "1rem" }}
+              style={{ color: 'red', marginLeft: '1rem' }}
             />
           )}
         </Row>
@@ -220,15 +190,10 @@ const FilterInterviewer = (props) => {
             ev.preventDefault();
             resetFilter();
           }}
-          className="clickable"
-        >
+          className="clickable">
           {COPY.RESET_FILTER}
         </a>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={filterHandler}
-        >
+        <button type="button" className="btn btn-secondary" onClick={filterHandler}>
           {COPY.APPLY_FILTER}
         </button>
       </div>
