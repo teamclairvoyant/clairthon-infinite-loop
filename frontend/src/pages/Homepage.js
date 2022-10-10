@@ -94,6 +94,7 @@ const Homepage = () => {
         </BlockHead>
         <Block>
           <h1>Coming Soon...</h1>
+          <p>ci-test</p>
         </Block>
       </Content>
     </React.Fragment>
